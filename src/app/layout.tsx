@@ -14,7 +14,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        noa{children}</body>
+        {children}</body>
     </html>
   );
 }
