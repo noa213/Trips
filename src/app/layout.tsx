@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import connect from "./lib/db/mongo-db";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -11,6 +12,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  connect()
   return (
     <html lang="en">
       <body>
