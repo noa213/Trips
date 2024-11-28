@@ -1,3 +1,4 @@
+import { IBudgetCategories } from "./BudgetCategories";
 export interface ITrip {
   title: string;
   destination: string;
@@ -7,13 +8,9 @@ export interface ITrip {
   };
   budget: {
     total: number;
-    spent: number;
-    categories: {
-      transportation: number;
-      accommodation: number;
-      food: number;
-      activities: number;
-    };
+    // spent: number;
+    categories: IBudgetCategories;
+    tripType: "urban" | "nature" | "family";
     participants: Array<{
       userId: string;
       share: number;

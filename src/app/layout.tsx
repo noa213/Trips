@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 // import Surveys from "./components/Surveys";
-import Header from "./components/Header";
+// import Header from "./components/Header";
 import HomePage from "./components/HomePage";
 
 export const metadata: Metadata = {
@@ -18,7 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {/* <Surveys /> */}
-        <Header/>
+        {/* <Header/> */}
         <HomePage />
         {children}
       </body>
