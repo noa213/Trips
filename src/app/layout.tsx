@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Surveys from "./components/Surveys";
+// import Surveys from "./components/Surveys";
+import Header from "./components/Header";
+import HomePage from "./components/HomePage";
 
 export const metadata: Metadata = {
   title: "Steps",
@@ -15,7 +17,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Surveys /> {children}
+        {/* <Surveys /> */}
+        <Header/>
+        <HomePage />
+        {children}
       </body>
     </html>
   );
