@@ -16,6 +16,7 @@ import {
   ListItemSecondaryAction,
   IconButton,
   Button,
+  Box,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BudgetCalculator from "./BudgetCalculator";
@@ -25,6 +26,7 @@ import { ITask } from "../types/task";
 import { IPoll } from "../types/poll";
 import { IMemory } from "../types/memory";
 import { TripItem } from "../types/tripItem";
+import { Link as ScrollLink } from "react-scroll";
 
 const CreateDetailedTrip: React.FC = () => {
   const [trip, setTrip] = useState<ITrip>({
@@ -211,253 +213,317 @@ const CreateDetailedTrip: React.FC = () => {
   return (
     <Container maxWidth="lg">
       <Grid container spacing={2}>
-        {/* Basic Details */}
-        <Grid item xs={12}>
-          <Typography variant="h6">Basic Details</Typography>
-          <TextField
-            label="Trip Title"
-            name="title"
-            value={trip.title}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            required
-          />
-          <TextField
-            label="Destination"
-            name="destination"
-            value={trip.destination}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            required
-          />
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
+        {/* Sidebar for Navigation */}
+        <Grid item xs={12} sm={3}>
+          <Box
+            sx={{
+              position: "sticky",
+              top: 0,
+              height: "100vh",
+              padding: 2,
+              backgroundColor: "#f4f4f4",
+              boxShadow: 2,
+              borderRadius: 2,
+            }}
+          >
+            <Typography variant="h6">Navigation</Typography>
+            <List>
+              <ListItem>
+                <ScrollLink to="basic-details" smooth={true} duration={500}>
+                  Basic Details
+                </ScrollLink>
+              </ListItem>
+              <ListItem>
+                <ScrollLink to="budget-details" smooth={true} duration={500}>
+                  Budget Details
+                </ScrollLink>
+              </ListItem>
+              <ListItem>
+                <ScrollLink to="tasks" smooth={true} duration={500}>
+                  Tasks
+                </ScrollLink>
+              </ListItem>
+              <ListItem>
+                <ScrollLink to="polls" smooth={true} duration={500}>
+                  Polls
+                </ScrollLink>
+              </ListItem>
+              <ListItem>
+                <ScrollLink to="memories" smooth={true} duration={500}>
+                  Memories
+                </ScrollLink>
+              </ListItem>
+            </List>
+          </Box>
+        </Grid>
+
+        {/* Main Content */}
+        <Grid item xs={12} sm={9}>
+          <Box sx={{ padding: 2 }}>
+            {/* Basic Details */}
+            <Grid item xs={12} id="basic-details">
+              <Typography variant="h6">Basic Details</Typography>
               <TextField
-                label="Start Date"
-                type="date"
-                value={trip.dates.start.toISOString().split("T")[0]}
-                onChange={(e) =>
-                  setTrip((prevTrip) => ({
-                    ...prevTrip,
-                    dates: {
-                      ...prevTrip.dates,
-                      start: new Date(e.target.value),
-                    },
-                  }))
-                }
+                label="Trip Title"
+                name="title"
+                value={trip.title}
+                onChange={handleChange}
                 fullWidth
                 margin="normal"
-                InputLabelProps={{
-                  shrink: true,
-                }}
                 required
               />
-            </Grid>
-            <Grid item xs={6}>
               <TextField
-                label="End Date"
-                type="date"
-                value={trip.dates.end.toISOString().split("T")[0]}
-                onChange={(e) =>
-                  setTrip((prevTrip) => ({
-                    ...prevTrip,
-                    dates: {
-                      ...prevTrip.dates,
-                      end: new Date(e.target.value),
-                    },
-                  }))
-                }
+                label="Destination"
+                name="destination"
+                value={trip.destination}
+                onChange={handleChange}
                 fullWidth
                 margin="normal"
-                InputLabelProps={{
-                  shrink: true,
-                }}
                 required
               />
-            </Grid>
-          </Grid>
-        </Grid>
-
-        {/* Budget */}
-        <Grid item xs={12}>
-          <Typography variant="h6">Budget Details</Typography>
-          <TextField
-            label="Total Budget"
-            name="total"
-            type="number"
-            value={trip.budget.total}
-            onChange={handleTotalBudgetChange}
-            fullWidth
-            margin="normal"
-            required
-          />
-          <FormControl fullWidth margin="normal">
-            <InputLabel>Trip Type</InputLabel>
-            <Select
-              value={trip.budget.tripType}
-              onChange={handleTripTypeChange}
-              name="tripType"
-              label="Trip Type"
-            >
-              <MenuItem value="urban">Urban</MenuItem>
-              <MenuItem value="nature">Nature</MenuItem>
-              <MenuItem value="family">Family</MenuItem>
-            </Select>
-          </FormControl>
-          {Object.entries(trip.budget.categories).map(([category, amount]) => (
-            <Grid container spacing={2} key={category} alignItems="center">
-              <Grid item xs={8}>
-                <TextField
-                  label={category.charAt(0).toUpperCase() + category.slice(1)}
-                  name={category}
-                  type="number"
-                  value={amount}
-                  onChange={handleBudgetChange}
-                  fullWidth
-                  margin="normal"
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <Typography variant="body2" align="right">
-                  {getCategoryPercentage(category as keyof IBudgetCategories)}%
-                  of Total Budget
-                </Typography>
-              </Grid>
-            </Grid>
-          ))}
-          {/* Error message if budget exceeds */}
-          {errorMessage && (
-            <Typography
-              variant="body2"
-              color="error"
-              align="center"
-              marginTop={2}
-            >
-              {errorMessage}
-            </Typography>
-          )}
-        </Grid>
-        <Grid></Grid>
-        {/* Tasks */}
-        <Grid item xs={12}>
-          <Typography variant="h6">Tasks</Typography>
-          <TextField
-            label="New Task"
-            value={task}
-            // onChange={(e) => setTask(e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <Button
-            variant="contained"
-            onClick={handleAddTask}
-            color="primary"
-            style={{ marginBottom: "1rem" }}
-          >
-            Add Task
-          </Button>
-          <List>
-            {trip.tasks.map((task, index) => (
-              <ListItem key={index}>
-                <ListItemText primary={task.title} />
-                <ListItemSecondaryAction>
-                  <IconButton
-                    edge="end"
-                    onClick={() => handleRemoveItem(trip.tasks, task, "tasks")}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))}
-          </List>
-        </Grid>
-
-        {/* Polls */}
-        <Grid item xs={12}>
-          <Typography variant="h6">Polls</Typography>
-          <TextField
-            label="New Poll"
-            value={poll}
-            // onChange={(e) => setPoll(e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <Button
-            variant="contained"
-            onClick={handleAddPoll}
-            color="primary"
-            style={{ marginBottom: "1rem" }}
-          >
-            Add Poll
-          </Button>
-          <List>
-            {trip.polls.map((poll, index) => (
-              <ListItem key={index}>
-                <ListItemText primary={poll.question} />
-                <ListItemSecondaryAction>
-                  <IconButton
-                    edge="end"
-                    onClick={() => handleRemoveItem(trip.polls, poll, "polls")}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))}
-          </List>
-        </Grid>
-
-        {/* Memories */}
-        <Grid item xs={12}>
-          <Typography variant="h6">Memories</Typography>
-          <TextField
-            label="New Memory"
-            value={memory}
-            // onChange={(e) => setMemory(e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <Button
-            variant="contained"
-            onClick={handleAddMemory}
-            color="primary"
-            style={{ marginBottom: "1rem" }}
-          >
-            Add Memory
-          </Button>
-          <List>
-            {trip.memories.map((memory, index) => (
-              <ListItem key={index}>
-                <ListItemText primary={memory.description} />
-                <ListItemSecondaryAction>
-                  <IconButton
-                    edge="end"
-                    onClick={() =>
-                      handleRemoveItem(trip.memories, memory, "memories")
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <TextField
+                    label="Start Date"
+                    type="date"
+                    value={trip.dates.start.toISOString().split("T")[0]}
+                    onChange={(e) =>
+                      setTrip((prevTrip) => ({
+                        ...prevTrip,
+                        dates: {
+                          ...prevTrip.dates,
+                          start: new Date(e.target.value),
+                        },
+                      }))
                     }
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))}
-          </List>
-        </Grid>
+                    fullWidth
+                    margin="normal"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    label="End Date"
+                    type="date"
+                    value={trip.dates.end.toISOString().split("T")[0]}
+                    onChange={(e) =>
+                      setTrip((prevTrip) => ({
+                        ...prevTrip,
+                        dates: {
+                          ...prevTrip.dates,
+                          end: new Date(e.target.value),
+                        },
+                      }))
+                    }
+                    fullWidth
+                    margin="normal"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    required
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
 
-        {/* Save Button */}
-        {/* <Grid item xs={12} align="center"> */}
-        <Grid item xs={12}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSave}
-            size="large"
-          >
-            Save Trip
-          </Button>
+            {/* Budget */}
+            <Grid item xs={12} id="budget-details">
+              <Typography variant="h6">Budget Details</Typography>
+              <TextField
+                label="Total Budget"
+                name="total"
+                type="number"
+                value={trip.budget.total}
+                onChange={handleTotalBudgetChange}
+                fullWidth
+                margin="normal"
+                required
+              />
+              <FormControl fullWidth margin="normal">
+                <InputLabel>Trip Type</InputLabel>
+                <Select
+                  value={trip.budget.tripType}
+                  onChange={handleTripTypeChange}
+                  name="tripType"
+                  label="Trip Type"
+                >
+                  <MenuItem value="urban">Urban</MenuItem>
+                  <MenuItem value="nature">Nature</MenuItem>
+                  <MenuItem value="family">Family</MenuItem>
+                </Select>
+              </FormControl>
+              {Object.entries(trip.budget.categories).map(
+                ([category, amount]) => (
+                  <Grid
+                    container
+                    spacing={2}
+                    key={category}
+                    alignItems="center"
+                  >
+                    <Grid item xs={8}>
+                      <TextField
+                        label={
+                          category.charAt(0).toUpperCase() + category.slice(1)
+                        }
+                        name={category}
+                        type="number"
+                        value={amount}
+                        onChange={handleBudgetChange}
+                        fullWidth
+                        margin="normal"
+                      />
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Typography variant="body2" align="right">
+                        {getCategoryPercentage(
+                          category as keyof IBudgetCategories
+                        )}
+                        % of Total Budget
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                )
+              )}
+              {/* Error message if budget exceeds */}
+              {errorMessage && (
+                <Typography
+                  variant="body2"
+                  color="error"
+                  align="center"
+                  marginTop={2}
+                >
+                  {errorMessage}
+                </Typography>
+              )}
+            </Grid>
+            <Grid></Grid>
+            {/* Tasks */}
+            <Grid item xs={12} id="tasks">
+              <Typography variant="h6">Tasks</Typography>
+              <TextField
+                label="New Task"
+                value={task}
+                // onChange={(e) => setTask(e.target.value)}
+                fullWidth
+                margin="normal"
+              />
+              <Button
+                variant="contained"
+                onClick={handleAddTask}
+                color="primary"
+                style={{ marginBottom: "1rem" }}
+              >
+                Add Task
+              </Button>
+              <List>
+                {trip.tasks.map((task, index) => (
+                  <ListItem key={index}>
+                    <ListItemText primary={task.title} />
+                    <ListItemSecondaryAction>
+                      <IconButton
+                        edge="end"
+                        onClick={() =>
+                          handleRemoveItem(trip.tasks, task, "tasks")
+                        }
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            </Grid>
+
+            {/* Polls */}
+            <Grid item xs={12} id="polls">
+              <Typography variant="h6">Polls</Typography>
+              <TextField
+                label="New Poll"
+                value={poll}
+                // onChange={(e) => setPoll(e.target.value)}
+                fullWidth
+                margin="normal"
+              />
+              <Button
+                variant="contained"
+                onClick={handleAddPoll}
+                color="primary"
+                style={{ marginBottom: "1rem" }}
+              >
+                Add Poll
+              </Button>
+              <List>
+                {trip.polls.map((poll, index) => (
+                  <ListItem key={index}>
+                    <ListItemText primary={poll.question} />
+                    <ListItemSecondaryAction>
+                      <IconButton
+                        edge="end"
+                        onClick={() =>
+                          handleRemoveItem(trip.polls, poll, "polls")
+                        }
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            </Grid>
+
+            {/* Memories */}
+            <Grid item xs={12} id="memories">
+              <Typography variant="h6">Memories</Typography>
+              <TextField
+                label="New Memory"
+                value={memory}
+                // onChange={(e) => setMemory(e.target.value)}
+                fullWidth
+                margin="normal"
+              />
+              <Button
+                variant="contained"
+                onClick={handleAddMemory}
+                color="primary"
+                style={{ marginBottom: "1rem" }}
+              >
+                Add Memory
+              </Button>
+              <List>
+                {trip.memories.map((memory, index) => (
+                  <ListItem key={index}>
+                    <ListItemText primary={memory.description} />
+                    <ListItemSecondaryAction>
+                      <IconButton
+                        edge="end"
+                        onClick={() =>
+                          handleRemoveItem(trip.memories, memory, "memories")
+                        }
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            </Grid>
+
+            {/* Save Button */}
+            {/* <Grid item xs={12} align="center"> */}
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSave}
+                size="large"
+              >
+                Save Trip
+              </Button>
+            </Grid>
+          </Box>
         </Grid>
       </Grid>
     </Container>
