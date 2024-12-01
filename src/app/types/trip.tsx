@@ -1,4 +1,7 @@
 import { IBudgetCategories } from "./BudgetCategories";
+import { IMemory } from "./memory";
+import { IPoll } from "./poll";
+import { ITask } from "./task";
 export interface ITrip {
   title: string;
   destination: string;
@@ -16,27 +19,8 @@ export interface ITrip {
       share: number;
     }>;
   };
-  tasks: Array<{
-    taskId: string;
-    title: string;
-    assignedTo: string;
-    status: "notStarted" | "inProgress" | "completed";
-    dueDate: Date;
-  }>;
-  polls: Array<{
-    pollId: string;
-    question: string;
-    options: Array<{
-      option: string;
-      votes: number;
-    }>;
-    status: "open" | "closed";
-  }>;
-  memories: Array<{
-    imageUrl: string;
-    description: string;
-    userId: string;
-    timestamp: Date;
-  }>;
+  tasks: Array<ITask>;
+  polls: Array<IPoll>;
+  memories: Array<IMemory>;
   status: "active" | "completed" | "cancelled";
 }
