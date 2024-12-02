@@ -16,7 +16,7 @@ export const getTrips = async (): Promise<ITrip[]> => {
 export const addTrip = async (newTrip: ITrip): Promise<ITrip> => {
     try {
       const response = await axios.post("/api/trips", newTrip);
-      // console.log(response.data.newTrip);
+      console.log(response.data.newTrip);
       return response.data.newTrip;
     } catch (error) {
       console.error("Error adding trip:", error);

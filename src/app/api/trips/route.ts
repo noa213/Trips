@@ -22,11 +22,13 @@ export async function POST(req: NextRequest) {
     console.log('after connect');
     
     const { title, destination, dates, budget, tasks, polls, memories, status } = await req.json();
-    const recipe = new Trip({ title, destination, dates, budget, tasks, polls, memories, status});
-    await recipe.save();
-    
+    const trip = new Trip({ title, destination, dates, budget, tasks, polls, memories, status});
+    console.log('before save trip');
+    await trip.save();
+    console.log('after save trip');
+
     // return await GET();
-    return NextResponse.json({ newRecipe: recipe });
+    return NextResponse.json({ newTrip: trip });
   } catch (error) {
     return NextResponse.json({ message: "Error: " + error }, { status: 500 });
   }
