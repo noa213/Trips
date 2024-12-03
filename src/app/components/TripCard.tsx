@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 const TripCard: React.FC<{ trip: ITrip }> = ({ trip }) => {
   const router = useRouter();
   const handleClick = () => {
-    router.push(`/trips/${trip._id}`);
+    router.push(`pages/trips/${trip._id}`);
   };
   return (
     <div
