@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Surveys from "./components/Surveys";
-
+import CreateSurvey from "./components/CreateSurvey";
 import Navbar from "@/app/components/Navbar"
 import HomePage from "./components/HomePage";
 
@@ -18,7 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Surveys /> {children}
+        <CreateSurvey /> 
+        <Navbar /> 
+        {children} 
       </body>
     </html>
   );
