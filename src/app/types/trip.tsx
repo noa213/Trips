@@ -3,6 +3,7 @@ import { IMemory } from "./memory";
 import { IPoll } from "./poll";
 import { ITask } from "./task";
 export interface ITrip {
+  _id?: string;
   title: string;
   destination: string;
   dates: {

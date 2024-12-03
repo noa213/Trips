@@ -27,6 +27,7 @@ import { IPoll } from "../types/poll";
 import { IMemory } from "../types/memory";
 import { TripItem } from "../types/tripItem";
 import { Link as ScrollLink } from "react-scroll";
+import { addTrip } from "../services/trips";
 
 const CreateDetailedTrip: React.FC = () => {
   const [trip, setTrip] = useState<ITrip>({
@@ -75,8 +76,11 @@ const CreateDetailedTrip: React.FC = () => {
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     console.log("Trip Details:", trip);
+    const response = await addTrip(trip);
+    console.log("response Details:", response);
+
     alert("Trip details saved successfully!");
   };
 
