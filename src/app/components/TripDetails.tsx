@@ -1,6 +1,5 @@
 // import { useRouter } from "next/router";
 // import { useState, useEffect } from "react";
-// import axios from "axios";
 // import { ITrip } from "../types/trip";
 
 const TripDetail = () => {

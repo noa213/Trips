@@ -13,6 +13,17 @@ export const getTrips = async (): Promise<ITrip[]> => {
   }
 };
 
+export const getTrip = async (id: string): Promise<ITrip> => {
+  try {
+    const response = await axios.get(`/api/trips/${id}`);
+    console.log("response get trip: ",response.data);
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching trip:", error);
+    throw new Error("Failed to fetch trips");
+  }
+};
+
 export const addTrip = async (newTrip: ITrip): Promise<ITrip> => {
     try {
       const response = await axios.post("/api/trips", newTrip);
