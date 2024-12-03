@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Surveys from "./components/Surveys";
+import CreateSurvey from "./components/CreateSurvey";
 import Navbar from "@/app/components/Navbar"
 
 export const metadata: Metadata = {
@@ -16,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {/* <Surveys />  */}
+        <CreateSurvey /> 
         <Navbar /> 
         {children} 
       </body>
