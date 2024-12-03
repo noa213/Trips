@@ -1,8 +1,8 @@
+import { NextRequest, NextResponse } from "next/server";
 import connect from "@/app/lib/db/mongo-db";
 import Trip from "@/app/lib/moduls/trip";
-import { NextRequest, NextResponse } from "next/server";
 
-export async function GET({ params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     await connect();
     const data = await Trip.findById(params.id);
