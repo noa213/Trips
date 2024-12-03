@@ -229,12 +229,14 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 
 console.log("EMAIL_USER:", process.env.EMAIL_USER);  // הדפסת המשתנים
+
+
 console.log("EMAIL_PASS:", process.env.EMAIL_PASS);
+
 export async function POST(req: NextApiRequest, res: NextApiResponse) {
   const { emails, subject, surveyResults } = req.body;
 
  
-
   // הדפסת נתוני סביבה (במידה ונתקלת בבעיה עם המשתנים הסביבתיים)
   console.log("EMAIL_USER:", process.env.EMAIL_USER);  // הדפסת המשתנים
   console.log("EMAIL_PASS:", process.env.EMAIL_PASS);

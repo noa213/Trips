@@ -5,7 +5,7 @@
 import React, { useState, useRef } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale } from 'chart.js';
-import { sendSurvey } from '../services/Survey';
+import { sendSurvey } from '@/app/services/survey';
 import { Option, Question, Survey } from "@/app/types/survy"
 
 // import {sendSurvey} from "@/app/services/Survey"
