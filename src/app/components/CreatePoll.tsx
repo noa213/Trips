@@ -5,10 +5,12 @@
 import React, { useState, useRef } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale } from 'chart.js';
-import { sendSurvey } from '@/app/services/survey';
-import { Option, Question, Survey } from "@/app/types/survy"
+import { sendPoll } from '@/app/services/polls';
+import { Option, Question, IPoll } from "@/app/types/poll"
+import CreateTripDialog from '@/app/components/CreateTripDialog'
 
-// import {sendSurvey} from "@/app/services/Survey"
+
+// import {sendPoll} from "@/app/services/Poll"
 
 ChartJS.register(CategoryScale, LinearScale, BarElement);
 
@@ -23,47 +25,47 @@ ChartJS.register(CategoryScale, LinearScale, BarElement);
 //   options: Option[];
 // }
 
-// interface Survey {
+// interface Poll {
 //   id: number;
 //   title: string;
 //   questions: Question[];
 //   status: 'open' | 'closed'; // חייב להיות אחד מהערכים הללו
 // }
 
-const Home = () => {
-  const [surveys, setSurveys] = useState<Survey[]>([]);
-  const [newSurveyTitle, setNewSurveyTitle] = useState('');
-  const [currentSurveyId, setCurrentSurveyId] = useState<number | null>(null);
+const CreatePoll = () => {
+  const [polls, setPolls] = useState<IPoll[]>([]);
+  const [newPollTitle, setNewPollTitle] = useState('');
+  const [currentPollId, setCurrentPollId] = useState<number | null>(null);
   const [newQuestionText, setNewQuestionText] = useState('');
   const [newOptionText, setNewOptionText] = useState('');
   const questionRefs = useRef<Map<number, HTMLDivElement>>(new Map()); // Map to hold refs for each question
+  const [showCreateTripDialog, setshowCreateTripDialog] = useState(false);
+  const currentPoll = polls.find(poll => poll.id === currentPollId);
 
 
+  const handleSendPoll = () => {
 
-
-  const handleSendSurvey = () => {
-
-    sendSurvey(surveys, currentSurveyId);
+    sendPoll(polls, currentPollId);
   };
 
 
 
   // יצירת סקר חדש
-  const createSurvey = () => {
-    const newSurvey: Survey = {
+  const createPoll = () => {
+    const newPoll: IPoll = {
       id: Date.now(),
-      title: newSurveyTitle,
+      title: newPollTitle,
       questions: [],
       status: 'open',  // סטטוס ברירת מחדל
     };
-    setSurveys([...surveys, newSurvey]);
-    setNewSurveyTitle('');
-    setCurrentSurveyId(newSurvey.id); // עובר לסקר החדש
+    setPolls([...polls, newPoll]);
+    setNewPollTitle('');
+    setCurrentPollId(newPoll.id); // עובר לסקר החדש
   };
 
   // הוספת שאלה
   const addQuestion = () => {
-    if (!newQuestionText || currentSurveyId === null) return;
+    if (!newQuestionText || currentPollId === null) return;
 
     const newQuestion: Question = {
       id: Date.now(),
@@ -71,13 +73,13 @@ const Home = () => {
       options: [],
     };
 
-    const updatedSurveys = surveys.map((survey) =>
-      survey.id === currentSurveyId
-        ? { ...survey, questions: [...survey.questions, newQuestion] }
-        : survey
+    const updatedPolls = polls.map((poll) =>
+      poll.id === currentPollId
+        ? { ...poll, questions: [...poll.questions, newQuestion] }
+        : poll
     );
 
-    setSurveys(updatedSurveys);
+    setPolls(updatedPolls);
     setNewQuestionText('');
 
     // גלילה אל השאלה החדשה לאחר עדכון ה-state
@@ -91,11 +93,11 @@ const Home = () => {
 
   // הוספת אופציה לשאלה
   const addOption = (questionId: number) => {
-    if (!newOptionText || currentSurveyId === null) return;
+    if (!newOptionText || currentPollId === null) return;
 
-    const updatedSurveys = surveys.map((survey) => {
-      if (survey.id === currentSurveyId) {
-        const updatedQuestions = survey.questions.map((question) =>
+    const updatedPolls = polls.map((poll) => {
+      if (poll.id === currentPollId) {
+        const updatedQuestions = poll.questions.map((question) =>
           question.id === questionId
             ? {
               ...question,
@@ -103,20 +105,20 @@ const Home = () => {
             }
             : question
         );
-        return { ...survey, questions: updatedQuestions };
+        return { ...poll, questions: updatedQuestions };
       }
-      return survey;
+      return poll;
     });
 
-    setSurveys(updatedSurveys);
+    setPolls(updatedPolls);
     setNewOptionText('');
   };
 
   // הצבעה לאופציה
   const voteOption = (questionId: number, optionIndex: number) => {
-    const updatedSurveys = surveys.map((survey) => {
-      if (survey.id === currentSurveyId) {
-        const updatedQuestions = survey.questions.map((question) => {
+    const updatedPolls = polls.map((poll) => {
+      if (poll.id === currentPollId) {
+        const updatedQuestions = poll.questions.map((question) => {
           if (question.id === questionId) {
             const updatedOptions = question.options.map((option, index) =>
               index === optionIndex ? { ...option, votes: option.votes + 1 } : option
@@ -125,12 +127,12 @@ const Home = () => {
           }
           return question;
         });
-        return { ...survey, questions: updatedQuestions };
+        return { ...poll, questions: updatedQuestions };
       }
-      return survey;
+      return poll;
     });
 
-    setSurveys(updatedSurveys);
+    setPolls(updatedPolls);
   };
 
   // הצגת גרף
@@ -152,34 +154,56 @@ const Home = () => {
   // console.log("EMAIL_USER:", process.env.EMAIL_USER);
 
 
+
+
+  
+
+
+  const backToCreateTripDialog = () => {
+    setshowCreateTripDialog(!showCreateTripDialog);
+  };
+
+  if (showCreateTripDialog) {
+    return <CreateTripDialog poll={currentPoll} />;
+  }
+
+
   return (
-   
+
     <div className="container p-6">
       <h1 className="  text-3xl font-bold text-center mb-6">Voting System</h1>
 
-      {currentSurveyId === null ? (
+      {currentPollId === null ? (
         <>
           <div>
             <input
               type="text"
-              value={newSurveyTitle}
-              onChange={(e) => setNewSurveyTitle(e.target.value)}
+              value={newPollTitle}
+              onChange={(e) => setNewPollTitle(e.target.value)}
               className="border p-2"
-              placeholder="Survey Title"
+              placeholder="Poll Title"
             />
-            <button onClick={createSurvey} className="bg-[#9B111E] text-white p-2 ml-4">
-              Create Survey
+            <button
+              onClick={createPoll}
+              className="bg-[#9B111E] text-white p-2 ml-4">
+              Create Poll
+            </button>
+
+            <button
+              className="bg-[#9B111E] text-white p-2 ml-4"
+              onClick={backToCreateTripDialog}>
+              Back
             </button>
           </div>
           <div className="mt-6">
-            <h2 className="text-2xl mb-4">My Surveys</h2>
-            {surveys.map((survey) => (
-              <div key={survey.id} className="mb-4">
+            <h2 className="text-2xl mb-4">My Polls</h2>
+            {polls.map((poll) => (
+              <div key={poll.id} className="mb-4">
                 <button
-                  onClick={() => setCurrentSurveyId(survey.id)}
+                  onClick={() => setCurrentPollId(poll.id)}
                   className="p-2 w-full text-left border bg-white"
                 >
-                  {survey.title}
+                  {poll.title}
                 </button>
               </div>
             ))}
@@ -188,7 +212,7 @@ const Home = () => {
       ) : (
         <div>
           <h2 className="text-2xl mb-4">
-            Survey: {surveys.find((s) => s.id === currentSurveyId)?.title}
+            Poll: {polls.find((s) => s.id === currentPollId)?.title}
           </h2>
 
           <div>
@@ -204,8 +228,8 @@ const Home = () => {
             </button>
           </div>
 
-          {surveys
-            .find((s) => s.id === currentSurveyId)
+          {polls
+            .find((s) => s.id === currentPollId)
             ?.questions.map((question) => (
               <div
                 key={question.id}
@@ -248,19 +272,19 @@ const Home = () => {
             ))}
 
           <button
-            onClick={handleSendSurvey}
+            onClick={handleSendPoll}
             className="bg-green-500 text-white p-2 mt-6"
           >
-            Send Survey via Email
+            Send poll via Email
           </button>
 
 
 
           <button
-            onClick={() => setCurrentSurveyId(null)}
+            onClick={() => setCurrentPollId(null)}
             className="bg-gray-500 text-white p-2 mt-6"
           >
-            Back to Surveys
+            Back to pools
           </button>
 
 
@@ -279,4 +303,7 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default CreatePoll;
+
+
+
