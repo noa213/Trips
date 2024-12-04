@@ -9,7 +9,7 @@ const TripDetail = () => {
 //   const trip = router.state?.trip;
 
 //   if (!trip) return <p>Loading...</p>;
-
+consoloe.log('noa magori')
   return (
     <div className="trip-detail">
         <p>dfgedrwsdgerf</p>
