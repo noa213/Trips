@@ -459,7 +459,7 @@
 //                 fullWidth
 //                 margin="normal"
 //               />
-     
+
 
 //               <Button
 //                 variant="contained"
@@ -611,11 +611,9 @@ import CreatePoll from "@/app/components/CreatePoll"
 
 
 
-interface CreateTripDialogProps {
-  poll: IPoll;  // קבלת הסקר כפרופס
-}
 
-const CreateDetailedTrip: FC<CreateTripDialogProps> = ({ poll }) => {
+const CreateDetailedTrip: FC<{poll:IPoll}> = ({poll}) => {
+  console.log(poll);
   const [trip, setTrip] = useState<ITrip>({
     title: "",
     destination: "",
@@ -648,15 +646,15 @@ const CreateDetailedTrip: FC<CreateTripDialogProps> = ({ poll }) => {
     dueDate: new Date(),
   });
 
-  // const [poll, setPoll] = useState<IPoll>({
+ 
 
 
-  const [pollState, setPollState] = useState<IPoll>(poll);  // עדכון המצב של הסקר
-  //   id: Date.now(),
-  //   title: "newPollTitle",
-  //   questions: [],
-  //   status: 'open',  // סטטוס ברירת מחדל
-  // });
+  // const [pollState, setPollState] = useState<IPoll>(poll);  // עדכון המצב של הסקר
+  // //   id: Date.now(),
+  // //   title: "newPollTitle",
+  // //   questions: [],
+  // //   status: 'open',  // סטטוס ברירת מחדל
+  // // });
 
   const [memory, setMemory] = useState<IMemory>({
     imageUrl: "",
@@ -773,7 +771,7 @@ const CreateDetailedTrip: FC<CreateTripDialogProps> = ({ poll }) => {
 
 
   if (showCreatePoll) {
-    return <CreatePoll />; 
+    return <CreatePoll  />;
   }
 
 
@@ -805,7 +803,7 @@ const CreateDetailedTrip: FC<CreateTripDialogProps> = ({ poll }) => {
   };
 
   return (
-    
+
     <Container maxWidth="lg">
       <Grid container spacing={2}>
         {/* Sidebar for Navigation */}
@@ -821,10 +819,11 @@ const CreateDetailedTrip: FC<CreateTripDialogProps> = ({ poll }) => {
               borderRadius: 2,
             }}
           >
-             <div>
-      <h2>Create Trip for Poll: {pollState.title}</h2>
-      {/* כאן תוכל להוסיף את שאר הממשק של יצירת הטיול */}
-    </div>
+            <div>
+              {/* <h2>Create Trip for Poll: {pollState.title}</h2> */}
+              <h2>Create Trip for Poll: </h2>
+              {/* כאן תוכל להוסיף את שאר הממשק של יצירת הטיול */}
+            </div>
             <Typography variant="h6">Navigation</Typography>
             <List>
               <ListItem>
@@ -1039,14 +1038,14 @@ const CreateDetailedTrip: FC<CreateTripDialogProps> = ({ poll }) => {
             {/* Polls */}
             <Grid item xs={12} id="polls">
               <Typography variant="h6">Polls</Typography>
-              <TextField
+              {/* <TextField
                 label="New Poll"
                 value={poll}
                 // onChange={(e) => setPoll(e.target.value)}
                 fullWidth
                 margin="normal"
-              />
-     
+              /> */}
+
 
               <Button
                 variant="contained"
