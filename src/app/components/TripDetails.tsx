@@ -4,6 +4,7 @@ import { ITrip } from "../types/trip";
 import { getTrip, updateTrip } from "../services/trips";
 import { useParams } from "next/navigation";
 import { MdModeEdit } from "react-icons/md";
+import BudgetComponent from "./BudgetComponent";
 
 const TripDetail = () => {
   const [trip, setTrip] = useState<ITrip | null>(null);
@@ -110,7 +111,7 @@ const TripDetail = () => {
             ) : (
               <>
                 <span>
-                  {new Date(trip.dates.end).toLocaleDateString()} -{" "}
+                  {new Date(trip.dates.start).toLocaleDateString()} -{" "}
                   {new Date(trip.dates.end).toLocaleDateString()}
                 </span>
                 <MdModeEdit
@@ -127,7 +128,7 @@ const TripDetail = () => {
           </div>
 
           {/* Budget */}
-          <div className="flex items-center justify-between mb-4">
+          {/* <div className="flex items-center justify-between mb-4">
             <span className="text-gray-600 font-bold">Budget:</span>
             {editingField === "budget" ? (
               <>
@@ -155,7 +156,14 @@ const TripDetail = () => {
                 />
               </>
             )}
-          </div>
+          </div> */}
+          <BudgetComponent
+            budget={trip.budget}
+            onSave={(updatedBudget) => {
+              console.log("Updated budget:", updatedBudget);
+              // Save the updated budget to the server or state
+            }}
+          />
         </div>
       ) : (
         <p>Loading...</p>
@@ -166,4 +174,3 @@ const TripDetail = () => {
 };
 
 export default TripDetail;
-
