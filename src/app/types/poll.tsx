@@ -1,9 +1,21 @@
-export interface IPoll {
-  pollId: string;
-  question: string;
-  options: Array<{
-    option: string;
+
+
+
+export interface Option {
+    text: string;
     votes: number;
-  }>;
-  status: "open" | "closed";
-}
+  }
+  
+  export interface Question {
+    id: number;
+    questionText: string;
+    options: Option[];
+  }
+  
+  export interface IPoll {
+    id: number;
+    title: string;
+    questions: Question[];
+    status: 'open' | 'closed'; // חייב להיות אחד מהערכים הללו
+  }
+  
