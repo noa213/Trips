@@ -1,5 +1,5 @@
-import Footer from "@/app/components/Footer";
-import TripList from "./components/TripList";
+import Footer from '@/app/components/Footer';
+import Navbar from '@/app/components/Navbar';
 
 const Home = () => {
   // רשימת ה-URL של התמונות
@@ -13,31 +13,44 @@ const Home = () => {
   ];
 
   return (
-    <div
-      className="relative min-h-screen bg-cover bg-center"
-      style={{
-        backgroundImage:
-          "url('https://source.unsplash.com/1600x900/?nature,landscape')",
-      }}
-    >
-      <div className="flex items-center justify-center min-h-screen bg-opacity-60 bg-black text-white">
-        <h1 className="text-4xl md:text-6xl font-bold text-center">
-          ברוך הבא ל-Triply
-          <br />
-          התחל לתכנן את הטיול הבא שלך!
+    <div className="relative min-h-screen bg-gray-100">
+
+      {/* כותרת ותוכן ראשי */}
+      <div
+        className="flex items-center justify-center min-h-screen bg-opacity-60 bg-black text-white"
+        style={{ backgroundColor: "#f7f2e7" }} // גוון בז בהגדרת הסטייל
+      >
+        <h1 className="text-4xl md:text-6xl font-light text-center text-[#9B111E]"
+        >
+          Welcome to Triply<br />
+          Discover the world and plan your perfect trip!
         </h1>
       </div>
-      <TripList />
+
+      {/* גלריית תמונות */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
+        {images.map((imageUrl, index) => (
+          <div
+            key={index}
+            className="relative h-64 bg-cover bg-center rounded-lg shadow-lg overflow-hidden"
+            style={{
+              backgroundImage: `url('${imageUrl}')`,
+            }}
+          >
+            <div className="absolute inset-0 bg-black bg-opacity-25 rounded-lg flex items-center justify-center text-white font-bold text-lg opacity-0 hover:opacity-100 transition-opacity duration-300">
+              Explore
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* פוטר */}
       <Footer />
     </div>
   );
 };
 
 export default Home;
-
-
-
-
 
 
 

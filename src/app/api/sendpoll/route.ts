@@ -5,9 +5,9 @@
 
 // // פונקציה למענה על בקשות POST
 // export async function POST(req: NextApiRequest, res: NextApiResponse) {
-//   const { emails, subject, surveyResults } = req.body;
+//   const { emails, subject, pollResults } = req.body;
 
-//   if (!emails || !subject || !surveyResults) {
+//   if (!emails || !subject || !pollResults) {
 //     return res.status(400).json({ error: 'Missing required fields' });
 //   }
 
@@ -25,7 +25,7 @@
 //       to: emails.join(','), // רשימה של מיילים מופרדים בפסיקים
 //       subject: subject,
 //       html: `<h1>Survey Results</h1><pre>${JSON.stringify(
-//         surveyResults,
+//         pollResults,
 //         null,
 //         2
 //       )}</pre>`,
@@ -53,9 +53,9 @@
 // // פונקציה למענה על בקשות POST
 // export async function POST(req: NextApiRequest, res: NextApiResponse) {
 
-//   const { emails, subject, surveyResults } = req.body;
+//   const { emails, subject, pollResults } = req.body;
 
-//   if (!emails || !subject || !surveyResults) {
+//   if (!emails || !subject || !pollResults) {
 //     return res.status(400).json({ error: 'Missing required fields' });
 //   }
 
@@ -74,8 +74,8 @@
 //       from: process.env.EMAIL_USER,
 //       to: emails.join(','), // רשימה של מיילים מופרדים בפסיקים
 //       subject: subject,
-//       html: `<h1>Survey Results</h1><pre>${JSON.stringify(
-//         surveyResults,
+//       html: `<h1>Poll Results</h1><pre>${JSON.stringify(
+//         pollResults,
 //         null,
 //         2
 //       )}</pre>`,
@@ -110,12 +110,12 @@
 
 // // פונקציה למענה על בקשות POST
 // export async function POST(req: NextApiRequest, res: NextApiResponse) {
-//   const { emails, subject, surveyResults } = req.body;
+//   const { emails, subject, pollResults } = req.body;
 
 //   // הדפסת כל משתני הסביבה
 //   console.log(process.env.EMAIL_USER);  // יפלט את הערך
 
-//   if (!emails || !subject || !surveyResults) {
+//   if (!emails || !subject || !pollResults) {
 //     return res.status(400).json({ error: 'Missing required fields' });
 //   }
 
@@ -133,7 +133,7 @@
 //       to: emails.join(','), // רשימה של מיילים מופרדים בפסיקים
 //       subject: subject,
 //       html: `<h1>Survey Results</h1><pre>${JSON.stringify(
-//         surveyResults,
+//         pollResults,
 //         null,
 //         2
 //       )}</pre>`,
@@ -156,9 +156,9 @@
 // import { NextApiRequest, NextApiResponse } from 'next';
 
 // export async function POST(req: NextApiRequest, res: NextApiResponse) {
-//   const { emails, subject, surveyResults } = req.body;
+//   const { emails, subject, pollResults } = req.body;
 
-//   if (!emails || !subject || !surveyResults) {
+//   if (!emails || !subject || !pollResults) {
 //     return res.status(400).json({ error: 'Missing required fields' });
 //   }
 
@@ -180,7 +180,7 @@
 //       from: process.env.EMAIL_USER,
 //       to: emails.join(','),
 //       subject: subject,
-//       html: `<h1>${surveyResults.message}</h1>`,  // שלח את ההודעה בלבד
+//       html: `<h1>${pollResults.message}</h1>`,  // שלח את ההודעה בלבד
 //     };
 
 //     const info = await transporter.sendMail(mailOptions);
@@ -222,31 +222,25 @@
 
 
 import nodemailer from 'nodemailer';
-import { NextApiRequest, NextApiResponse } from 'next';
+
+import { NextRequest, NextResponse } from 'next/server';
 
 
 
 
 
-console.log("EMAIL_USER:", process.env.EMAIL_USER);  // הדפסת המשתנים
+export async function POST(req: NextRequest, res: NextResponse) {
+  const { emails, subject, pollResults } =await req.json();
 
+  console.log(emails, subject, pollResults);
 
-console.log("EMAIL_PASS:", process.env.EMAIL_PASS);
-
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
-  const { emails, subject, surveyResults } = req.body;
-
- 
   // הדפסת נתוני סביבה (במידה ונתקלת בבעיה עם המשתנים הסביבתיים)
-  console.log("EMAIL_USER:", process.env.EMAIL_USER);  // הדפסת המשתנים
-  console.log("EMAIL_PASS:", process.env.EMAIL_PASS);
 
   // הדפסת הנתונים המתקבלים ב-POST (כדי לוודא שהנתונים הגיעו כראוי)
-  console.log("Received data:", req.body); 
 
   // בדיקת שדות חובה
-  if (!emails || !subject || !surveyResults) {
-    return res.status(400).json({ error: 'Missing required fields' });
+  if (!emails || !subject || !pollResults) {
+    return NextResponse.json({status:500,error: 'Missing required fields' })
   }
 
   try {
@@ -264,16 +258,18 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
       from: process.env.EMAIL_USER,
       to: emails.join(','),  // רשימה של מיילים מופרדים בפסיקים
       subject: subject,
-      html: `<h1>${surveyResults.message}</h1>`,  // שלח את ההודעה בלבד
+      html: `<h1>${pollResults.message}</h1>`,  // שלח את ההודעה בלבד
     };
 
     // שליחת המייל
     const info = await transporter.sendMail(mailOptions);
-    res.status(200).json({ message: 'Email sent successfully', info });
+  
+    
+   return NextResponse.json({status:500, message: 'Email sent successfully', info });
   } catch (error) {
     // הדפסת השגיאה בצורה מפורטת
     const e = error as Error;
     console.error("Error sending email:", e.message);
-    res.status(500).json({ error: 'Failed to send email', details: e.message });
+   return NextResponse.json({status:500, error: 'Failed to send email', details: e.message });
   }
 }

@@ -42,7 +42,7 @@
 
 
 
-import { Option, Question, Survey } from "@/app/types/survy";
+import { Option, Question, IPoll } from "@/app/types/poll";
 
 // export const sendSurvey = (surveys: Survey[], currentSurveyId: number | null) => {
 //   const currentSurvey = surveys.find((s) => s.id === currentSurveyId);
@@ -80,30 +80,55 @@ import { Option, Question, Survey } from "@/app/types/survy";
 
 
 
+// //עובד ברשימה של סקרים
+// import axios from 'axios';
+
+// export const sendPoll = async (polls: IPoll[], currentPollId: number | null) => {
+//   const currentPoll = polls.find((s) => s.id === currentPollId);
+//   if (!currentPoll) return;
+
+//   const emails = prompt('Enter recipient emails separated by commas:');
+//   if (!emails) return;
+
+//   try {
+//     console.log("ayala");
+//     const response = await axios.post('/api/sendpoll', {
+//       emails: emails.split(',').map((email) => email.trim()),
+//       subject: `Poll Results: ${currentPoll.title}`,
+//       pollResults: currentPoll,
+//     });
+
+
+//     alert(response.data.message || 'Poll sent successfully!');
+//   } catch (err) {
+//     console.error("Error in client-side sendpoll:", err); // הדפסת השגיאה בצד הלקוח
+//     alert('Failed to send Poll.');
+//   }
+// };
+
+
+
+
+
+
 
 import axios from 'axios';
 
-export const sendSurvey = async (surveys: Survey[], currentSurveyId: number | null) => {
-  const currentSurvey = surveys.find((s) => s.id === currentSurveyId);
-  if (!currentSurvey) return;
-
+export const sendPoll = async (poll: IPoll) => {
   const emails = prompt('Enter recipient emails separated by commas:');
   if (!emails) return;
 
   try {
     console.log("ayala");
-    const EMAIL_USER = process.env.EMAIL_USER || "";
-    console.log(EMAIL_USER);  // הדפסת המשתנים
-    const response = await axios.post('/api/sendsurvey', {
+    const response = await axios.post('/api/sendpoll', {
       emails: emails.split(',').map((email) => email.trim()),
-      subject: `Survey Results: ${currentSurvey.title}`,
-      surveyResults: currentSurvey,
+      subject: `Poll Results: ${poll.title}`,
+      pollResults: poll,
     });
 
-
-    alert(response.data.message || 'Survey sent successfully!');
+    alert(response.data.message || 'Poll sent successfully!');
   } catch (err) {
-    console.error("Error in client-side sendSurvey:", err); // הדפסת השגיאה בצד הלקוח
-    alert('Failed to send survey.');
+    console.error("Error in client-side sendpoll:", err); // הדפסת השגיאה בצד הלקוח
+    alert('Failed to send Poll.');
   }
 };
