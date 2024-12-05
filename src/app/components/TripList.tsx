@@ -13,7 +13,7 @@ const TripList = () => {
         const response = await getTrips();
         setTrips(response);
       } catch (error) {
-        console.error("Failed to fetch recipes:", error);
+        console.error("Failed to fetch trips:", error);
       }
     };
     fetchData();

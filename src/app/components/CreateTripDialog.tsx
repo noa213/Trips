@@ -77,11 +77,8 @@ const CreateDetailedTrip: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleSave = async () => {
-    console.log("Trip Details:", trip);
     const response = await addTrip(trip);
     console.log("response Details:", response);
-
-    alert("Trip details saved successfully!");
   };
 
   const handleChange = (
