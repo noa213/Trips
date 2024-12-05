@@ -23,10 +23,10 @@ export async function PUT(req: NextRequest) {
     await connect();
     const updatedTrip = await Trip.findByIdAndUpdate(updatedData._id, updatedData, {
       new: true,
-    });
+    });    
     return !updatedTrip
       ? NextResponse.json({ message: "Trip not found" }, { status: 404 })
-      : NextResponse.json({ updatedTrip });
+      : NextResponse.json(updatedTrip);
   } catch (error) {
     return NextResponse.json({ message: "Error: " + error }, { status: 500 });
   }

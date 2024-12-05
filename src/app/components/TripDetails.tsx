@@ -13,7 +13,6 @@ const TripDetail = () => {
   const id = router.tripId;
 
   const tripId = Array.isArray(id) ? id[0] : id;
-  console.log(tripId);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -24,13 +23,25 @@ const TripDetail = () => {
       }
     };
     fetchData();
-  }, [setTrip, tripId]);
+  }, [tripId]);
 
   const handleSave = async (field: string) => {
     if (trip) {
-      const updatedTrip = { ...trip, [field]: updatedValue };
+      let updatedTrip = { ...trip };
+      const [start, end] = await updatedValue
+        .split(" - ")
+        .map((date) => new Date(date));
+      // console.log("strat | end", start, end);
+
+      field === "dates"
+        ? (updatedTrip.dates = { start, end })
+        : (updatedTrip = { ...trip, [field]: updatedValue });
+      console.log("updatedTripppp", updatedTrip.budget);
+
       const response = await updateTrip(updatedTrip);
-      console.log("response", response);
+      // console.log("updatedTripppp", response.budget);
+
+      setTrip(response);
       setEditingField(null);
     }
   };
@@ -39,9 +50,11 @@ const TripDetail = () => {
     setEditingField(field);
     setUpdatedValue(currentValue);
   };
+
+  // console.log("trip", trip?.dates);
   return (
     <>
-      {trip ? (
+      {trip && trip.dates ? (
         <div className="trip-detail p-6 rounded-lg shadow-lg border max-w-2xl mx-auto">
           <h1 className="text-2xl font-bold mb-4">{trip.title}</h1>
 
@@ -97,7 +110,7 @@ const TripDetail = () => {
             ) : (
               <>
                 <span>
-                  {new Date(trip.dates.start).toLocaleDateString()} -{" "}
+                  {new Date(trip.dates.end).toLocaleDateString()} -{" "}
                   {new Date(trip.dates.end).toLocaleDateString()}
                 </span>
                 <MdModeEdit
@@ -153,3 +166,4 @@ const TripDetail = () => {
 };
 
 export default TripDetail;
+

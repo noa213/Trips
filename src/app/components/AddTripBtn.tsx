@@ -9,15 +9,15 @@ const AddTripButton = () => {
   };
 
   return (
-    <div>
-      <button
-        onClick={toggleForm}
-        className="bg-green-500 text-white p-2 rounded"
-      >
-        NEW TRIP
-      </button>
-      {showForm && <CreateDetailedTrip />}
-    </div>
+<div>
+  <button
+    onClick={toggleForm}
+    className="bg-[#81C784] text-white p-3 rounded-lg hover:bg-[#66BB6A] transition duration-300"
+  >
+    NEW TRIP
+  </button>
+  {showForm && <CreateDetailedTrip />}
+</div>
   );
 };
 

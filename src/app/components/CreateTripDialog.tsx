@@ -213,7 +213,7 @@ const CreateDetailedTrip: React.FC = () => {
 
   return (
     <Container maxWidth="lg">
-      <Grid container spacing={2}>
+      <Grid container spacing={4}>
         {/* Sidebar for Navigation */}
         <Grid item xs={12} sm={3}>
           <Box
@@ -221,13 +221,18 @@ const CreateDetailedTrip: React.FC = () => {
               position: "sticky",
               top: 0,
               height: "100vh",
-              padding: 2,
+              padding: 3,
               backgroundColor: "#f4f4f4",
               boxShadow: 2,
               borderRadius: 2,
             }}
           >
-            <Typography variant="h6">Navigation</Typography>
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: "bold", color: "#81C784" }}
+            >
+              Navigation
+            </Typography>
             <List>
               <ListItem>
                 <ScrollLink to="basic-details" smooth={true} duration={500}>
@@ -260,10 +265,15 @@ const CreateDetailedTrip: React.FC = () => {
 
         {/* Main Content */}
         <Grid item xs={12} sm={9}>
-          <Box sx={{ padding: 2 }}>
+          <Box sx={{ padding: 4 }}>
             {/* Basic Details */}
-            <Grid item xs={12} id="basic-details">
-              <Typography variant="h6">Basic Details</Typography>
+            <Grid item xs={12} id="basic-details" sx={{ marginBottom: 4 }}>
+              <Typography
+                variant="h5"
+                sx={{ fontWeight: "bold", color: "#81C784" }}
+              >
+                Basic Details
+              </Typography>
               <TextField
                 label="Trip Title"
                 name="title"
@@ -272,6 +282,10 @@ const CreateDetailedTrip: React.FC = () => {
                 fullWidth
                 margin="normal"
                 required
+                sx={{
+                  backgroundColor: "#f9f9f9",
+                  borderRadius: 1,
+                }}
               />
               <TextField
                 label="Destination"
@@ -281,6 +295,10 @@ const CreateDetailedTrip: React.FC = () => {
                 fullWidth
                 margin="normal"
                 required
+                sx={{
+                  backgroundColor: "#f9f9f9",
+                  borderRadius: 1,
+                }}
               />
               <Grid container spacing={2}>
                 <Grid item xs={6}>
@@ -303,6 +321,10 @@ const CreateDetailedTrip: React.FC = () => {
                       shrink: true,
                     }}
                     required
+                    sx={{
+                      backgroundColor: "#f9f9f9",
+                      borderRadius: 1,
+                    }}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -325,14 +347,23 @@ const CreateDetailedTrip: React.FC = () => {
                       shrink: true,
                     }}
                     required
+                    sx={{
+                      backgroundColor: "#f9f9f9",
+                      borderRadius: 1,
+                    }}
                   />
                 </Grid>
               </Grid>
             </Grid>
 
             {/* Budget */}
-            <Grid item xs={12} id="budget-details">
-              <Typography variant="h6">Budget Details</Typography>
+            <Grid item xs={12} id="budget-details" sx={{ marginBottom: 4 }}>
+              <Typography
+                variant="h5"
+                sx={{ fontWeight: "bold", color: "#81C784" }}
+              >
+                Budget Details
+              </Typography>
               <TextField
                 label="Total Budget"
                 name="total"
@@ -342,6 +373,10 @@ const CreateDetailedTrip: React.FC = () => {
                 fullWidth
                 margin="normal"
                 required
+                sx={{
+                  backgroundColor: "#f9f9f9",
+                  borderRadius: 1,
+                }}
               />
               <FormControl fullWidth margin="normal">
                 <InputLabel>Trip Type</InputLabel>
@@ -350,6 +385,10 @@ const CreateDetailedTrip: React.FC = () => {
                   onChange={handleTripTypeChange}
                   name="tripType"
                   label="Trip Type"
+                  sx={{
+                    backgroundColor: "#f9f9f9",
+                    borderRadius: 1,
+                  }}
                 >
                   <MenuItem value="urban">Urban</MenuItem>
                   <MenuItem value="nature">Nature</MenuItem>
@@ -375,47 +414,55 @@ const CreateDetailedTrip: React.FC = () => {
                         onChange={handleBudgetChange}
                         fullWidth
                         margin="normal"
+                        sx={{
+                          backgroundColor: "#f9f9f9",
+                          borderRadius: 1,
+                        }}
                       />
                     </Grid>
                     <Grid item xs={4}>
                       <Typography variant="body2" align="right">
-                        {getCategoryPercentage(
-                          category as keyof IBudgetCategories
-                        )}
-                        % of Total Budget
+                        {getCategoryPercentage(category as keyof IBudgetCategories)}% of Total Budget
                       </Typography>
                     </Grid>
                   </Grid>
                 )
               )}
-              {/* Error message if budget exceeds */}
               {errorMessage && (
                 <Typography
                   variant="body2"
                   color="error"
                   align="center"
-                  marginTop={2}
+                  sx={{ marginTop: 2 }}
                 >
                   {errorMessage}
                 </Typography>
               )}
             </Grid>
-            <Grid></Grid>
+
             {/* Tasks */}
-            <Grid item xs={12} id="tasks">
-              <Typography variant="h6">Tasks</Typography>
+            <Grid item xs={12} id="tasks" sx={{ marginBottom: 4 }}>
+              <Typography
+                variant="h5"
+                sx={{ fontWeight: "bold", color: "#81C784" }}
+              >
+                Tasks
+              </Typography>
               <TextField
                 label="New Task"
                 value={task}
-                // onChange={(e) => setTask(e.target.value)}
                 fullWidth
                 margin="normal"
+                sx={{
+                  backgroundColor: "#f9f9f9",
+                  borderRadius: 1,
+                }}
               />
               <Button
                 variant="contained"
                 onClick={handleAddTask}
                 color="primary"
-                style={{ marginBottom: "1rem" }}
+                sx={{ marginBottom: "1rem" }}
               >
                 Add Task
               </Button>
@@ -439,20 +486,28 @@ const CreateDetailedTrip: React.FC = () => {
             </Grid>
 
             {/* Polls */}
-            <Grid item xs={12} id="polls">
-              <Typography variant="h6">Polls</Typography>
+            <Grid item xs={12} id="polls" sx={{ marginBottom: 4 }}>
+              <Typography
+                variant="h5"
+                sx={{ fontWeight: "bold", color: "#81C784" }}
+              >
+                Polls
+              </Typography>
               <TextField
                 label="New Poll"
                 value={poll}
-                // onChange={(e) => setPoll(e.target.value)}
                 fullWidth
                 margin="normal"
+                sx={{
+                  backgroundColor: "#f9f9f9",
+                  borderRadius: 1,
+                }}
               />
               <Button
                 variant="contained"
                 onClick={handleAddPoll}
                 color="primary"
-                style={{ marginBottom: "1rem" }}
+                sx={{ marginBottom: "1rem" }}
               >
                 Add Poll
               </Button>
@@ -476,20 +531,28 @@ const CreateDetailedTrip: React.FC = () => {
             </Grid>
 
             {/* Memories */}
-            <Grid item xs={12} id="memories">
-              <Typography variant="h6">Memories</Typography>
+            <Grid item xs={12} id="memories" sx={{ marginBottom: 4 }}>
+              <Typography
+                variant="h5"
+                sx={{ fontWeight: "bold", color: "#81C784" }}
+              >
+                Memories
+              </Typography>
               <TextField
                 label="New Memory"
                 value={memory}
-                // onChange={(e) => setMemory(e.target.value)}
                 fullWidth
                 margin="normal"
+                sx={{
+                  backgroundColor: "#f9f9f9",
+                  borderRadius: 1,
+                }}
               />
               <Button
                 variant="contained"
                 onClick={handleAddMemory}
                 color="primary"
-                style={{ marginBottom: "1rem" }}
+                sx={{ marginBottom: "1rem" }}
               >
                 Add Memory
               </Button>
@@ -513,13 +576,21 @@ const CreateDetailedTrip: React.FC = () => {
             </Grid>
 
             {/* Save Button */}
-            {/* <Grid item xs={12} align="center"> */}
-            <Grid item xs={12}>
+            <Grid
+              item
+              xs={12}
+              sx={{ display: "flex", justifyContent: "center" }}
+            >
               <Button
                 variant="contained"
                 color="primary"
                 onClick={handleSave}
                 size="large"
+                sx={{
+                  padding: "10px 20px",
+                  fontWeight: "bold",
+                  backgroundColor: "#81C784",
+                }}
               >
                 Save Trip
               </Button>
