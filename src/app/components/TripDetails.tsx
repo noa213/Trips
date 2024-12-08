@@ -4,6 +4,7 @@ import { ITrip } from "../types/trip";
 import { getTrip, updateTrip } from "../services/trips";
 import { useParams } from "next/navigation";
 import { MdModeEdit } from "react-icons/md";
+import BudgetComponent from "./BudgetComponent";
 
 const TripDetail = () => {
   const [trip, setTrip] = useState<ITrip | null>(null);
@@ -13,7 +14,6 @@ const TripDetail = () => {
   const id = router.tripId;
 
   const tripId = Array.isArray(id) ? id[0] : id;
-  console.log(tripId);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -26,12 +26,14 @@ const TripDetail = () => {
     fetchData();
   }, [setTrip, tripId]);
 
-  const handleSave = async (field: string) => {
+  const handleSave = async (field: string, value?: any) => {
     if (trip) {
-      const updatedTrip = { ...trip, [field]: updatedValue };
+      const updatedTrip = { ...trip, [field]: value ? value : updatedValue };
       const response = await updateTrip(updatedTrip);
       console.log("response", response);
+      setTrip(response);
       setEditingField(null);
+      setUpdatedValue("");
     }
   };
 
@@ -114,35 +116,12 @@ const TripDetail = () => {
           </div>
 
           {/* Budget */}
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-gray-600 font-bold">Budget:</span>
-            {editingField === "budget" ? (
-              <>
-                <input
-                  className="border p-2 rounded w-full"
-                  type="number"
-                  value={updatedValue}
-                  onChange={(e) => setUpdatedValue(e.target.value)}
-                />
-                <button
-                  onClick={() => handleSave("budget.total")}
-                  className="ml-2 px-3 py-2 bg-green-500 text-white rounded"
-                >
-                  Save
-                </button>
-              </>
-            ) : (
-              <>
-                <span>${trip.budget.total}</span>
-                <MdModeEdit
-                  onClick={() =>
-                    handleEditClick("budget", trip.budget.total.toString())
-                  }
-                  className="cursor-pointer text-blue-500 ml-2"
-                />
-              </>
-            )}
-          </div>
+          <BudgetComponent
+            budget={trip.budget}
+            onSave={(updatedBudget) => {
+              handleSave("budget", updatedBudget);
+            }}
+          />
         </div>
       ) : (
         <p>Loading...</p>

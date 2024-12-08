@@ -26,7 +26,7 @@ export async function PUT(req: NextRequest) {
     });
     return !updatedTrip
       ? NextResponse.json({ message: "Trip not found" }, { status: 404 })
-      : NextResponse.json({ updatedTrip });
+      : NextResponse.json( updatedTrip );
   } catch (error) {
     return NextResponse.json({ message: "Error: " + error }, { status: 500 });
   }

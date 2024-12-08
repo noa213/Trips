@@ -4,9 +4,8 @@ import { ITrip } from "@/app/types/trip";
 export const getTrips = async (): Promise<ITrip[]> => {
   try {
     const response = await axios.get("/api/trips");
-    console.log("response get trips: ",response.data);
-    
-    return response.data.data;
+    console.log("response get trips: ",response.data);    
+    return response.data;
   } catch (error) {
     console.error("Error fetching trips:", error);
     throw new Error("Failed to fetch trips");
@@ -16,7 +15,6 @@ export const getTrips = async (): Promise<ITrip[]> => {
 export const getTrip = async (id: string): Promise<ITrip> => {
   try {
     const response = await axios.get(`/api/trips/${id}`);
-    console.log("response get trip: ",response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching trip:", error);
@@ -27,7 +25,6 @@ export const getTrip = async (id: string): Promise<ITrip> => {
 export const addTrip = async (newTrip: ITrip): Promise<ITrip> => {
     try {
       const response = await axios.post("/api/trips", newTrip);
-      console.log(response.data.newTrip);
       return response.data.newTrip;
     } catch (error) {
       console.error("Error adding trip:", error);
@@ -38,7 +35,6 @@ export const addTrip = async (newTrip: ITrip): Promise<ITrip> => {
   export const updateTrip = async (updateTrip: ITrip): Promise<ITrip> => {
     try {
       const response = await axios.put(`/api/trips/${updateTrip._id}`, updateTrip);
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error("Error updating trip:", error);
