@@ -28,6 +28,7 @@ import { IMemory } from "../types/memory";
 import { TripItem } from "../types/tripItem";
 import { Link as ScrollLink } from "react-scroll";
 import { addTrip } from "../services/trips";
+import CreateTask from "./CreateTask";
 
 const CreateDetailedTrip: React.FC = () => {
   const [trip, setTrip] = useState<ITrip>({
@@ -73,7 +74,7 @@ const CreateDetailedTrip: React.FC = () => {
     userId: "",
     timestamp: new Date(),
   });
-
+  const [add, setAdd] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleSave = async () => {
@@ -153,8 +154,9 @@ const CreateDetailedTrip: React.FC = () => {
     if (trip.budget.total === 0) return 0;
     return ((categoryValue / trip.budget.total) * 100).toFixed(2);
   };
+  const handleCreateTask = (newTask: ITask) => {
+    console.log("New Task Created:", newTask);
 
-  const handleAddTask = () => {
     if (task.title.trim() !== "") {
       setTrip((prevTrip) => ({
         ...prevTrip,
@@ -168,7 +170,11 @@ const CreateDetailedTrip: React.FC = () => {
       status: "notStarted",
       dueDate: new Date(),
     });
+
+    // Save the task to the server or update state
   };
+
+  const handleAddTask = () => {};
 
   const handleAddPoll = () => {
     if (poll.question.trim() !== "") {
@@ -400,17 +406,23 @@ const CreateDetailedTrip: React.FC = () => {
                 </Typography>
               )}
             </Grid>
-            <Grid></Grid>
+
             {/* Tasks */}
             <Grid item xs={12} id="tasks">
               <Typography variant="h6">Tasks</Typography>
-              <TextField
+              {/* <TextField
                 label="New Task"
                 value={task}
                 // onChange={(e) => setTask(e.target.value)}
                 fullWidth
                 margin="normal"
+              /> */}
+              add? (
+              <CreateTask
+                onCreate={handleCreateTask}
+                participants={["Alice", "Bob", "Charlie"]}
               />
+              ) : (
               <Button
                 variant="contained"
                 onClick={handleAddTask}
@@ -419,6 +431,7 @@ const CreateDetailedTrip: React.FC = () => {
               >
                 Add Task
               </Button>
+              )
               <List>
                 {trip.tasks.map((task, index) => (
                   <ListItem key={index}>
