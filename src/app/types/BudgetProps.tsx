@@ -6,5 +6,5 @@ export interface IBudgetProps {
     categories: IBudgetCategories;
     tripType: string;
   };
-  onSave: (updatedBudget: IBudgetProps) => void;
+  onSave: (updatedBudget: unknown) => void;
 }

@@ -5,7 +5,6 @@ import { getTrip, updateTrip } from "../services/trips";
 import { useParams } from "next/navigation";
 import { MdModeEdit } from "react-icons/md";
 import BudgetComponent from "./BudgetComponent";
-import { IBudgetProps } from "../types/BudgetProps";
 
 const TripDetail = () => {
   const [trip, setTrip] = useState<ITrip | null>(null);
@@ -29,7 +28,7 @@ const TripDetail = () => {
     fetchData();
   }, [setTrip, tripId]);
 
-  const handleSave = async (field: string, value?: IBudgetProps) => {
+  const handleSave = async (field: string, value?: unknown) => {
     if (trip) {
       const updatedTrip = { ...trip, [field]: value ? value : updatedValue };
       const response = await updateTrip(updatedTrip);
