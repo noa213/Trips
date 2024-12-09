@@ -34,7 +34,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ onCreate, participants }) => {
     }
 
     const newTask: ITask = {
-      taskId: `task-${Date.now()}`, // יוצר מזהה ייחודי
+      taskId: `task-${Date.now()}`,
       ...task,
     };
 

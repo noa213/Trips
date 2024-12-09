@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Container,
@@ -55,13 +55,13 @@ const CreateDetailedTrip: React.FC = () => {
     memories: [],
     status: "active",
   });
-  const [task, setTask] = useState<ITask>({
-    taskId: crypto.randomUUID(),
-    title: "",
-    assignedTo: "Unassigned",
-    status: "notStarted",
-    dueDate: new Date(),
-  });
+  // const [task, setTask] = useState<ITask>({
+  //   taskId: crypto.randomUUID(),
+  //   title: "",
+  //   assignedTo: "Unassigned",
+  //   status: "notStarted",
+  //   dueDate: new Date(),
+  // });
   const [poll, setPoll] = useState<IPoll>({
     pollId: crypto.randomUUID(),
     question: "",
@@ -77,6 +77,7 @@ const CreateDetailedTrip: React.FC = () => {
   const [add, setAdd] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  useEffect(() => {}, [trip]);
   const handleSave = async () => {
     const response = await addTrip(trip);
     console.log("response Details:", response);
@@ -154,27 +155,31 @@ const CreateDetailedTrip: React.FC = () => {
     if (trip.budget.total === 0) return 0;
     return ((categoryValue / trip.budget.total) * 100).toFixed(2);
   };
+
   const handleCreateTask = (newTask: ITask) => {
     console.log("New Task Created:", newTask);
 
-    if (task.title.trim() !== "") {
+    if (newTask.title.trim() !== "") {
       setTrip((prevTrip) => ({
         ...prevTrip,
-        tasks: [...prevTrip.tasks, task],
+        tasks: [...prevTrip.tasks, newTask],
       }));
     }
-    setTask({
-      taskId: crypto.randomUUID(),
-      title: "",
-      assignedTo: "Unassigned",
-      status: "notStarted",
-      dueDate: new Date(),
-    });
+    // setTask({
+    //   taskId: crypto.randomUUID(),
+    //   title: "",
+    //   assignedTo: "Unassigned",
+    //   status: "notStarted",
+    //   dueDate: new Date(),
+    // });
+    setAdd(false);
 
     // Save the task to the server or update state
   };
 
-  const handleAddTask = () => {};
+  const handleAddTask = () => {
+    setAdd(true);
+  };
 
   const handleAddPoll = () => {
     if (poll.question.trim() !== "") {
@@ -216,6 +221,7 @@ const CreateDetailedTrip: React.FC = () => {
       [type]: prevTrip[type].filter((i) => i !== item),
     }));
   };
+  console.log("trip", trip);
 
   return (
     <Container maxWidth="lg">
@@ -410,45 +416,55 @@ const CreateDetailedTrip: React.FC = () => {
             {/* Tasks */}
             <Grid item xs={12} id="tasks">
               <Typography variant="h6">Tasks</Typography>
-              {/* <TextField
-                label="New Task"
-                value={task}
-                // onChange={(e) => setTask(e.target.value)}
-                fullWidth
-                margin="normal"
-              /> */}
-              add? (
-              <CreateTask
-                onCreate={handleCreateTask}
-                participants={["Alice", "Bob", "Charlie"]}
-              />
+              {add ? (
+                <CreateTask
+                  onCreate={handleCreateTask}
+                  participants={["Alice", "Bob", "Charlie"]}
+                />
               ) : (
-              <Button
-                variant="contained"
-                onClick={handleAddTask}
-                color="primary"
-                style={{ marginBottom: "1rem" }}
-              >
-                Add Task
-              </Button>
-              )
-              <List>
-                {trip.tasks.map((task, index) => (
-                  <ListItem key={index}>
-                    <ListItemText primary={task.title} />
-                    <ListItemSecondaryAction>
-                      <IconButton
-                        edge="end"
-                        onClick={() =>
-                          handleRemoveItem(trip.tasks, task, "tasks")
-                        }
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                ))}
-              </List>
+                <>
+                  <Button
+                    variant="contained"
+                    onClick={handleAddTask}
+                    color="primary"
+                    style={{ marginBottom: "1rem" }}
+                  >
+                    Add Task
+                  </Button>
+
+                  <List>
+                    {trip.tasks ? (
+                      trip.tasks.map((task) => (
+                        <ListItem
+                          key={task.taskId}
+                          sx={{ borderBottom: "1px solid #ccc" }}
+                        >
+                          <ListItemText
+                            primary={task.title}
+                            secondary={`Status: ${
+                              task.status
+                            } | Due Date: ${task.dueDate.toLocaleDateString()}`}
+                          />
+                          <ListItemSecondaryAction>
+                            <IconButton
+                              edge="end"
+                              onClick={() =>
+                                handleRemoveItem(trip.tasks, task, "tasks")
+                              }
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                      ))
+                    ) : (
+                      <Typography variant="body2" color="textSecondary">
+                        No tasks added yet.
+                      </Typography>
+                    )}
+                  </List>
+                </>
+              )}
             </Grid>
 
             {/* Polls */}

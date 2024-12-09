@@ -5,6 +5,7 @@ import { getTrip, updateTrip } from "../services/trips";
 import { useParams } from "next/navigation";
 import { MdModeEdit } from "react-icons/md";
 import BudgetComponent from "./BudgetComponent";
+import { IBudgetProps } from "../types/BudgetProps";
 
 const TripDetail = () => {
   const [trip, setTrip] = useState<ITrip | null>(null);
@@ -19,6 +20,8 @@ const TripDetail = () => {
       try {
         const response = await getTrip(tripId);
         setTrip(response);
+        console.log(response);
+        
       } catch (error) {
         console.error("Failed to fetch trip:", error);
       }
@@ -26,7 +29,7 @@ const TripDetail = () => {
     fetchData();
   }, [setTrip, tripId]);
 
-  const handleSave = async (field: string, value?: any) => {
+  const handleSave = async (field: string, value?: IBudgetProps) => {
     if (trip) {
       const updatedTrip = { ...trip, [field]: value ? value : updatedValue };
       const response = await updateTrip(updatedTrip);
