@@ -35,6 +35,7 @@ const TripDetail = () => {
         .map((date) => new Date(date));
       // console.log("strat | end", start, end);
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       field === "dates"
         ? (updatedTrip.dates = { start, end })
         : (updatedTrip = { ...trip, [field]: value ? value : updatedValue });

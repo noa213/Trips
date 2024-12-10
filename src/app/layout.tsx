@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import CreateSurvey from "./components/CreatePoll";
 import Navbar from "@/app/components/Navbar"
-import CreateTripDialog from "./components/CreateTripDialog";
-import HomePage from "./components/HomePage";
+// import CreateTripDialog from "./components/CreateTripDialog";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,10 +16,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-      <CreateTripDialog />
-        {/* <CreateSurvey />  */}
+      {/* <CreateTripDialog /> */}
         <Navbar /> 
-        {/* <Other></Other> */}
         {children} 
       </body>
     </html>
