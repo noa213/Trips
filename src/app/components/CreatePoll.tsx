@@ -1,70 +1,55 @@
 
 
+
+
+
+
+
+
+
+
 // 'use client';
 
 // import React, { useState, useRef } from 'react';
 // import { Bar } from 'react-chartjs-2';
 // import { Chart as ChartJS, BarElement, CategoryScale, LinearScale } from 'chart.js';
 // import { sendPoll } from '@/app/services/polls';
-// import { Option, Question, IPoll } from "@/app/types/poll"
-// import CreateTripDialog from '@/app/components/CreateTripDialog'
-
-
-// // import {sendPoll} from "@/app/services/Poll"
+// import { Option, Question, IPoll } from "@/app/types/poll";
+// import CreateTripDialog from '@/app/components/CreateTripDialog';
+// import { ITrip } from '../types/trip';
 
 // ChartJS.register(CategoryScale, LinearScale, BarElement);
 
-// // interface Option {
-// //   text: string;
-// //   votes: number;
-// // }
+// interface CreatePollProps {
+//   poll: IPoll;
+//   onPollUpdate: (updatedPoll: IPoll) => void;
+// }
 
-// // interface Question {
-// //   id: number;
-// //   questionText: string;
-// //   options: Option[];
-// // }
-
-// // interface Poll {
-// //   id: number;
-// //   title: string;
-// //   questions: Question[];
-// //   status: 'open' | 'closed'; // חייב להיות אחד מהערכים הללו
-// // }
-
-// const CreatePoll = () => {
-//   const [polls, setPolls] = useState<IPoll[]>([]);
+// const CreatePoll: React.FC<CreatePollProps> = ({ poll, onPollUpdate }) => {
+//   const [newPoll, setNewPoll] = useState<IPoll>(poll);
 //   const [newPollTitle, setNewPollTitle] = useState('');
-//   const [currentPollId, setCurrentPollId] = useState<number | null>(null);
 //   const [newQuestionText, setNewQuestionText] = useState('');
 //   const [newOptionText, setNewOptionText] = useState('');
-//   const questionRefs = useRef<Map<number, HTMLDivElement>>(new Map()); // Map to hold refs for each question
+//   const questionRefs = useRef<Map<number, HTMLDivElement>>(new Map());
 //   const [showCreateTripDialog, setshowCreateTripDialog] = useState(false);
-//   const currentPoll = polls.find(poll => poll.id === currentPollId);
-
 
 //   const handleSendPoll = () => {
-
-//     sendPoll(polls, currentPollId);
+//     sendPoll(poll);
 //   };
 
+//   // const createPoll = () => {
+//   //   // const newPoll: IPoll = {
+//   //   //   id: Date.now(),
+//   //   //   title: newPollTitle,
+//   //   //   questions: [],
+//   //   //   status: 'open',
+//   //   // };
+//   //   // setPoll(newPoll);
+//   //   setNewPollTitle('');
+//   // };
 
-//   // יצירת סקר חדש
-//   const createPoll = () => {
-//     const newPoll: IPoll = {
-//       id: Date.now(),
-//       title: newPollTitle,
-//       questions: [],
-//       status: 'open',  // סטטוס ברירת מחדל
-//     };
-//     setPolls([...polls, newPoll]);
-//     setNewPollTitle('');
-//     setCurrentPollId(newPoll.id); // עובר לסקר החדש
-//   };
-
-//   // הוספת שאלה
 //   const addQuestion = () => {
-//     if (!newQuestionText || currentPollId === null) return;
+//     if (!newQuestionText || !poll.pollId) return;
 
 //     const newQuestion: Question = {
 //       id: Date.now(),
@@ -72,69 +57,57 @@
 //       options: [],
 //     };
 
-//     const updatedPolls = polls.map((poll) =>
-//       poll.id === currentPollId
-//         ? { ...poll, questions: [...poll.questions, newQuestion] }
-//         : poll
-//     );
+//     setNewPoll((prevPoll) => ({
+//       ...prevPoll,
+//       questions: [...prevPoll.questions, newQuestion],
+//     }));
 
-//     setPolls(updatedPolls);
 //     setNewQuestionText('');
 
-//     // גלילה אל השאלה החדשה לאחר עדכון ה-state
 //     setTimeout(() => {
 //       const newQuestionRef = questionRefs.current.get(newQuestion.id);
 //       if (newQuestionRef) {
 //         newQuestionRef.scrollIntoView({ behavior: 'smooth', block: 'start' });
 //       }
-//     }, 100); // מאפשר ל-React לעדכן את ה-DOM
+//     }, 100);
 //   };
 
-//   // הוספת אופציה לשאלה
 //   const addOption = (questionId: number) => {
-//     if (!newOptionText || currentPollId === null) return;
+//     if (!newOptionText || !poll.pollId) return;
 
-//     const updatedPolls = polls.map((poll) => {
-//       if (poll.id === currentPollId) {
-//         const updatedQuestions = poll.questions.map((question) =>
-//           question.id === questionId
-//             ? {
-//               ...question,
-//               options: [...question.options, { text: newOptionText, votes: 0 }],
-//             }
-//             : question
-//         );
-//         return { ...poll, questions: updatedQuestions };
-//       }
-//       return poll;
-//     });
+//     const updatedPoll = {
+//       ...poll,
+//       questions: poll.questions.map((question) =>
+//         question.id === questionId
+//           ? {
+//             ...question,
+//             options: [...question.options, { text: newOptionText, votes: 0 }],
+//           }
+//           : question
+//       ),
+//     };
 
-//     setPolls(updatedPolls);
+//     setNewPoll(updatedPoll);
 //     setNewOptionText('');
 //   };
 
-//   // הצבעה לאופציה
 //   const voteOption = (questionId: number, optionIndex: number) => {
-//     const updatedPolls = polls.map((poll) => {
-//       if (poll.id === currentPollId) {
-//         const updatedQuestions = poll.questions.map((question) => {
-//           if (question.id === questionId) {
-//             const updatedOptions = question.options.map((option, index) =>
-//               index === optionIndex ? { ...option, votes: option.votes + 1 } : option
-//             );
-//             return { ...question, options: updatedOptions };
-//           }
-//           return question;
-//         });
-//         return { ...poll, questions: updatedQuestions };
-//       }
-//       return poll;
-//     });
+//     const updatedPoll = {
+//       ...poll,
+//       questions: poll.questions.map((question) => {
+//         if (question.id === questionId) {
+//           const updatedOptions = question.options.map((option, index) =>
+//             index === optionIndex ? { ...option, votes: option.votes + 1 } : option
+//           );
+//           return { ...question, options: updatedOptions };
+//         }
+//         return question;
+//       }),
+//     };
 
-//     setPolls(updatedPolls);
+//     setNewPoll(updatedPoll);
 //   };
 
-//   // הצגת גרף
 //   const renderChart = (options: Option[]) => {
 //     const data = {
 //       labels: options.map((option) => option.text),
@@ -150,37 +123,31 @@
 //     return <Bar data={data} />;
 //   };
 
-//   // console.log("EMAIL_USER:", process.env.EMAIL_USER);
+//   // const backToCreateTripDialog = () => {
+//   //   setshowCreateTripDialog(true);
+    
+//   // };
+
+//   // if (!poll) {
+//   //   return <div>No poll selected. Please go back and select a poll.</div>;
+//   // }
+
+//   // if (showCreateTripDialog) {
+//   //     console.log({ poll });
+//   //       return poll;
+//   // }
 
 
 
-
-
-
-
-//   const backToCreateTripDialog = () => {
-//     setshowCreateTripDialog(!showCreateTripDialog);
-//     console.log({currentPoll});
-
+//   const backSendPoll = () => {
+//      onPollUpdate(newPoll); // קוראים לפונקציה שנשלחה מההורה עם ה-poll המעודכן
 //   };
 
-
-
-//   if (!currentPoll) {
-//     return <div>Error: Poll not found</div>;
-//   }
-
-//   if (showCreateTripDialog) {
-//     return <CreateTripDialog polls={currentPoll} />;
-//   }
-
-
 //   return (
-
 //     <div className="container p-6">
-//       <h1 className="  text-3xl font-bold text-center mb-6">Voting System</h1>
+//       <h1 className="text-3xl font-bold text-center mb-6">Voting System</h1>
 
-//       {currentPollId === null ? (
+//       {!poll.pollId ? (
 //         <>
 //           <div>
 //             <input
@@ -190,37 +157,21 @@
 //               className="border p-2"
 //               placeholder="Poll Title"
 //             />
-//             <button
+//             {/* <button
 //               onClick={createPoll}
 //               className="bg-[#9B111E] text-white p-2 ml-4">
 //               Create Poll
-//             </button>
-
-//             <button
+//             </button> */}
+//             {/* <button
 //               className="bg-[#9B111E] text-white p-2 ml-4"
 //               onClick={backToCreateTripDialog}>
 //               Back
-//             </button>
-//           </div>
-//           <div className="mt-6">
-//             <h2 className="text-2xl mb-4">My Polls</h2>
-//             {polls.map((poll) => (
-//               <div key={poll.id} className="mb-4">
-//                 <button
-//                   onClick={() => setCurrentPollId(poll.id)}
-//                   className="p-2 w-full text-left border bg-white"
-//                 >
-//                   {poll.title}
-//                 </button>
-//               </div>
-//             ))}
+//             </button> */}
 //           </div>
 //         </>
 //       ) : (
 //         <div>
-//           <h2 className="text-2xl mb-4">
-//             Poll: {polls.find((s) => s.id === currentPollId)?.title}
-//           </h2>
+//           <h2 className="text-2xl mb-4">Poll: {poll.title}</h2>
 
 //           <div>
 //             <input
@@ -235,48 +186,46 @@
 //             </button>
 //           </div>
 
-//           {polls
-//             .find((s) => s.id === currentPollId)
-//             ?.questions.map((question) => (
-//               <div
-//                 key={question.id}
-//                 className="mt-6"
-//                 ref={(el) => {
-//                   if (el) {
-//                     questionRefs.current.set(question.id, el);
-//                   }
-//                 }}
-//               >
-//                 <h3 className="text-xl">{question.questionText}</h3>
-//                 {question.options.map((option, index) => (
-//                   <div key={index} className="flex items-center justify-between mt-2">
-//                     <p>{option.text}</p>
-//                     <button
-//                       onClick={() => voteOption(question.id, index)}
-//                       className="bg-blue-500 text-white p-2"
-//                     >
-//                       Vote
-//                     </button>
-//                   </div>
-//                 ))}
-//                 <div className="flex items-center mt-2">
-//                   <input
-//                     type="text"
-//                     value={newOptionText}
-//                     onChange={(e) => setNewOptionText(e.target.value)}
-//                     className="border p-2"
-//                     placeholder="Add option"
-//                   />
+//           {poll.questions.map((question) => (
+//             <div
+//               key={question.id}
+//               className="mt-6"
+//               ref={(el) => {
+//                 if (el) {
+//                   questionRefs.current.set(question.id, el);
+//                 }
+//               }}
+//             >
+//               <h3 className="text-xl">{question.questionText}</h3>
+//               {question.options.map((option, index) => (
+//                 <div key={index} className="flex items-center justify-between mt-2">
+//                   <p>{option.text}</p>
 //                   <button
-//                     onClick={() => addOption(question.id)}
-//                     className="bg-[#9B111E] text-white p-2 ml-4"
+//                     onClick={() => voteOption(question.id, index)}
+//                     className="bg-blue-500 text-white p-2"
 //                   >
-//                     Add Option
+//                     Vote
 //                   </button>
 //                 </div>
-//                 <div className="mt-4">{renderChart(question.options)}</div>
+//               ))}
+//               <div className="flex items-center mt-2">
+//                 <input
+//                   type="text"
+//                   value={newOptionText}
+//                   onChange={(e) => setNewOptionText(e.target.value)}
+//                   className="border p-2"
+//                   placeholder="Add option"
+//                 />
+//                 <button
+//                   onClick={() => addOption(question.id)}
+//                   className="bg-[#9B111E] text-white p-2 ml-4"
+//                 >
+//                   Add Option
+//                 </button>
 //               </div>
-//             ))}
+//               <div className="mt-4">{renderChart(question.options)}</div>
+//             </div>
+//           ))}
 
 //           <button
 //             onClick={handleSendPoll}
@@ -286,50 +235,20 @@
 //           </button>
 
 
-
 //           <button
-//             onClick={() => setCurrentPollId(null)}
+//             onClick={() => backSendPoll()}
 //             className="bg-gray-500 text-white p-2 mt-6"
 //           >
-//             Back to pools
+
+//             Back to CreateTripDialog
 //           </button>
-
-
-
-
-
-
-
-
-
 //         </div>
 //       )}
-
 //     </div>
-
 //   );
 // };
 
 // export default CreatePoll;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -347,41 +266,32 @@
 // import { sendPoll } from '@/app/services/polls';
 // import { Option, Question, IPoll } from "@/app/types/poll";
 // import CreateTripDialog from '@/app/components/CreateTripDialog';
+// import { ITrip } from '../types/trip';
 
 // ChartJS.register(CategoryScale, LinearScale, BarElement);
 
-// const CreatePoll = () => {
-//   const [polls, setPolls] = useState<IPoll[]>([]);
+// interface CreatePollProps {
+//   poll: IPoll;
+//   onPollUpdate: (updatedPoll: IPoll) => void;
+// }
+
+// const CreatePoll: React.FC<CreatePollProps> = ({ poll, onPollUpdate }) => {
+//   const [newPoll, setNewPoll] = useState<IPoll>(poll);
 //   const [newPollTitle, setNewPollTitle] = useState('');
-//   const [currentPollId, setCurrentPollId] = useState<number | null>(null);
 //   const [newQuestionText, setNewQuestionText] = useState('');
 //   const [newOptionText, setNewOptionText] = useState('');
 //   const questionRefs = useRef<Map<number, HTMLDivElement>>(new Map());
 //   const [showCreateTripDialog, setshowCreateTripDialog] = useState(false);
 
-//   const currentPoll = polls.find(poll => poll.id === currentPollId);
-
-//     const [poll, setPoll] = useState<IPoll>({
-//     id: Date.now(),
-//     title: "newPollTitle",
-//     questions: [],
-//     status: 'open',
-//   });
-
-//   const createPoll = () => {
-//     const newPoll: IPoll = {
-//       id: Date.now(),
-//       title: newPollTitle,
-//       questions: [],
-//       status: 'open',
-//     };
-//     setPolls([...polls, newPoll]);
-//     setNewPollTitle('');
-//     setCurrentPollId(newPoll.id);
+//   const handleSendPoll = () => {
+//     sendPoll(newPoll); // שליחה עם ה-poll המעודכן
 //   };
 
+ 
+
+
 //   const addQuestion = () => {
-//     if (!newQuestionText || currentPollId === null) return;
+//     if (!newQuestionText) return;
 
 //     const newQuestion: Question = {
 //       id: Date.now(),
@@ -389,13 +299,11 @@
 //       options: [],
 //     };
 
-//     const updatedPolls = polls.map((poll) =>
-//       poll.id === currentPollId
-//         ? { ...poll, questions: [...poll.questions, newQuestion] }
-//         : poll
-//     );
+//     setNewPoll((prevPoll) => ({
+//       ...prevPoll,
+//       questions: [...prevPoll.questions, newQuestion],
+//     }));
 
-//     setPolls(updatedPolls);
 //     setNewQuestionText('');
 
 //     setTimeout(() => {
@@ -407,45 +315,39 @@
 //   };
 
 //   const addOption = (questionId: number) => {
-//     if (!newOptionText || currentPollId === null) return;
+//     if (!newOptionText) return;
 
-//     const updatedPolls = polls.map((poll) => {
-//       if (poll.id === currentPollId) {
-//         const updatedQuestions = poll.questions.map((question) =>
-//           question.id === questionId
-//             ? {
-//                 ...question,
-//                 options: [...question.options, { text: newOptionText, votes: 0 }],
-//               }
-//             : question
-//         );
-//         return { ...poll, questions: updatedQuestions };
-//       }
-//       return poll;
-//     });
+//     const updatedPoll = {
+//       ...newPoll, // עבודה עם ה-state המקומי newPoll
+//       questions: newPoll.questions.map((question) =>
+//         question.id === questionId
+//           ? {
+//               ...question,
+//               options: [...question.options, { text: newOptionText, votes: 0 }],
+//             }
+//           : question
+//       ),
+//     };
 
-//     setPolls(updatedPolls);
+//     setNewPoll(updatedPoll);
 //     setNewOptionText('');
 //   };
 
 //   const voteOption = (questionId: number, optionIndex: number) => {
-//     const updatedPolls = polls.map((poll) => {
-//       if (poll.id === currentPollId) {
-//         const updatedQuestions = poll.questions.map((question) => {
-//           if (question.id === questionId) {
-//             const updatedOptions = question.options.map((option, index) =>
-//               index === optionIndex ? { ...option, votes: option.votes + 1 } : option
-//             );
-//             return { ...question, options: updatedOptions };
-//           }
-//           return question;
-//         });
-//         return { ...poll, questions: updatedQuestions };
-//       }
-//       return poll;
-//     });
+//     const updatedPoll = {
+//       ...newPoll, // עבודה עם ה-state המקומי newPoll
+//       questions: newPoll.questions.map((question) => {
+//         if (question.id === questionId) {
+//           const updatedOptions = question.options.map((option, index) =>
+//             index === optionIndex ? { ...option, votes: option.votes + 1 } : option
+//           );
+//           return { ...question, options: updatedOptions };
+//         }
+//         return question;
+//       }),
+//     };
 
-//     setPolls(updatedPolls);
+//     setNewPoll(updatedPoll);
 //   };
 
 //   const renderChart = (options: Option[]) => {
@@ -463,60 +365,21 @@
 //     return <Bar data={data} />;
 //   };
 
-//   const backToCreateTripDialog = () => {
-//     setshowCreateTripDialog(true);
-//     console.log({ polls });
+//   const backSendPoll = () => {
+//     onPollUpdate(newPoll); // שליחה של ה-poll המעודכן להורה
 //   };
-
-//   if (showCreateTripDialog) {
-//     return <CreateTripDialog polls={polls} />;
-//   }
 
 //   return (
 //     <div className="container p-6">
 //       <h1 className="text-3xl font-bold text-center mb-6">Voting System</h1>
 
-//       {currentPollId === null ? (
-//         <>
-//           <div>
-//             <input
-//               type="text"
-//               value={newPollTitle}
-//               onChange={(e) => setNewPollTitle(e.target.value)}
-//               className="border p-2"
-//               placeholder="Poll Title"
-//             />
-//             <button
-//               onClick={createPoll}
-//               className="bg-[#9B111E] text-white p-2 ml-4">
-//               Create Poll
-//             </button>
 
-//             <button
-//               className="bg-[#9B111E] text-white p-2 ml-4"
-//               onClick={backToCreateTripDialog}>
-//               Back
-//             </button>
-//           </div>
-//           <div className="mt-6">
-//             <h2 className="text-2xl mb-4">My Polls</h2>
-//             {polls.map((poll) => (
-//               <div key={poll.id} className="mb-4">
-//                 <button
-//                   onClick={() => setCurrentPollId(poll.id)}
-//                   className="p-2 w-full text-left border bg-white"
-//                 >
-//                   {poll.title}
-//                 </button>
-//               </div>
-//             ))}
-//           </div>
-//         </>
-//       ) : (
-//         <div>
-//           <h2 className="text-2xl mb-4">
-//             Poll: {polls.find((s) => s.id === currentPollId)?.title}
-//           </h2>
+
+
+//         {<div>
+//           <h2 className="text-2xl mb-4">Poll: {poll.title}</h2>
+
+
 
 //           <div>
 //             <input
@@ -531,80 +394,68 @@
 //             </button>
 //           </div>
 
-//           {polls
-//             .find((s) => s.id === currentPollId)
-//             ?.questions.map((question) => (
-//               <div
-//                 key={question.id}
-//                 className="mt-6"
-//                 ref={(el) => {
-//                   if (el) {
-//                     questionRefs.current.set(question.id, el);
-//                   }
-//                 }}
-//               >
-//                 <h3 className="text-xl">{question.questionText}</h3>
-//                 {question.options.map((option, index) => (
-//                   <div key={index} className="flex items-center justify-between mt-2">
-//                     <p>{option.text}</p>
-//                     <button
-//                       onClick={() => voteOption(question.id, index)}
-//                       className="bg-blue-500 text-white p-2"
-//                     >
-//                       Vote
-//                     </button>
-//                   </div>
-//                 ))}
-//                 <div className="flex items-center mt-2">
-//                   <input
-//                     type="text"
-//                     value={newOptionText}
-//                     onChange={(e) => setNewOptionText(e.target.value)}
-//                     className="border p-2"
-//                     placeholder="Add option"
-//                   />
+//           {newPoll.questions.map((question) => (
+//             <div
+//               key={question.id}
+//               className="mt-6"
+//               ref={(el) => {
+//                 if (el) {
+//                   questionRefs.current.set(question.id, el);
+//                 }
+//               }}
+//             >
+//               <h3 className="text-xl">{question.questionText}</h3>
+//               {question.options.map((option, index) => (
+//                 <div key={index} className="flex items-center justify-between mt-2">
+//                   <p>{option.text}</p>
 //                   <button
-//                     onClick={() => addOption(question.id)}
-//                     className="bg-[#9B111E] text-white p-2 ml-4"
+//                     onClick={() => voteOption(question.id, index)}
+//                     className="bg-blue-500 text-white p-2"
 //                   >
-//                     Add Option
+//                     Vote
 //                   </button>
 //                 </div>
-//                 <div className="mt-4">{renderChart(question.options)}</div>
+//               ))}
+//               <div className="flex items-center mt-2">
+//                 <input
+//                   type="text"
+//                   value={newOptionText}
+//                   onChange={(e) => setNewOptionText(e.target.value)}
+//                   className="border p-2"
+//                   placeholder="Add option"
+//                 />
+//                 <button
+//                   onClick={() => addOption(question.id)}
+//                   className="bg-[#9B111E] text-white p-2 ml-4"
+//                 >
+//                   Add Option
+//                 </button>
 //               </div>
-//             ))}
+//               <div className="mt-4">{renderChart(question.options)}</div>
+//             </div>
+//           ))}
 
 //           <button
-//             onClick={() => setCurrentPollId(null)}
+//             onClick={handleSendPoll}
+//             className="bg-green-500 text-white p-2 mt-6"
+//           >
+//             Send poll via Email
+//           </button>
+
+//           <button
+//             onClick={backSendPoll}
 //             className="bg-gray-500 text-white p-2 mt-6"
 //           >
-//             Back to polls
+//             Back to CreateTripDialog
 //           </button>
 //         </div>
-//       )}
+//       }
 //     </div>
+ 
 //   );
 // };
 
 // export default CreatePoll;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -615,44 +466,28 @@ import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale } from 'chart.js';
 import { sendPoll } from '@/app/services/polls';
 import { Option, Question, IPoll } from "@/app/types/poll";
-import CreateTripDialog from '@/app/components/CreateTripDialog';
-
-
+import { ITrip } from '../types/trip';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement);
 
-const CreatePoll = () => {
-  const [poll, setPoll] = useState<IPoll>({
-    id: Date.now(),
-    title: "newPollTitle",
-    questions: [],
-    status: 'open',
-  });
-  const [newPollTitle, setNewPollTitle] = useState('');
+interface CreatePollProps {
+  poll: IPoll;
+  onPollUpdate: (updatedPoll: IPoll) => void;
+}
+
+const CreatePoll: React.FC<CreatePollProps> = ({ poll, onPollUpdate }) => {
+  const [newPoll, setNewPoll] = useState<IPoll>(poll);
+  const [newPollTitle, setNewPollTitle] = useState(poll.title || ''); // אם יש כותרת בסקר, נשתמש בה
   const [newQuestionText, setNewQuestionText] = useState('');
   const [newOptionText, setNewOptionText] = useState('');
   const questionRefs = useRef<Map<number, HTMLDivElement>>(new Map());
-  const [showCreateTripDialog, setshowCreateTripDialog] = useState(false);
-
-
-    const handleSendPoll = () => {
-
-    sendPoll(poll);
-  };
-
-  const createPoll = () => {
-    const newPoll: IPoll = {
-      id: Date.now(),
-      title: newPollTitle,
-      questions: [],
-      status: 'open',
-    };
-    setPoll(newPoll);
-    setNewPollTitle('');
+  
+  const handleSendPoll = () => {
+    sendPoll(newPoll); // שליחה עם ה-poll המעודכן
   };
 
   const addQuestion = () => {
-    if (!newQuestionText || !poll.id) return;
+    if (!newQuestionText) return;
 
     const newQuestion: Question = {
       id: Date.now(),
@@ -660,7 +495,7 @@ const CreatePoll = () => {
       options: [],
     };
 
-    setPoll((prevPoll) => ({
+    setNewPoll((prevPoll) => ({
       ...prevPoll,
       questions: [...prevPoll.questions, newQuestion],
     }));
@@ -676,28 +511,28 @@ const CreatePoll = () => {
   };
 
   const addOption = (questionId: number) => {
-    if (!newOptionText || !poll.id) return;
+    if (!newOptionText) return;
 
     const updatedPoll = {
-      ...poll,
-      questions: poll.questions.map((question) =>
+      ...newPoll, // עבודה עם ה-state המקומי newPoll
+      questions: newPoll.questions.map((question) =>
         question.id === questionId
           ? {
-            ...question,
-            options: [...question.options, { text: newOptionText, votes: 0 }],
-          }
+              ...question,
+              options: [...question.options, { text: newOptionText, votes: 0 }],
+            }
           : question
       ),
     };
 
-    setPoll(updatedPoll);
+    setNewPoll(updatedPoll);
     setNewOptionText('');
   };
 
   const voteOption = (questionId: number, optionIndex: number) => {
     const updatedPoll = {
-      ...poll,
-      questions: poll.questions.map((question) => {
+      ...newPoll, // עבודה עם ה-state המקומי newPoll
+      questions: newPoll.questions.map((question) => {
         if (question.id === questionId) {
           const updatedOptions = question.options.map((option, index) =>
             index === optionIndex ? { ...option, votes: option.votes + 1 } : option
@@ -708,7 +543,7 @@ const CreatePoll = () => {
       }),
     };
 
-    setPoll(updatedPoll);
+    setNewPoll(updatedPoll);
   };
 
   const renderChart = (options: Option[]) => {
@@ -726,127 +561,100 @@ const CreatePoll = () => {
     return <Bar data={data} />;
   };
 
-  const backToCreateTripDialog = () => {
-    setshowCreateTripDialog(true);
-    console.log({ poll });
+  const backSendPoll = () => {
+    onPollUpdate(newPoll); // שליחה של ה-poll המעודכן להורה
   };
 
-  if (!poll) {
-    return <div>No poll selected. Please go back and select a poll.</div>;
-  }
-
-  if (showCreateTripDialog) {
-   
-    return <CreateTripDialog poll={poll} />;
-
-
-  }
+  const handlePollTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewPollTitle(e.target.value);
+    setNewPoll((prevPoll) => ({
+      ...prevPoll,
+      title: e.target.value, // עדכון כותרת הסקר
+    }));
+  };
 
   return (
     <div className="container p-6">
       <h1 className="text-3xl font-bold text-center mb-6">Voting System</h1>
 
-      {!poll.id ? (
-        <>
-          <div>
-            <input
-              type="text"
-              value={newPollTitle}
-              onChange={(e) => setNewPollTitle(e.target.value)}
-              className="border p-2"
-              placeholder="Poll Title"
-            />
-            <button
-              onClick={createPoll}
-              className="bg-[#9B111E] text-white p-2 ml-4">
-              Create Poll
-            </button>
-            <button
-              className="bg-[#9B111E] text-white p-2 ml-4"
-              onClick={backToCreateTripDialog}>
-              Back
-            </button>
-          </div>
-        </>
-      ) : (
-        <div>
-          <h2 className="text-2xl mb-4">Poll: {poll.title}</h2>
+      <div>
+        {/* ה-input של כותרת הסקר */}
+        <input
+          type="text"
+          value={newPollTitle}
+          onChange={handlePollTitleChange}
+          className="border p-2"
+          placeholder="Poll Title"
+        />
+      </div>
 
-          <div>
-            <input
-              type="text"
-              value={newQuestionText}
-              onChange={(e) => setNewQuestionText(e.target.value)}
-              className="border p-2"
-              placeholder="Add a question"
-            />
-            <button onClick={addQuestion} className="bg-[#9B111E] text-white p-2 ml-4">
-              Add Question
-            </button>
-          </div>
+      <div>
+        <input
+          type="text"
+          value={newQuestionText}
+          onChange={(e) => setNewQuestionText(e.target.value)}
+          className="border p-2"
+          placeholder="Add a question"
+        />
+        <button onClick={addQuestion} className="bg-[#9B111E] text-white p-2 ml-4">
+          Add Question
+        </button>
+      </div>
 
-          {poll.questions.map((question) => (
-            <div
-              key={question.id}
-              className="mt-6"
-              ref={(el) => {
-                if (el) {
-                  questionRefs.current.set(question.id, el);
-                }
-              }}
-            >
-              <h3 className="text-xl">{question.questionText}</h3>
-              {question.options.map((option, index) => (
-                <div key={index} className="flex items-center justify-between mt-2">
-                  <p>{option.text}</p>
-                  <button
-                    onClick={() => voteOption(question.id, index)}
-                    className="bg-blue-500 text-white p-2"
-                  >
-                    Vote
-                  </button>
-                </div>
-              ))}
-              <div className="flex items-center mt-2">
-                <input
-                  type="text"
-                  value={newOptionText}
-                  onChange={(e) => setNewOptionText(e.target.value)}
-                  className="border p-2"
-                  placeholder="Add option"
-                />
-                <button
-                  onClick={() => addOption(question.id)}
-                  className="bg-[#9B111E] text-white p-2 ml-4"
-                >
-                  Add Option
-                </button>
-              </div>
-              <div className="mt-4">{renderChart(question.options)}</div>
+      {newPoll.questions.map((question) => (
+        <div
+          key={question.id}
+          className="mt-6"
+          ref={(el) => {
+            if (el) {
+              questionRefs.current.set(question.id, el);
+            }
+          }}
+        >
+          <h3 className="text-xl">{question.questionText}</h3>
+          {question.options.map((option, index) => (
+            <div key={index} className="flex items-center justify-between mt-2">
+              <p>{option.text}</p>
+              <button
+                onClick={() => voteOption(question.id, index)}
+                className="bg-blue-500 text-white p-2"
+              >
+                Vote
+              </button>
             </div>
           ))}
-
-          <button
-            onClick={handleSendPoll}
-            className="bg-green-500 text-white p-2 mt-6"
-          >
-            Send poll via Email
-          </button>
-
-
-
-
-
-
-          <button
-            onClick={() => backToCreateTripDialog()}
-            className="bg-gray-500 text-white p-2 mt-6"
-          >
-
-            Back to CreateTripDialog
-          </button>
+          <div className="flex items-center mt-2">
+            <input
+              type="text"
+              value={newOptionText}
+              onChange={(e) => setNewOptionText(e.target.value)}
+              className="border p-2"
+              placeholder="Add option"
+            />
+            <button
+              onClick={() => addOption(question.id)}
+              className="bg-[#9B111E] text-white p-2 ml-4"
+            >
+              Add Option
+            </button>
+          </div>
+          <div className="mt-4">{renderChart(question.options)}</div>
         </div>
-      )}
+      ))}
+
+      <button
+        onClick={handleSendPoll}
+        className="bg-green-500 text-white p-2 mt-6"
+      >
+        Send poll via Email
+      </button>
+
+      <button
+        onClick={backSendPoll}
+        className="bg-gray-500 text-white p-2 mt-6"
+      >
+        Back to CreateTripDialog
+      </button>
     </div>
   );
 };
