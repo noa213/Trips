@@ -6,4 +6,3 @@ export interface IBudgetCategories {
     misc: number;
   }
   
-  

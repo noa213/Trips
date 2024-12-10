@@ -15,11 +15,11 @@ export interface ITrip {
     // spent: number;
     categories: IBudgetCategories;
     tripType: "urban" | "nature" | "family";
-    participants: Array<{
-      userId: string;
-      share: number;
-    }>;
   };
+  participants: Array<{
+    userId: string;
+    share: number;
+  }>;
   tasks: Array<ITask>;
   polls: Array<IPoll>;
   memories: Array<IMemory>;

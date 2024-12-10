@@ -4,9 +4,8 @@ import { ITrip } from "@/app/types/trip";
 export const getTrips = async (): Promise<ITrip[]> => {
   try {
     const response = await axios.get("/api/trips");
-    console.log("response get trips: ",response.data);
-    
-    return response.data.data;
+    console.log("response get trips: ",response.data);    
+    return response.data;
   } catch (error) {
     console.error("Error fetching trips:", error);
     throw new Error("Failed to fetch trips");
@@ -26,7 +25,6 @@ export const getTrip = async (id: string): Promise<ITrip> => {
 export const addTrip = async (newTrip: ITrip): Promise<ITrip> => {
     try {
       const response = await axios.post("/api/trips", newTrip);
-      console.log(response.data.newTrip);
       return response.data.newTrip;
     } catch (error) {
       console.error("Error adding trip:", error);
@@ -41,6 +39,18 @@ export const addTrip = async (newTrip: ITrip): Promise<ITrip> => {
     } catch (error) {
       console.error("Error updating trip:", error);
       throw new Error("Failed to update trip");
+    }
+  };
+  
+  export const deleteTrip = async (tripId: string): Promise<ITrip[]> => {
+    try {
+      const response = await axios.delete(`/api/trips?id=${tripId}`);
+      console.log(`Trip with ID ${tripId} deleted successfully.`);
+      return response.data;
+
+    } catch (error) {
+      console.error("Error deleting trip:", error);
+      throw new Error("Failed to delete trip");
     }
   };
   

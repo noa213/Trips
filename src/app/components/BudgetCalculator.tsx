@@ -1,4 +1,4 @@
-import { IBudgetCategories } from "@/app/types/BudgetCategories"; // ייבוא הטיפוס המתאים
+import { IBudgetCategories } from "@/app/types/BudgetCategories";
 
 const BudgetCalculator = (
   totalBudget: number,

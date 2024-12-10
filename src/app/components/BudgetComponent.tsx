@@ -1,19 +1,10 @@
 import { useState } from "react";
 import { MdModeEdit } from "react-icons/md";
+import { IBudgetCategories } from "../types/BudgetCategories";
+import BudgetCalculator from "./BudgetCalculator";
+import { IBudgetProps } from "../types/BudgetProps";
 
-interface BudgetProps {
-  budget: {
-    total: number;
-    categories: { [key: string]: number }; // Example: { food: 100, transport: 200 }
-    participants: Array<{
-      userId: string;
-      share: number;
-    }>;
-  };
-  onSave: (updatedBudget: any) => void; // Function to save the updated budget
-}
-
-const BudgetComponent: React.FC<BudgetProps> = ({ budget, onSave }) => {
+const BudgetComponent: React.FC<IBudgetProps> = ({ budget, onSave }) => {
   const [editingField, setEditingField] = useState<string | null>(null);
   const [updatedValue, setUpdatedValue] = useState<string>("");
 
@@ -23,14 +14,18 @@ const BudgetComponent: React.FC<BudgetProps> = ({ budget, onSave }) => {
   };
 
   const handleSave = () => {
-    if (editingField) {
-      const updatedBudget = { ...budget };
-      updatedBudget[editingField as keyof typeof budget] =
+    const updatedBudget = { ...budget };
+    if (editingField === "total") {
+      updatedBudget.total = parseFloat(updatedValue);
+      updatedBudget.categories = BudgetCalculator(updatedBudget.total, budget.tripType);
+    } else if (editingField?.startsWith("categories.")) {
+      const categoryKey = editingField.split(".")[1];
+      updatedBudget.categories[categoryKey as keyof IBudgetCategories] =
         parseFloat(updatedValue);
-      onSave(updatedBudget);
-      setEditingField(null);
-      setUpdatedValue("");
     }
+    onSave(updatedBudget);
+    setEditingField(null);
+    setUpdatedValue("");
   };
 
   return (
@@ -95,50 +90,6 @@ const BudgetComponent: React.FC<BudgetProps> = ({ budget, onSave }) => {
                 <MdModeEdit
                   onClick={() =>
                     handleEditClick(`categories.${category}`, amount.toString())
-                  }
-                  className="cursor-pointer text-blue-500 ml-2"
-                />
-              </>
-            )}
-          </div>
-        ))}
-      </div>
-
-      {/* Participants */}
-      <div className="mb-6">
-        <h3 className="text-xl font-semibold mb-2">Participants</h3>
-        {budget.participants.map((participant, index) => (
-          <div
-            className="flex items-center justify-between mb-2"
-            key={participant.userId}
-          >
-            <span className="text-gray-600 font-bold">
-              User ID: {participant.userId}
-            </span>
-            {editingField === `participants.${index}.share` ? (
-              <>
-                <input
-                  className="border p-2 rounded w-full"
-                  type="number"
-                  value={updatedValue}
-                  onChange={(e) => setUpdatedValue(e.target.value)}
-                />
-                <button
-                  onClick={handleSave}
-                  className="ml-2 px-3 py-2 bg-green-500 text-white rounded"
-                >
-                  Save
-                </button>
-              </>
-            ) : (
-              <>
-                <span>Share: {participant.share}%</span>
-                <MdModeEdit
-                  onClick={() =>
-                    handleEditClick(
-                      `participants.${index}.share`,
-                      participant.share.toString()
-                    )
                   }
                   className="cursor-pointer text-blue-500 ml-2"
                 />

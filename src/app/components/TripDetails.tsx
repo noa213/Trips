@@ -19,6 +19,8 @@ const TripDetail = () => {
       try {
         const response = await getTrip(tripId);
         setTrip(response);
+        console.log(response);
+        
       } catch (error) {
         console.error("Failed to fetch trip:", error);
       }
@@ -26,7 +28,7 @@ const TripDetail = () => {
     fetchData();
   }, [tripId]);
 
-  const handleSave = async (field: string) => {
+  const handleSave = async (field: string, value?: unknown) => {
     if (trip) {
       let updatedTrip = { ...trip };
       const [start, end] = await updatedValue
@@ -36,14 +38,13 @@ const TripDetail = () => {
 
       field === "dates"
         ? (updatedTrip.dates = { start, end })
-        : (updatedTrip = { ...trip, [field]: updatedValue });
+        : (updatedTrip = { ...trip, [field]: value ? value : updatedValue });
       console.log("updatedTripppp", updatedTrip.budget);
 
       const response = await updateTrip(updatedTrip);
-      // console.log("updatedTripppp", response.budget);
-
-      setTrip(response);
+     
       setEditingField(null);
+      setUpdatedValue("");
     }
   };
 
@@ -128,40 +129,10 @@ const TripDetail = () => {
           </div>
 
           {/* Budget */}
-          {/* <div className="flex items-center justify-between mb-4">
-            <span className="text-gray-600 font-bold">Budget:</span>
-            {editingField === "budget" ? (
-              <>
-                <input
-                  className="border p-2 rounded w-full"
-                  type="number"
-                  value={updatedValue}
-                  onChange={(e) => setUpdatedValue(e.target.value)}
-                />
-                <button
-                  onClick={() => handleSave("budget.total")}
-                  className="ml-2 px-3 py-2 bg-green-500 text-white rounded"
-                >
-                  Save
-                </button>
-              </>
-            ) : (
-              <>
-                <span>${trip.budget.total}</span>
-                <MdModeEdit
-                  onClick={() =>
-                    handleEditClick("budget", trip.budget.total.toString())
-                  }
-                  className="cursor-pointer text-blue-500 ml-2"
-                />
-              </>
-            )}
-          </div> */}
           <BudgetComponent
             budget={trip.budget}
             onSave={(updatedBudget) => {
-              console.log("Updated budget:", updatedBudget);
-              // Save the updated budget to the server or state
+              handleSave("budget", updatedBudget);
             }}
           />
         </div>
