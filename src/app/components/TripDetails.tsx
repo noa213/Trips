@@ -20,7 +20,6 @@ const TripDetail = () => {
         const response = await getTrip(tripId);
         setTrip(response);
         console.log(response);
-        
       } catch (error) {
         console.error("Failed to fetch trip:", error);
       }
@@ -42,7 +41,7 @@ const TripDetail = () => {
       console.log("updatedTripppp", updatedTrip.budget);
 
       const response = await updateTrip(updatedTrip);
-     
+      setTrip(response);
       setEditingField(null);
       setUpdatedValue("");
     }

@@ -1,5 +1,4 @@
 import Footer from '@/app/components/Footer';
-import Navbar from '@/app/components/Navbar';
 
 const Home = () => {
   // רשימת ה-URL של התמונות

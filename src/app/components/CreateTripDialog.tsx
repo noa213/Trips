@@ -23,7 +23,6 @@ import BudgetCalculator from "./BudgetCalculator";
 import { ITrip } from "../types/trip";
 import { IBudgetCategories } from "../types/BudgetCategories";
 import { ITask } from "../types/task";
-import { IPoll } from "../types/poll";
 import { IMemory } from "../types/memory";
 import { TripItem } from "../types/tripItem";
 import { Link as ScrollLink } from "react-scroll";
@@ -66,13 +65,13 @@ const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   //   status: "open",
   // });
 
-  const [task, setTask] = useState<ITask>({
-    taskId: crypto.randomUUID(),
-    title: "",
-    assignedTo: "Unassigned",
-    status: "notStarted",
-    dueDate: new Date(),
-  });
+  // const [task, setTask] = useState<ITask>({
+  //   taskId: crypto.randomUUID(),
+  //   title: "",
+  //   assignedTo: "Unassigned",
+  //   status: "notStarted",
+  //   dueDate: new Date(),
+  // });
 
   const [memory, setMemory] = useState<IMemory>({
     imageUrl: "",
