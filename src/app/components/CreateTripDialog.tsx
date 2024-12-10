@@ -30,7 +30,9 @@ import { Link as ScrollLink } from "react-scroll";
 import { addTrip } from "../services/trips";
 import CreateTask from "./CreateTask";
 
-const CreateDetailedTrip: React.FC = () => {
+const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
+  onAddTrip,
+}) => {
   const [trip, setTrip] = useState<ITrip>({
     title: "",
     destination: "",
@@ -55,13 +57,7 @@ const CreateDetailedTrip: React.FC = () => {
     memories: [],
     status: "active",
   });
-  // const [task, setTask] = useState<ITask>({
-  //   taskId: crypto.randomUUID(),
-  //   title: "",
-  //   assignedTo: "Unassigned",
-  //   status: "notStarted",
-  //   dueDate: new Date(),
-  // });
+
   const [poll, setPoll] = useState<IPoll>({
     pollId: crypto.randomUUID(),
     question: "",
@@ -80,6 +76,7 @@ const CreateDetailedTrip: React.FC = () => {
   useEffect(() => {}, [trip]);
   const handleSave = async () => {
     const response = await addTrip(trip);
+    onAddTrip(response);
     console.log("response Details:", response);
   };
 
@@ -165,16 +162,7 @@ const CreateDetailedTrip: React.FC = () => {
         tasks: [...prevTrip.tasks, newTask],
       }));
     }
-    // setTask({
-    //   taskId: crypto.randomUUID(),
-    //   title: "",
-    //   assignedTo: "Unassigned",
-    //   status: "notStarted",
-    //   dueDate: new Date(),
-    // });
     setAdd(false);
-
-    // Save the task to the server or update state
   };
 
   const handleAddTask = () => {

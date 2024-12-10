@@ -42,3 +42,15 @@ export const addTrip = async (newTrip: ITrip): Promise<ITrip> => {
     }
   };
   
+  export const deleteTrip = async (tripId: string): Promise<ITrip[]> => {
+    try {
+      const response = await axios.delete(`/api/trips?id=${tripId}`);
+      console.log(`Trip with ID ${tripId} deleted successfully.`);
+      return response.data;
+
+    } catch (error) {
+      console.error("Error deleting trip:", error);
+      throw new Error("Failed to delete trip");
+    }
+  };
+  
