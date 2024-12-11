@@ -12,8 +12,25 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        yellowtail: ['"Yellowtail"', "cursive"],
+      },
+
     },
   },
   plugins: [],
 };
 export default config;
+
+// module.exports = {
+//   content: ["./src/**/*.{js,ts,jsx,tsx}"],
+//   theme: {
+//     extend: {
+//       fontFamily: {
+//         yellowtail: ['"Yellowtail"', "cursive"],
+//       },
+//     },
+//   },
+//   plugins: [],
+// };
+

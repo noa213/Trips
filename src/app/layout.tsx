@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/app/components/Navbar";
 import TripList from "./components/TripList";
+import HomePage from "./components/HomePage";
 
 export const metadata: Metadata = {
   title: "Steps",
@@ -16,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <HomePage />
         <Navbar />
         <TripList />
         {children}
