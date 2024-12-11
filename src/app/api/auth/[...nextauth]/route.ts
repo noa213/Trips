@@ -174,7 +174,10 @@ import GoogleProvider from "next-auth/providers/google";
 import connect from "@/app/lib/db/mongo-db";
 import User from "@/app/lib/moduls/user";
 
-export default NextAuth({
+
+
+
+  const handle = NextAuth({
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -210,3 +213,4 @@ export default NextAuth({
     },
   },
 });
+export {handle as GET, handle as POST}

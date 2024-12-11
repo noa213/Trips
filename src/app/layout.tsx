@@ -38,7 +38,7 @@
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react"; // הוספת SessionProvider
 import "./globals.css";
-import CreateSurvey from "./components/CreatePoll";
+import CreatePoll from "./components/CreatePoll";
 import Navbar from "@/app/components/Navbar";
 import CreateTripDialog from "./components/CreateTripDialog";
 import HomePage from "./components/HomePage";
@@ -58,8 +58,8 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <SessionProvider>
-          <CreateTripDialog />
-          {/* <CreateSurvey /> */}
+          {/* <CreateTripDialog /> */}
+          <CreatePoll />
           <Navbar />
           <LogIn />
           {children}
