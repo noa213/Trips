@@ -59,7 +59,7 @@ export default function RootLayout({
       <body>
         <SessionProvider>
           {/* <CreateTripDialog /> */}
-          <CreatePoll />
+          {/* <CreatePoll /> */}
           <Navbar />
           <LogIn />
           {children}
