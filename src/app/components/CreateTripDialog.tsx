@@ -1,3 +1,6 @@
+
+
+
 "use client";
 import React, { useEffect, useState } from "react";
 import {
@@ -257,6 +260,7 @@ const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                 <ScrollLink to="polls" smooth={true} duration={500}>
                   Polls
                 </ScrollLink>
+
               </ListItem>
               <ListItem>
                 <ScrollLink to="memories" smooth={true} duration={500}>
@@ -511,13 +515,33 @@ const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                 margin="normal"
               /> */}
               <Button
-                variant="contained"
+                  variant="contained"
                 onClick={backToCreateTripDialog}
-                color="primary"
+                  color="primary"
                 sx={{ marginBottom: "1rem" }}
-              >
-                Add Poll
-              </Button>
+                >
+                  Add Poll
+                </Button>
+              }
+              <div className="poll-titles">
+                <h2>Polls List</h2>
+                {polls.length === 0 ? (
+                  <p>No polls created yet.</p>
+                ) : (
+                  <ul>
+                    {polls.map((pollItem, index) => (
+                      <li key={index}>
+                        <h3>{pollItem.title}</h3>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+
+
+
+
 
               {/* <List>
                 {trip.polls.map((poll, index) => (
