@@ -74,7 +74,7 @@ const OpeningPage: React.FC = () => {
 
       <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-40">
         <h1 className="text-white text-6xl font-yellowtail font-bold mb-4">STEPS</h1>
-        <p className="text-white text-2xl">Planning your next step</p>
+        <p className="text-white text-2xl">planning your next step</p>
         {/* <link href="https://fonts.googleapis.com/css2?family=Yellowtail&family=Roboto:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet"> */}
 
       </div>
