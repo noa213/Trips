@@ -13,7 +13,7 @@ export interface Option {
   }
   
   export interface IPoll {
-    id: number;
+    pollId: string;
     title: string;
     questions: Question[];
     status: 'open' | 'closed'; // חייב להיות אחד מהערכים הללו

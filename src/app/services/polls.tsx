@@ -8,8 +8,9 @@ export const sendPoll = async (poll: IPoll) => {
   try {
     const response = await axios.post('/api/sendpoll', {
       emails: emails.split(',').map((email) => email.trim()),
-      subject: `Poll Results: ${poll.title}`,
+      subject: `Poll name: ${poll.title}`,
       pollResults: poll,
+    
     });
 
     alert(response.data.message || 'Poll sent successfully!');

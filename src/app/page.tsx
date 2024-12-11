@@ -36,12 +36,13 @@ const Home = () => {
               backgroundImage: `url('${imageUrl}')`,
             }}
           >
-            <div className="absolute inset-0 bg-black bg-opacity-25 rounded-lg flex items-center justify-center text-white font-bold text-lg opacity-0 hover:opacity-100 transition-opacity duration-300">
+            {/* <div className="absolute inset-0 bg-black bg-opacity-25 rounded-lg flex items-center justify-center text-white font-bold text-lg opacity-0 hover:opacity-100 transition-opacity duration-300">
               Explore
-            </div>
+            </div> */}
           </div>
         ))}
       </div>
+ 
 
       {/* פוטר */}
       <Footer />
