@@ -1,7 +1,12 @@
 import nodemailer from 'nodemailer';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: NextRequest) {
+
+
+
+
+export async function POST(req: NextRequest, res: NextResponse) {
+
   const { emails, subject, pollResults } =await req.json();
 
   console.log(emails, subject, pollResults);
@@ -25,7 +30,9 @@ export async function POST(req: NextRequest) {
       from: process.env.EMAIL_USER,
       to: emails.join(','),  // רשימה של מיילים מופרדים בפסיקים
       subject: subject,
-      html: `<h1>${pollResults.message}</h1>`,  // שלח את ההודעה בלבד
+      // html: `<h1>${pollResults.message}</h1>`,
+        // שלח את ההודעה בלבד
+        html: `<h1>${'נפתח סקר חדש לגבי הטיול הבא שלך נא היכנס ללינק המצורף על מנת לענות עליו'}</h1>`,
     };
 
     // שליחת המייל
