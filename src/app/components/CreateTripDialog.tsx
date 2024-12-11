@@ -1,3 +1,6 @@
+
+
+
 "use client";
 import React, { useEffect, useState } from "react";
 import {
@@ -27,12 +30,10 @@ import { IMemory } from "../types/memory";
 import { TripItem } from "../types/tripItem";
 import { Link as ScrollLink } from "react-scroll";
 import { addTrip } from "../services/trips";
-import CreateTask from "./CreateTask";
-import CreatePoll from "./CreatePoll";
+import CreatePoll from "@/app/components/CreatePoll"
 
-const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
-  onAddTrip,
-}) => {
+
+const CreateTripDialog = () => {
   const [trip, setTrip] = useState<ITrip>({
     title: "",
     destination: "",
@@ -57,21 +58,27 @@ const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     memories: [],
     status: "active",
   });
+  const [polls, setPolls] = useState<IPoll[]>([]);  // מערך הסקרים
 
-  // const [poll, setPoll] = useState<IPoll>({
-  //   pollId: crypto.randomUUID(),
-  //   question: "",
-  //   options: [],
-  //   status: "open",
-  // });
 
-  // const [task, setTask] = useState<ITask>({
-  //   taskId: crypto.randomUUID(),
-  //   title: "",
-  //   assignedTo: "Unassigned",
-  //   status: "notStarted",
-  //   dueDate: new Date(),
-  // });
+  const [poll, setPoll] = useState<IPoll>({
+    pollId: crypto.randomUUID(),
+    title: '',
+    questions: [],
+    status: "open",
+  });
+
+
+
+
+  const [task, setTask] = useState<ITask>({
+    taskId: crypto.randomUUID(),
+    title: "",
+    assignedTo: "Unassigned",
+    status: "notStarted",
+    dueDate: new Date(),
+  });
+  const [showCreatePoll, setShowCreatePoll] = useState(false);
 
   const [memory, setMemory] = useState<IMemory>({
     imageUrl: "",
@@ -79,10 +86,10 @@ const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     userId: "",
     timestamp: new Date(),
   });
-  const [add, setAdd] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  useEffect(() => {}, [trip]);
+
+
   const handleSave = async () => {
     const response = await addTrip(trip);
     onAddTrip(response);
@@ -178,15 +185,9 @@ const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     setAdd(true);
   };
 
-  const [showCreatePoll, setShowCreatePoll] = useState(false);
 
-  const backToCreateTripDialog = () => {
-    setShowCreatePoll(!showCreatePoll);
-  };
 
-  if (showCreatePoll) {
-    return <CreatePoll />;
-  }
+
 
   const handleAddMemory = () => {
     if (memory.description.trim() !== "") {
@@ -213,7 +214,23 @@ const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
       [type]: prevTrip[type].filter((i) => i !== item),
     }));
   };
-  console.log("trip", trip);
+
+
+
+  const openaddpoll = () => {
+    setShowCreatePoll(!showCreatePoll);
+  };
+
+  const handlePollUpdate = (updatedPoll: IPoll) => {
+    console.log("Updated Poll:", updatedPoll);
+    setPolls((prevPolls) => [...prevPolls, updatedPoll]);
+    setPoll(updatedPoll); // עדכני את ה-state של ה-poll או עשי פעולה אחרת
+    setShowCreatePoll(false); // חוזרים למסך הקודם אחרי עדכון
+  };
+
+
+
+
 
   return (
     <Container maxWidth="lg">
@@ -257,6 +274,7 @@ const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                 <ScrollLink to="polls" smooth={true} duration={500}>
                   Polls
                 </ScrollLink>
+
               </ListItem>
               <ListItem>
                 <ScrollLink to="memories" smooth={true} duration={500}>
@@ -510,14 +528,38 @@ const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                 fullWidth
                 margin="normal"
               /> */}
-              <Button
-                variant="contained"
-                onClick={backToCreateTripDialog}
-                color="primary"
-                sx={{ marginBottom: "1rem" }}
-              >
-                Add Poll
-              </Button>
+
+
+              {showCreatePoll
+                ? <CreatePoll poll={poll} onPollUpdate={handlePollUpdate} />
+                : <Button
+                  variant="contained"
+                  onClick={openaddpoll}
+                  color="primary"
+                  style={{ marginBottom: "1rem" }}
+                >
+                  Add Poll
+                </Button>
+              }
+              <div className="poll-titles">
+                <h2>Polls List</h2>
+                {polls.length === 0 ? (
+                  <p>No polls created yet.</p>
+                ) : (
+                  <ul>
+                    {polls.map((pollItem, index) => (
+                      <li key={index}>
+                        <h3>{pollItem.title}</h3>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+
+
+
+
 
               {/* <List>
                 {trip.polls.map((poll, index) => (
@@ -610,4 +652,52 @@ const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   );
 };
 
-export default CreateDetailedTrip;
+export default CreateTripDialog;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
