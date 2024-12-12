@@ -1,6 +1,6 @@
 import { useState } from "react";
-import CreateDetailedTrip from "./CreateTripDialog";
 import { ITrip } from "../types/trip";
+import CreateTrip from "./CreateTrip";
 
 const AddTripButton: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   onAddTrip,
@@ -15,12 +15,11 @@ const AddTripButton: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     setShowForm(!showForm);
     onAddTrip(newTrip)
   };
-
-
+  
   return (
     <div>
       {showForm ? (
-        <CreateDetailedTrip onAddTrip={handleAddTrip}/>
+        <CreateTrip onAddTrip={handleAddTrip}/>
       ) : (
         <button
           onClick={toggleForm}

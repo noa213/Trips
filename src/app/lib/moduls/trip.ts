@@ -94,13 +94,14 @@ const trips: Schema<ITrip> = new Schema({
       food: { type: Number },
       activities: { type: Number },
     },
-    participants: [
-      {
-        userId: { type: String },
-        share: { type: Number },
-      },
-    ],
   },
+  participants: [
+    {
+      userId: { type: String },
+      share: { type: Number },
+    },
+  ],
+
   tasks: [
     {
       taskId: { type: String },

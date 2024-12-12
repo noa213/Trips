@@ -18,19 +18,19 @@ import {
   Button,
   Box,
 } from "@mui/material";
+import { Link as ScrollLink } from "react-scroll";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BudgetCalculator from "./BudgetCalculator";
-import { ITrip } from "../types/trip";
-import { IBudgetCategories } from "../types/BudgetCategories";
-import { ITask } from "../types/task";
-import { IMemory } from "../types/memory";
-import { TripItem } from "../types/tripItem";
-import { Link as ScrollLink } from "react-scroll";
-import { addTrip } from "../services/trips";
 import CreateTask from "./CreateTask";
 import CreatePoll from "./CreatePoll";
+import { ITrip } from "../types/trip";
+import { IBudgetCategories } from "../types/BudgetCategories";
+import { TripItem } from "../types/tripItem";
+import { ITask } from "../types/task";
+import { IPoll } from "../types/poll";
+import { addTrip } from "../services/trips";
 
-const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
+const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   onAddTrip,
 }) => {
   const [trip, setTrip] = useState<ITrip>({
@@ -58,36 +58,17 @@ const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     status: "active",
   });
 
-  // const [poll, setPoll] = useState<IPoll>({
-  //   pollId: crypto.randomUUID(),
-  //   question: "",
-  //   options: [],
-  //   status: "open",
+  // const [memory, setMemory] = useState<IMemory>({
+  //   imageUrl: "",
+  //   description: "",
+  //   userId: "",
+  //   timestamp: new Date(),
   // });
-
-  // const [task, setTask] = useState<ITask>({
-  //   taskId: crypto.randomUUID(),
-  //   title: "",
-  //   assignedTo: "Unassigned",
-  //   status: "notStarted",
-  //   dueDate: new Date(),
-  // });
-
-  const [memory, setMemory] = useState<IMemory>({
-    imageUrl: "",
-    description: "",
-    userId: "",
-    timestamp: new Date(),
-  });
-  const [add, setAdd] = useState(false);
+  const [addTask, setAddTask] = useState(false);
+  const [addPoll, setAddPoll] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {}, [trip]);
-  const handleSave = async () => {
-    const response = await addTrip(trip);
-    onAddTrip(response);
-    console.log("response Details:", response);
-  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -96,6 +77,30 @@ const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     setTrip((prevTrip) => ({
       ...prevTrip,
       [name]: value,
+    }));
+  };
+
+  const handleTotalBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const totalBudget = parseFloat(e.target.value);
+    setTrip((prevTrip) => ({
+      ...prevTrip,
+      budget: {
+        ...prevTrip.budget,
+        total: totalBudget,
+        categories: BudgetCalculator(totalBudget, prevTrip.budget.tripType),
+      },
+    }));
+  };
+
+  const handleTripTypeChange = (e: SelectChangeEvent<string>) => {
+    const tripType = e.target.value as string;
+    setTrip((prevTrip) => ({
+      ...prevTrip,
+      tripType,
+      budget: {
+        ...prevTrip.budget,
+        categories: BudgetCalculator(prevTrip.budget.total, tripType),
+      },
     }));
   };
 
@@ -131,30 +136,6 @@ const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     }));
   };
 
-  const handleTotalBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const totalBudget = parseFloat(e.target.value);
-    setTrip((prevTrip) => ({
-      ...prevTrip,
-      budget: {
-        ...prevTrip.budget,
-        total: totalBudget,
-        categories: BudgetCalculator(totalBudget, prevTrip.budget.tripType),
-      },
-    }));
-  };
-
-  const handleTripTypeChange = (e: SelectChangeEvent<string>) => {
-    const tripType = e.target.value as string;
-    setTrip((prevTrip) => ({
-      ...prevTrip,
-      tripType,
-      budget: {
-        ...prevTrip.budget,
-        categories: BudgetCalculator(prevTrip.budget.total, tripType),
-      },
-    }));
-  };
-
   const getCategoryPercentage = (category: keyof IBudgetCategories) => {
     const categoryValue =
       trip.budget.categories[category as keyof IBudgetCategories];
@@ -162,49 +143,49 @@ const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     return ((categoryValue / trip.budget.total) * 100).toFixed(2);
   };
 
-  const handleCreateTask = (newTask: ITask) => {
-    console.log("New Task Created:", newTask);
+  const handleCreateTask = () => {
+    setAddTask(true);
+  };
 
-    if (newTask.title.trim() !== "") {
+  const handleAddTask = (newTask: ITask) => {
+    if (newTask.title.trim() !== "")
       setTrip((prevTrip) => ({
         ...prevTrip,
         tasks: [...prevTrip.tasks, newTask],
       }));
-    }
-    setAdd(false);
+    setAddTask(false);
   };
 
-  const handleAddTask = () => {
-    setAdd(true);
+  const handleCreatePoll = () => {
+    setAddPoll(!addPoll);
   };
 
-  const [showCreatePoll, setShowCreatePoll] = useState(false);
-
-  const backToCreateTripDialog = () => {
-    setShowCreatePoll(!showCreatePoll);
-  };
-
-  if (showCreatePoll) {
-    return <CreatePoll />;
-  }
-
-  const handleAddMemory = () => {
-    if (memory.description.trim() !== "") {
+  const handleAddPoll = (newPoll: IPoll) => {
+    if (newPoll.question.trim() !== "")
       setTrip((prevTrip) => ({
         ...prevTrip,
-        memories: [...prevTrip.memories, memory],
+        polls: [...prevTrip.polls, newPoll],
       }));
-      setMemory({
-        imageUrl: "",
-        description: "",
-        userId: "",
-        timestamp: new Date(),
-      });
-    }
+    setAddPoll(false);
   };
 
+  // const handleAddMemory = () => {
+  //   if (memory.description.trim() !== "") {
+  //     setTrip((prevTrip) => ({
+  //       ...prevTrip,
+  //       memories: [...prevTrip.memories, memory],
+  //     }));
+  //     setMemory({
+  //       imageUrl: "",
+  //       description: "",
+  //       userId: "",
+  //       timestamp: new Date(),
+  //     });
+  //   }
+  // };
+
   const handleRemoveItem = (
-    list: TripItem[],
+    // list: TripItem[],
     item: TripItem,
     type: "tasks" | "polls" | "memories"
   ) => {
@@ -213,6 +194,13 @@ const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
       [type]: prevTrip[type].filter((i) => i !== item),
     }));
   };
+
+  const handleSave = async () => {
+    const response = await addTrip(trip);
+    // sendPoll(trip.polls);
+    onAddTrip(response);
+  };
+
   console.log("trip", trip);
 
   return (
@@ -450,22 +438,21 @@ const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
             {/* Tasks */}
             <Grid item xs={12} id="tasks">
               <Typography variant="h6">Tasks</Typography>
-              {add ? (
+              {addTask ? (
                 <CreateTask
-                  onCreate={handleCreateTask}
+                  onCreate={handleAddTask}
                   participants={["Alice", "Bob", "Charlie"]}
                 />
               ) : (
                 <>
                   <Button
                     variant="contained"
-                    onClick={handleAddTask}
+                    onClick={handleCreateTask}
                     color="primary"
                     style={{ marginBottom: "1rem" }}
                   >
                     Add Task
                   </Button>
-
                   <List>
                     {trip.tasks ? (
                       trip.tasks.map((task) => (
@@ -482,9 +469,7 @@ const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                           <ListItemSecondaryAction>
                             <IconButton
                               edge="end"
-                              onClick={() =>
-                                handleRemoveItem(trip.tasks, task, "tasks")
-                              }
+                              onClick={() => handleRemoveItem(task, "tasks")}
                             >
                               <DeleteIcon />
                             </IconButton>
@@ -504,42 +489,53 @@ const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
             {/* Polls */}
             <Grid item xs={12} id="polls">
               <Typography variant="h6">Polls</Typography>
-              {/* <TextField
-                label="New Poll"
-                value={poll}
-                fullWidth
-                margin="normal"
-              /> */}
-              <Button
-                variant="contained"
-                onClick={backToCreateTripDialog}
-                color="primary"
-                sx={{ marginBottom: "1rem" }}
-              >
-                Add Poll
-              </Button>
-
-              {/* <List>
-                {trip.polls.map((poll, index) => (
-                  <ListItem key={index}>
-                    <ListItemText primary={poll.question} />
-                    <ListItemSecondaryAction>
-                      <IconButton
-                        edge="end"
-                        onClick={() =>
-                          handleRemoveItem(trip.polls, poll, "polls")
-                        }
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                ))}
-              </List> */}
+              {addPoll ? (
+                <CreatePoll onCreate={handleAddPoll} />
+              ) : (
+                <>
+                  <Button
+                    variant="contained"
+                    onClick={handleCreatePoll}
+                    color="primary"
+                    sx={{ marginBottom: "1rem" }}
+                  >
+                    Add Poll
+                  </Button>
+                  <List>
+                    {trip.polls ? (
+                      trip.polls.map((poll) => (
+                        <ListItem
+                          key={poll.pollId}
+                          sx={{ borderBottom: "1px solid #ccc" }}
+                        >
+                          <ListItemText
+                            primary={poll.question}
+                            secondary={poll.options
+                              .map((option) => option.text)
+                              .join(" | ")}
+                          />
+                          <ListItemSecondaryAction>
+                            <IconButton
+                              edge="end"
+                              onClick={() => handleRemoveItem(poll, "polls")}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                      ))
+                    ) : (
+                      <Typography variant="body2" color="textSecondary">
+                        No polls added yet.
+                      </Typography>
+                    )}
+                  </List>
+                </>
+              )}
             </Grid>
 
             {/* Memories */}
-            <Grid item xs={12} id="memories" sx={{ marginBottom: 4 }}>
+            {/* <Grid item xs={12} id="memories" sx={{ marginBottom: 4 }}>
               <Typography
                 variant="h5"
                 sx={{ fontWeight: "bold", color: "#81C784" }}
@@ -581,7 +577,7 @@ const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                   </ListItem>
                 ))}
               </List>
-            </Grid>
+            </Grid> */}
 
             {/* Save Button */}
             <Grid
@@ -610,4 +606,4 @@ const CreateDetailedTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   );
 };
 
-export default CreateDetailedTrip;
+export default CreateTrip;
