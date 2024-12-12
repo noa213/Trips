@@ -1,21 +1,20 @@
-import axios from 'axios';
-import { IPoll } from '../types/poll';
+import axios from "axios";
+import { IPoll } from "../types/poll";
 
-export const sendPoll = async (poll: IPoll) => {
-  const emails = prompt('Enter recipient emails separated by commas:');
+export const sendPoll = async (polls: IPoll[]) => {
+  const emails = prompt("Enter recipient emails separated by commas:");
   if (!emails) return;
 
   try {
-    const response = await axios.post('/api/sendpoll', {
-      emails: emails.split(',').map((email) => email.trim()),
-      subject: `Poll name: ${poll.title}`,
-      pollResults: poll,
-    
+    const response = await axios.post("/api/sendpoll", {
+      emails: emails.split(",").map((email) => email.trim()),
+      subject: `Poll Results: ${polls.map((poll) => poll.question).join(" | ")}`,
+      pollResults: polls,
     });
 
-    alert(response.data.message || 'Poll sent successfully!');
+    alert(response.data.message || "Poll sent successfully!");
   } catch (err) {
     console.error("Error in client-side sendpoll:", err); // הדפסת השגיאה בצד הלקוח
-    alert('Failed to send Poll.');
+    alert("Failed to send Poll.");
   }
 };

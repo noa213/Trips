@@ -1,6 +1,3 @@
-
-
-
 "use client";
 import React, { useEffect, useState } from "react";
 import {
@@ -21,23 +18,21 @@ import {
   Button,
   Box,
 } from "@mui/material";
+import { Link as ScrollLink } from "react-scroll";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BudgetCalculator from "./BudgetCalculator";
+import CreateTask from "./CreateTask";
+import CreatePoll from "./CreatePoll";
 import { ITrip } from "../types/trip";
-import { IPoll } from "../types/poll";
 import { IBudgetCategories } from "../types/BudgetCategories";
-import { ITask } from "../types/task";
-import { IMemory } from "../types/memory";
 import { TripItem } from "../types/tripItem";
-import { Link as ScrollLink } from "react-scroll";
+import { ITask } from "../types/task";
+import { IPoll } from "../types/poll";
 import { addTrip } from "../services/trips";
-import CreatePoll from "@/app/components/CreatePoll"
 
-
-// const CreateTripDialog = () => {
-  const CreateTripDialog: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
-    onAddTrip,
-  }) => {
+const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
+  onAddTrip,
+}) => {
   const [trip, setTrip] = useState<ITrip>({
     title: "",
     destination: "",
@@ -62,43 +57,18 @@ import CreatePoll from "@/app/components/CreatePoll"
     memories: [],
     status: "active",
   });
-  const [polls, setPolls] = useState<IPoll[]>([]);  // מערך הסקרים
 
-
-  const [poll, setPoll] = useState<IPoll>({
-    pollId: crypto.randomUUID(),
-    title: '',
-    questions: [],
-    status: "open",
-  });
-
-
-
-
-  const [task, setTask] = useState<ITask>({
-    taskId: crypto.randomUUID(),
-    title: "",
-    assignedTo: "Unassigned",
-    status: "notStarted",
-    dueDate: new Date(),
-  });
-  const [showCreatePoll, setShowCreatePoll] = useState(false);
-
-  const [memory, setMemory] = useState<IMemory>({
-    imageUrl: "",
-    description: "",
-    userId: "",
-    timestamp: new Date(),
-  });
+  // const [memory, setMemory] = useState<IMemory>({
+  //   imageUrl: "",
+  //   description: "",
+  //   userId: "",
+  //   timestamp: new Date(),
+  // });
+  const [addTask, setAddTask] = useState(false);
+  const [addPoll, setAddPoll] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-
-
-  const handleSave = async () => {
-    const response = await addTrip(trip);
-    onAddTrip(response);
-    console.log("response Details:", response);
-  };
+  useEffect(() => {}, [trip]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -107,6 +77,30 @@ import CreatePoll from "@/app/components/CreatePoll"
     setTrip((prevTrip) => ({
       ...prevTrip,
       [name]: value,
+    }));
+  };
+
+  const handleTotalBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const totalBudget = parseFloat(e.target.value);
+    setTrip((prevTrip) => ({
+      ...prevTrip,
+      budget: {
+        ...prevTrip.budget,
+        total: totalBudget,
+        categories: BudgetCalculator(totalBudget, prevTrip.budget.tripType),
+      },
+    }));
+  };
+
+  const handleTripTypeChange = (e: SelectChangeEvent<string>) => {
+    const tripType = e.target.value as string;
+    setTrip((prevTrip) => ({
+      ...prevTrip,
+      tripType,
+      budget: {
+        ...prevTrip.budget,
+        categories: BudgetCalculator(prevTrip.budget.total, tripType),
+      },
     }));
   };
 
@@ -142,30 +136,6 @@ import CreatePoll from "@/app/components/CreatePoll"
     }));
   };
 
-  const handleTotalBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const totalBudget = parseFloat(e.target.value);
-    setTrip((prevTrip) => ({
-      ...prevTrip,
-      budget: {
-        ...prevTrip.budget,
-        total: totalBudget,
-        categories: BudgetCalculator(totalBudget, prevTrip.budget.tripType),
-      },
-    }));
-  };
-
-  const handleTripTypeChange = (e: SelectChangeEvent<string>) => {
-    const tripType = e.target.value as string;
-    setTrip((prevTrip) => ({
-      ...prevTrip,
-      tripType,
-      budget: {
-        ...prevTrip.budget,
-        categories: BudgetCalculator(prevTrip.budget.total, tripType),
-      },
-    }));
-  };
-
   const getCategoryPercentage = (category: keyof IBudgetCategories) => {
     const categoryValue =
       trip.budget.categories[category as keyof IBudgetCategories];
@@ -173,43 +143,49 @@ import CreatePoll from "@/app/components/CreatePoll"
     return ((categoryValue / trip.budget.total) * 100).toFixed(2);
   };
 
-  // const handleCreateTask = (newTask: ITask) => {
-  //   console.log("New Task Created:", newTask);
-
-  //   if (newTask.title.trim() !== "") {
-  //     setTrip((prevTrip) => ({
-  //       ...prevTrip,
-  //       tasks: [...prevTrip.tasks, newTask],
-  //     }));
-  //   }
-  //   setAdd(false);
-  // };
-
-  // const handleAddTask = () => {
-  //   setAdd(true);
-  // };
-
-
-
-
-
-  const handleAddMemory = () => {
-    if (memory.description.trim() !== "") {
-      setTrip((prevTrip) => ({
-        ...prevTrip,
-        memories: [...prevTrip.memories, memory],
-      }));
-      setMemory({
-        imageUrl: "",
-        description: "",
-        userId: "",
-        timestamp: new Date(),
-      });
-    }
+  const handleCreateTask = () => {
+    setAddTask(true);
   };
 
+  const handleAddTask = (newTask: ITask) => {
+    if (newTask.title.trim() !== "")
+      setTrip((prevTrip) => ({
+        ...prevTrip,
+        tasks: [...prevTrip.tasks, newTask],
+      }));
+    setAddTask(false);
+  };
+
+  const handleCreatePoll = () => {
+    setAddPoll(!addPoll);
+  };
+
+  const handleAddPoll = (newPoll: IPoll) => {
+    if (newPoll.question.trim() !== "")
+      setTrip((prevTrip) => ({
+        ...prevTrip,
+        polls: [...prevTrip.polls, newPoll],
+      }));
+    setAddPoll(false);
+  };
+
+  // const handleAddMemory = () => {
+  //   if (memory.description.trim() !== "") {
+  //     setTrip((prevTrip) => ({
+  //       ...prevTrip,
+  //       memories: [...prevTrip.memories, memory],
+  //     }));
+  //     setMemory({
+  //       imageUrl: "",
+  //       description: "",
+  //       userId: "",
+  //       timestamp: new Date(),
+  //     });
+  //   }
+  // };
+
   const handleRemoveItem = (
-    list: TripItem[],
+    // list: TripItem[],
     item: TripItem,
     type: "tasks" | "polls" | "memories"
   ) => {
@@ -219,22 +195,13 @@ import CreatePoll from "@/app/components/CreatePoll"
     }));
   };
 
-
-
-  const openaddpoll = () => {
-    setShowCreatePoll(!showCreatePoll);
+  const handleSave = async () => {
+    const response = await addTrip(trip);
+    // sendPoll(trip.polls);
+    onAddTrip(response);
   };
 
-  const handlePollUpdate = (updatedPoll: IPoll) => {
-    console.log("Updated Poll:", updatedPoll);
-    setPolls((prevPolls) => [...prevPolls, updatedPoll]);
-    setPoll(updatedPoll); // עדכני את ה-state של ה-poll או עשי פעולה אחרת
-    setShowCreatePoll(false); // חוזרים למסך הקודם אחרי עדכון
-  };
-
-
-
-
+  console.log("trip", trip);
 
   return (
     <Container maxWidth="lg">
@@ -278,7 +245,6 @@ import CreatePoll from "@/app/components/CreatePoll"
                 <ScrollLink to="polls" smooth={true} duration={500}>
                   Polls
                 </ScrollLink>
-
               </ListItem>
               <ListItem>
                 <ScrollLink to="memories" smooth={true} duration={500}>
@@ -469,25 +435,24 @@ import CreatePoll from "@/app/components/CreatePoll"
               )}
             </Grid>
 
-            {/* Tasks
+            {/* Tasks */}
             <Grid item xs={12} id="tasks">
               <Typography variant="h6">Tasks</Typography>
-              {add ? (
+              {addTask ? (
                 <CreateTask
-                  onCreate={handleCreateTask}
+                  onCreate={handleAddTask}
                   participants={["Alice", "Bob", "Charlie"]}
                 />
               ) : (
                 <>
                   <Button
                     variant="contained"
-                    onClick={handleAddTask}
+                    onClick={handleCreateTask}
                     color="primary"
                     style={{ marginBottom: "1rem" }}
                   >
                     Add Task
                   </Button>
-
                   <List>
                     {trip.tasks ? (
                       trip.tasks.map((task) => (
@@ -504,9 +469,7 @@ import CreatePoll from "@/app/components/CreatePoll"
                           <ListItemSecondaryAction>
                             <IconButton
                               edge="end"
-                              onClick={() =>
-                                handleRemoveItem(trip.tasks, task, "tasks")
-                              }
+                              onClick={() => handleRemoveItem(task, "tasks")}
                             >
                               <DeleteIcon />
                             </IconButton>
@@ -521,50 +484,58 @@ import CreatePoll from "@/app/components/CreatePoll"
                   </List>
                 </>
               )}
-            </Grid> */}
+            </Grid>
 
             {/* Polls */}
             <Grid item xs={12} id="polls">
               <Typography variant="h6">Polls</Typography>
-              {/* <TextField
-                label="New Poll"
-                value={poll}
-                fullWidth
-                margin="normal"
-              /> */}
-               {showCreatePoll
-                ? <CreatePoll poll={poll} onPollUpdate={handlePollUpdate} />
-                : <Button
-                  variant="contained"
-                  onClick={openaddpoll}
-                  color="primary"
-                  style={{ marginBottom: "1rem" }}
-                >
-                  Add Poll
-                </Button>
-              }
-
-              {/* <List>
-                {trip.polls.map((poll, index) => (
-                  <ListItem key={index}>
-                    <ListItemText primary={poll.question} />
-                    <ListItemSecondaryAction>
-                      <IconButton
-                        edge="end"
-                        onClick={() =>
-                          handleRemoveItem(trip.polls, poll, "polls")
-                        }
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                ))}
-              </List> */}
+              {addPoll ? (
+                <CreatePoll onCreate={handleAddPoll} />
+              ) : (
+                <>
+                  <Button
+                    variant="contained"
+                    onClick={handleCreatePoll}
+                    color="primary"
+                    sx={{ marginBottom: "1rem" }}
+                  >
+                    Add Poll
+                  </Button>
+                  <List>
+                    {trip.polls ? (
+                      trip.polls.map((poll) => (
+                        <ListItem
+                          key={poll.pollId}
+                          sx={{ borderBottom: "1px solid #ccc" }}
+                        >
+                          <ListItemText
+                            primary={poll.question}
+                            secondary={poll.options
+                              .map((option) => option.text)
+                              .join(" | ")}
+                          />
+                          <ListItemSecondaryAction>
+                            <IconButton
+                              edge="end"
+                              onClick={() => handleRemoveItem(poll, "polls")}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                      ))
+                    ) : (
+                      <Typography variant="body2" color="textSecondary">
+                        No polls added yet.
+                      </Typography>
+                    )}
+                  </List>
+                </>
+              )}
             </Grid>
 
             {/* Memories */}
-            <Grid item xs={12} id="memories" sx={{ marginBottom: 4 }}>
+            {/* <Grid item xs={12} id="memories" sx={{ marginBottom: 4 }}>
               <Typography
                 variant="h5"
                 sx={{ fontWeight: "bold", color: "#81C784" }}
@@ -606,7 +577,7 @@ import CreatePoll from "@/app/components/CreatePoll"
                   </ListItem>
                 ))}
               </List>
-            </Grid>
+            </Grid> */}
 
             {/* Save Button */}
             <Grid
@@ -635,52 +606,4 @@ import CreatePoll from "@/app/components/CreatePoll"
   );
 };
 
-export default CreateTripDialog;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default CreateTrip;

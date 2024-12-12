@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
       title,
       destination,
       dates,
+      participants,
       budget,
       tasks,
       polls,
@@ -31,6 +32,7 @@ export async function POST(req: NextRequest) {
       title,
       destination,
       dates,
+      participants,
       budget,
       tasks,
       polls,
@@ -38,7 +40,6 @@ export async function POST(req: NextRequest) {
       status,
     });
     await trip.save();
-    // return await GET();
     return NextResponse.json({ newTrip: trip });
   } catch (error) {
     return NextResponse.json({ message: "Error: " + error }, { status: 500 });
@@ -49,7 +50,6 @@ export async function DELETE(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const tripId = searchParams.get("id");
-    console.log("tripId", tripId);
     if (!tripId) {
       return NextResponse.json(
         { message: "Trip ID is required" },

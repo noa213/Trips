@@ -1,13 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { ITask } from "../types/task";
+import { ICreateTaskProps } from "../types/CreateTaskProps";
 
-interface CreateTaskProps {
-  onCreate: (newTask: ITask) => void;
-  participants: string[];
-}
-
-const CreateTask: React.FC<CreateTaskProps> = ({ onCreate, participants }) => {
+const CreateTask: React.FC<ICreateTaskProps> = ({ onCreate, participants }) => {
   const [task, setTask] = useState<Omit<ITask, "taskId">>({
     title: "",
     assignedTo: "",
@@ -27,17 +23,14 @@ const CreateTask: React.FC<CreateTaskProps> = ({ onCreate, participants }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!task.title || !task.assignedTo) {
       alert("Please fill in all required fields.");
       return;
     }
-
     const newTask: ITask = {
       taskId: `task-${Date.now()}`,
       ...task,
     };
-
     onCreate(newTask);
     setTask({
       title: "",
