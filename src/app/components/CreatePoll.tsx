@@ -7,7 +7,7 @@ import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale } from 'chart.js';
 import { sendPoll } from '@/app/services/polls';
 import { Option, Question, IPoll } from "@/app/types/poll";
-import { ITrip } from '../types/trip';
+// import { ITrip } from '../types/trip';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement);
 
