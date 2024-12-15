@@ -5,7 +5,7 @@ export interface IPoll {
   options: IOption[]; 
 }
 
-interface IOption {
+export interface IOption {
   text: string;
   votes: number;
 }

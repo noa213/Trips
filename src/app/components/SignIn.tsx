@@ -40,10 +40,10 @@
 
 
 
-"use client";
+// "use client";
 import { signIn, signOut, useSession } from "next-auth/react";
 
-export default function LogIn() {
+export default function SignIn() {
   const { data: session, status } = useSession();
 
   return (

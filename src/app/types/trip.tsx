@@ -23,5 +23,9 @@ export interface ITrip {
   tasks: Array<ITask>;
   polls: Array<IPoll>;
   memories: Array<IMemory>;
+  image: string;
   status: "active" | "completed" | "cancelled";
 }
+
+
+
