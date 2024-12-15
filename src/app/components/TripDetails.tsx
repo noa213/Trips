@@ -32,37 +32,21 @@ const TripDetail = () => {
     if (trip) {
       let updatedTrip = { ...trip };
 
+      if (field === "startDate" || field === "endDate")
+        updatedTrip.dates[field === "startDate" ? "start" : "end"] = new Date(
+          value as string
+        );
+        
+      else updatedTrip = { ...trip, [field]: value ? value : updatedValue };
+      console.log("value", value);
 
-
-      if (field === "startDate") {
-        updatedTrip.dates.start = new Date(value as string);
-      } else if (field === "endDate") {
-        updatedTrip.dates.end = new Date(value as string);
-      } else {
-        updatedTrip = { ...trip, [field]: value ? value : updatedValue };
-      }
-  
       try {
         const response = await updateTrip(updatedTrip);
         setTrip(response);
-        setUpdatedValue(""); // מאפס את הערך שהוזן
+        setUpdatedValue("");
       } catch (error) {
         console.error("Failed to save trip:", error);
       }
-      // const [start, end] = await updatedValue
-      //   .split(" - ")
-      //   .map((date) => new Date(date));
-
-      // // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      // field === "dates"
-      //   ? (updatedTrip.dates = { start, end })
-      //   : (updatedTrip = { ...trip, [field]: value ? value : updatedValue });
-      // console.log("updatedTripppp", updatedTrip.budget);
-
-      // const response = await updateTrip(updatedTrip);
-      // setTrip(response);
-      // // setEditingField(null);
-      // setUpdatedValue("");
     }
   };
 
@@ -90,9 +74,7 @@ const TripDetail = () => {
           <div className="flex items-center justify-between mb-4">
             <EditableField
               label="Start Date"
-              // value={trip.dates.start.split("T")[0]} 
               value={new Date(trip.dates.start).toISOString().split("T")[0]}
-
               field="startDate"
               inputType="date"
               onSave={(field, value) =>
@@ -109,25 +91,6 @@ const TripDetail = () => {
               }
             />
           </div>
-
-          {/* <div className="flex items-center justify-between mb-4">
-            <EditableField
-              label="Start Date"
-              value={new Date(trip.dates.start).toLocaleDateString()}
-              field="startDate"
-              onSave={(field, value) =>
-                handleSave("dates", { ...trip.dates, start: new Date(value) })
-              }
-            />
-            <EditableField
-              label="End Date"
-              value={new Date(trip.dates.end).toLocaleDateString()}
-              field="endDate"
-              onSave={(field, value) =>
-                handleSave("dates", { ...trip.dates, end: new Date(value) })
-              }
-            />
-          </div> */}
 
           {/* Budget */}
           <BudgetComponent
