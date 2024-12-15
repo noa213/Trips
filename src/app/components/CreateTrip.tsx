@@ -29,7 +29,13 @@ import { TripItem } from "../types/tripItem";
 import { ITask } from "../types/task";
 import { IPoll } from "../types/poll";
 import { addTrip } from "../services/trips";
+import Image from "next/image";
 
+const tripTypeImages: { [key: string]: string } = {
+  urban: "/./images/urban.jpg",
+  nature: "/images/nature.jpg",
+  family: "/images/family.jpg",
+}
 const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   onAddTrip,
 }) => {
@@ -55,6 +61,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     tasks: [],
     polls: [],
     memories: [],
+    image: tripTypeImages.urban,
     status: "active",
   });
 
@@ -205,8 +212,10 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
 
   return (
     <Container maxWidth="lg">
-      <Grid container spacing={4}>
-        {/* Sidebar for Navigation */}
+<Image src={"https://www.deviantart.com/iseegrim/art/forest-1036328819"} alt="Urban Trip" width={500} height={300} /> 
+<Image src={'/./footstep.png'} alt="footstep" width={500} height={300} />  
+    <Grid container spacing={4}>
+{/* Sidebar for Navigation */}
         <Grid item xs={12} sm={3}>
           <Box
             sx={{

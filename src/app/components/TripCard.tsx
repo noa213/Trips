@@ -40,7 +40,6 @@ const TripCard: React.FC<{ trip: ITrip; onDelete: (tripId: string) => void }> = 
         Dates: {new Date(trip.dates.start).toLocaleDateString()} -{" "}
         {new Date(trip.dates.end).toLocaleDateString()}
       </p>
-      <p className="text-[#757575]">Budget: ${trip.budget.total}</p>
     </div>
   );
 };
