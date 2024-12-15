@@ -1,10 +1,11 @@
 "use client";
+import Previous_trips from "@/app/components/Previous_trips";
 import React from "react";
 
 
 const Page = () => {
 return(
-    <h1>Previous trips</h1>
+    <Previous_trips />
 );
 };
 

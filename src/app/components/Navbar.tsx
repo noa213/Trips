@@ -41,7 +41,7 @@ const Navbar = () => {
         <Tab
           label="טיולים קודמים"
           component={Link}
-          href="/pages/Previous_trips"
+          href="/pages/previous_trips"
           sx={{
             color: value === 1 ? "#9B111E" : "#374151",
             "&.mui-selected": { color: "#9B111E" },
