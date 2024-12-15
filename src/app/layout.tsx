@@ -21,9 +21,7 @@ export default function RootLayout({
         <HomePage />
         <Navbar />
         <TripList />
-        {/* <SignIn /> */}
-        {children}
-        {/* </SessionProvider> */}
+        {children} {/* </SessionProvider> */}
       </body>
     </html>
   );
