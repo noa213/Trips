@@ -35,7 +35,7 @@ import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react"; 
 import "./globals.css";
 import Navbar from "@/app/components/Navbar";
-import TripList from "./components/TripList";
+// import CreateTripDialog from "./components/CreateTripDialog";
 import HomePage from "./components/HomePage";
 import SignIn from "./components/SignIn";
 
@@ -53,8 +53,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <SessionProvider>
-          {/* <TripList/> */}
+        <SessionProvider>   
+           {/* <CreateTripDialog /> */}
           {/* <CreatePoll /> */}
           <Navbar />
           <SignIn />
