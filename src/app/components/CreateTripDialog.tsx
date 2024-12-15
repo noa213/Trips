@@ -34,10 +34,10 @@ import { addTrip } from "../services/trips";
 import CreatePoll from "@/app/components/CreatePoll"
 
 
-// const CreateTripDialog = () => {
-  const CreateTripDialog: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
-    onAddTrip,
-  }) => {
+const CreateTripDialog = () => {
+  // const CreateTripDialog: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
+  //   onAddTrip,
+  // }) => {
   const [trip, setTrip] = useState<ITrip>({
     title: "",
     destination: "",
@@ -94,11 +94,11 @@ import CreatePoll from "@/app/components/CreatePoll"
 
 
 
-  const handleSave = async () => {
-    const response = await addTrip(trip);
-    onAddTrip(response);
-    console.log("response Details:", response);
-  };
+  // const handleSave = async () => {
+  //   const response = await addTrip(trip);
+  //   onAddTrip(response);
+  //   console.log("response Details:", response);
+  // };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -617,7 +617,7 @@ import CreatePoll from "@/app/components/CreatePoll"
               <Button
                 variant="contained"
                 color="primary"
-                onClick={handleSave}
+                // onClick={handleSave}
                 size="large"
                 sx={{
                   padding: "10px 20px",

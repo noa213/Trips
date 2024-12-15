@@ -42,7 +42,7 @@ import CreatePoll from "./components/CreatePoll";
 import Navbar from "@/app/components/Navbar";
 import CreateTripDialog from "./components/CreateTripDialog";
 import HomePage from "./components/HomePage";
-import LogIn from "./components/LogIn";
+import SignIn from "./components/SignIn";
 
  const metadata: Metadata = {
   title: "Triply",
@@ -58,10 +58,10 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <SessionProvider>
-          {/* <CreateTripDialog /> */}
+          <CreateTripDialog />
           {/* <CreatePoll /> */}
           <Navbar />
-          <LogIn />
+          <SignIn />
           {children}
         </SessionProvider>
       </body>
