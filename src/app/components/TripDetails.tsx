@@ -55,7 +55,6 @@ const TripDetail = () => {
   //   setUpdatedValue(currentValue);
   // };
 
-  // console.log("trip", trip?.dates);
   return (
     <>
       {trip && trip.dates ? (
