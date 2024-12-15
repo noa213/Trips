@@ -30,16 +30,16 @@
 //   );
 // }
 
-
-"use client"
+"use client";
 
 // import type { Metadata } from "next";
-import { SessionProvider } from "next-auth/react"; 
+import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 import Navbar from "@/app/components/Navbar";
 // import HomePage from "./components/HomePage";
 import SignIn from "./components/SignIn";
-
+import TripList from "./components/TripList";
+import HomePage from "./components/HomePage";
 
 // export const metadata: Metadata = {
 //   title: "Steps",
@@ -54,10 +54,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <SessionProvider>   
-           {/* <CreateTripDialog /> */}
-          {/* <CreatePoll /> */}
-          <Navbar />
+        <SessionProvider>
+          <HomePage /> <Navbar />
+          <TripList />
           <SignIn />
           {children}
         </SessionProvider>
