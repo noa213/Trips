@@ -35,7 +35,6 @@ import type { Metadata } from "next";
 // import { SessionProvider } from "next-auth/react"; 
 import "./globals.css";
 import Navbar from "@/app/components/Navbar";
-// import CreateTripDialog from "./components/CreateTripDialog";
 // import HomePage from "./components/HomePage";
 import SignIn from "./components/SignIn";
 
