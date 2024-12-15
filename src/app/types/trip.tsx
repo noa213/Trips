@@ -26,3 +26,6 @@ export interface ITrip {
   image: string;
   status: "active" | "completed" | "cancelled";
 }
+
+
+
