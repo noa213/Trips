@@ -40,7 +40,7 @@ import { SessionProvider } from "next-auth/react"; // הוספת SessionProvider
 import "./globals.css";
 import CreatePoll from "./components/CreatePoll";
 import Navbar from "@/app/components/Navbar";
-import CreateTripDialog from "./components/CreateTripDialog";
+// import CreateTripDialog from "./components/CreateTripDialog";
 import HomePage from "./components/HomePage";
 import SignIn from "./components/SignIn";
 
@@ -58,7 +58,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <SessionProvider>
-          <CreateTripDialog />
+          {/* <CreateTripDialog /> */}
           {/* <CreatePoll /> */}
           <Navbar />
           <SignIn />
