@@ -121,7 +121,7 @@ const trips: Schema<ITrip> = new Schema({
       question: { type: String },
       options: [
         {
-          option: { type: String },
+          value: { type: String },
           votes: { type: Number },
         },
       ],

@@ -27,8 +27,6 @@ const TripList = () => {
   const handleDelete = async (tripId: string) => {
     try {
       const response = await deleteTrip(tripId);
-
-      // Update the local state to remove the deleted trip
       setTrips(response);
     } catch (error) {
       console.error("Error deleting trip:", error);
@@ -38,12 +36,12 @@ const TripList = () => {
   return (
     <>
       <div className="trip-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-        {trips.length === 0 ? (
-          <p className="text-gray-500 text-center">No trips found.</p>
-        ) : (
-          trips.map((trip) => (
+        {trips ? (
+          trips.map((trip: ITrip) => (
             <TripCard key={trip._id} trip={trip} onDelete={handleDelete} />
           ))
+        ) : (
+          <p className="text-gray-500 text-center">No trips found.</p>
         )}
       </div>
       <AddTripButton onAddTrip={handleAddTrip} />

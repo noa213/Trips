@@ -1,6 +1,16 @@
 import axios from "axios";
 import { IPoll } from "../types/poll";
 
+export const getPolls = async (): Promise<IPoll[]> => {
+  try {
+    const response = await axios.get("/api/polls");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching polls:", error);
+    throw new Error("Failed to fetch polls");
+  }
+};
+
 export const sendPoll = async (polls: IPoll[]) => {
   const emails = prompt("Enter recipient emails separated by commas:");
   if (!emails) return;
