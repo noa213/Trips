@@ -1,8 +1,8 @@
-import Polls from "@/app/components/Polls";
-import React from "react";
+// import Polls from "@/app/components/Polls";
+// import React from "react";
 
 const page = () => {
-  return <Polls />;
+  // return <Polls />;
 };
 
 export default page;
