@@ -118,7 +118,7 @@ const Polls: React.FC<IPollsProps> = ({ pollsList }) => {
           handleVote(poll.pollId, selectedValue);
           // saveVotes()
         });
-        surveyModel.onComplete.add((sender) => {
+        surveyModel.onComplete.add(() => {
           saveVotes(poll);
           console.log(poll);
           // console.log("User votes:", userVotes); // מדפיס את ההצבעות
