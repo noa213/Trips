@@ -26,7 +26,6 @@ export async function PUT(req: NextRequest) {
       {
         arrayFilters: [
           { "poll.pollId": pollId },
-          // { "option.value": options.value },
         ],
         new: true,
       }
