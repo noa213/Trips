@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { IOption, IPoll } from "../types/poll";
-import { getPolls, updatePoll } from "../services/polls";
+import { updatePoll } from "../services/polls";
 import { Survey } from "survey-react-ui";
 import * as SurveyCore from "survey-core";
 import "survey-core/defaultV2.css";
@@ -112,7 +112,7 @@ const Polls: React.FC<IPollsProps> = ({ pollsList }) => {
           ],
         });
 
-        surveyModel.onValueChanged.add((sender, options) => {
+        surveyModel.onValueChanged.add((options) => {
           const selectedValue = options.value;
 
           handleVote(poll.pollId, selectedValue);
