@@ -16,9 +16,9 @@ const PieChart: React.FC<IPieChartProps> = (options) => {
   //   };
 
   const generatePastelColor = () => {
-    const r = Math.floor(Math.random() * 127) + 127; // רמות אדום גבוהות
-    const g = Math.floor(Math.random() * 127) + 127; // רמות ירוק גבוהות
-    const b = Math.floor(Math.random() * 127) + 127; // רמות כחול גבוהות
+    const r = Math.floor(Math.random() * 127) + 127; 
+    const g = Math.floor(Math.random() * 127) + 127; 
+    const b = Math.floor(Math.random() * 127) + 127; 
     return `rgb(${r}, ${g}, ${b})`;
   };
 
@@ -47,7 +47,7 @@ const PieChart: React.FC<IPieChartProps> = (options) => {
   };
 
   return (
-    <div style={{ width: "250px", height: "300px" }}>
+    <div style={{ width: "200px", height: "200px" }}>
       <Pie data={data} options={optionss} />
     </div>
   );

@@ -16,7 +16,7 @@ const TripDetail = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getTrip(tripId);
+        const response = await getTrip(tripId);        
         setTrip(response);
       } catch (error) {
         console.error("Failed to fetch trip:", error);
@@ -76,7 +76,7 @@ const TripDetail = () => {
           </div>
 
           {/* Polls */}
-          <Polls />
+          <Polls pollsList={trip.polls}/>
           {/* <div className="polls mt-6">
             <h3 className="text-xl font-semibold mb-2">Polls</h3>
             <List>

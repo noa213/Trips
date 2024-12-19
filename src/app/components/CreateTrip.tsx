@@ -167,7 +167,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   };
 
   const handleAddPoll = (newPoll: IPoll) => {
-    console.log("newPoll");
+    console.log("newPoll", newPoll);
 
     if (newPoll.question.trim() !== "")
       setTrip((prevTrip) => ({
@@ -204,9 +204,13 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   };
 
   const handleSave = async () => {
+    console.log("before add",trip.polls);
+
     const response = await addTrip(trip);
     // sendPoll(trip.polls);
     onAddTrip(response);
+    console.log("after add",response.polls);
+    
   };
 
   console.log("trip", trip);

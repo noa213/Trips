@@ -40,15 +40,11 @@ const CreatePoll: React.FC<ICreatePollProps> = ({ onCreate }) => {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    console.log("poll", poll);
-
     e.preventDefault();
     const newPoll: IPoll = {
       pollId: `poll-${Date.now()}`,
       ...poll,
     };
-    console.log("newPoll", newPoll);
-
     onCreate(newPoll);
     setPoll({
       question: "",
