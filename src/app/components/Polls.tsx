@@ -76,7 +76,8 @@ const Polls: React.FC<IPollsProps> = ({ pollsList }) => {
       ],
     });
 
-    model.onValueChanged.add((sender, options) => {
+    model.onValueChanged.add((_, options) => {
+      // console.log(sender);
       const selectedValue = options.value;
       handleVote(poll.pollId, selectedValue);
     });
