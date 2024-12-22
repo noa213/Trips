@@ -1,3 +1,6 @@
+
+
+
 "use client";
 import React, { useEffect, useState } from "react";
 import { ITrip } from "../types/trip";
@@ -12,6 +15,8 @@ const TripList = () => {
     const fetchData = async () => {
       try {
         const response = await getTrips();
+        console.log("trip",response);
+        
         setTrips(response);
       } catch (error) {
         console.error("Failed to fetch trips:", error);

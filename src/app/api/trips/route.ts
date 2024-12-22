@@ -6,8 +6,10 @@ export async function GET() {
   try {
     await connect();
     const data = await Trip.find().select(
-      "title destination dates budget.total status"
+      "title destination dates status"
     );
+   
+    
     return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json("Error in fetching " + error);

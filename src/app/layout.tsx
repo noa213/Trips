@@ -32,13 +32,14 @@
 
 "use client"
 import type { Metadata } from "next";
-import { SessionProvider } from "next-auth/react"; 
 import "./globals.css";
 import Navbar from "@/app/components/Navbar";
-// import CreateTripDialog from "./components/CreateTripDialog";
+import TripList from "./components/TripList";
 import HomePage from "./components/HomePage";
 import SignIn from "./components/SignIn";
 import CreatePoll from "./components/CreatePoll";
+import { SessionProvider } from "next-auth/react";
+import GroupChat from "./components/GroupChat";
 
 
 // export const metadata: Metadata = {
@@ -54,12 +55,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <SessionProvider> 
-          
-           {/* <CreateTripDialog /> */}
-          {/* <CreatePoll /> */}
-          <Navbar />
+
+        <SessionProvider>
+          <HomePage />
           <SignIn />
+          <Navbar />
+          <GroupChat></GroupChat>
+          <TripList />
           {children}
         </SessionProvider>
       </body>
