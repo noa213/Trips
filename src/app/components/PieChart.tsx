@@ -6,19 +6,10 @@ import { IPieChartProps } from "../types/PieChartProps";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const PieChart: React.FC<IPieChartProps> = (options) => {
-  //     const getRandomColor = () => {
-  //     const letters = "0123456789ABCDEF";
-  //     let color = "#";
-  //     for (let i = 0; i < 6; i++) {
-  //       color += letters[Math.floor(Math.random() * 16)];
-  //     }
-  //     return color;
-  //   };
-
   const generatePastelColor = () => {
-    const r = Math.floor(Math.random() * 127) + 127; 
-    const g = Math.floor(Math.random() * 127) + 127; 
-    const b = Math.floor(Math.random() * 127) + 127; 
+    const r = Math.floor(Math.random() * 127) + 127;
+    const g = Math.floor(Math.random() * 127) + 127;
+    const b = Math.floor(Math.random() * 127) + 127;
     return `rgb(${r}, ${g}, ${b})`;
   };
 

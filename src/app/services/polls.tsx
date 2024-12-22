@@ -32,9 +32,7 @@ export const sendPoll = async (polls: IPoll[]) => {
 };
 
 export const updatePoll = async (poll: IPoll): Promise<void> => {
-  try {
-    console.log("ppppppppppp");
-    
+  try {    
     const response = await axios.put(`/api/polls`, poll);
     console.log("Polls updated successfully:", response.data);
     // return response.data;
