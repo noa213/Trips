@@ -4,8 +4,9 @@ import { ITrip } from "../../types/trip";
 import { getTrip } from "../../services/trips";
 import { useParams } from "next/navigation";
 import BudgetComponent from "../BudgetComponent";
-import { List, ListItem, ListItemText } from "@mui/material";
+// import { List, ListItem, ListItemText } from "@mui/material";
 import Polls from "../Polls";
+import Tasks from "../Tasks";
 
 const TripDetail = () => {
   const [trip, setTrip] = useState<ITrip>();
@@ -16,7 +17,7 @@ const TripDetail = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getTrip(tripId);        
+        const response = await getTrip(tripId);
         setTrip(response);
       } catch (error) {
         console.error("Failed to fetch trip:", error);
@@ -52,7 +53,8 @@ const TripDetail = () => {
           <BudgetComponent budget={trip.budget} />
 
           {/* Tasks */}
-          <div className="tasks mt-6">
+          <Tasks tasksList={trip.tasks} />
+          {/* <div className="tasks mt-6">
             <h3 className="text-xl font-semibold mb-2">Tasks</h3>
             <List>
               {trip.tasks ? (
@@ -73,27 +75,11 @@ const TripDetail = () => {
                 <p>No tasks available for this trip.</p>
               )}
             </List>
-          </div>
-
-          {/* Polls */}
-          <Polls pollsList={trip.polls}/>
-          {/* <div className="polls mt-6">
-            <h3 className="text-xl font-semibold mb-2">Polls</h3>
-            <List>
-              {trip.polls ? (
-                trip.polls.map((poll) => (
-                  <ListItem key={poll.pollId} sx={{ borderBottom: "1px solid #ccc" }}>
-                    <ListItemText
-                      primary={poll.question}
-                      secondary={poll.options.map((option) => option.value).join(" | ")}
-                    />
-                  </ListItem>
-                ))
-              ) : (
-                <p>No polls available for this trip.</p>
-              )}
-            </List>
           </div> */}
+
+         
+          {/* Polls */}
+          <Polls pollsList={trip.polls} />
         </div>
       ) : (
         <p>Loading...</p>

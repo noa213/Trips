@@ -3,10 +3,10 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { Tabs, Tab } from "@mui/material";
 // import MenuIcon from "@mui/icons-material/Menu";
-import HomeIcon from "@mui/icons-material/Home";
-import TaskIcon from "@mui/icons-material/Task";
-import PollIcon from "@mui/icons-material/Poll";
-import TripIcon from "@mui/icons-material/LoginOutlined";
+// import HomeIcon from "@mui/icons-material/Home";
+// import TaskIcon from "@mui/icons-material/Task";
+// import PollIcon from "@mui/icons-material/Poll";
+// import TripIcon from "@mui/icons-material/LoginOutlined";
 
 const Navbar = () => {
   const [value, setValue] = useState(0);
@@ -71,7 +71,7 @@ const Navbar = () => {
             "&.mui-selected": { color: "#9B111E" },
           }}
         />
-        <Tab
+        {/* <Tab
           label="תכנון טיול"
           component={Link}
           href="/pages/Planning_a_trip"
@@ -88,9 +88,9 @@ const Navbar = () => {
             color: value === 6 ? "#9B111E" : "#374151",
             "&.mui-selected": { color: "#9B111E" },
           }}
-        />
+        /> */}
       </Tabs>
-      <Tabs
+      {/* <Tabs
         value={value}
         onChange={handleChange}
         className="bg-[#f7f2e7] text-gray-700 mt-2 px-4"
@@ -162,7 +162,7 @@ const Navbar = () => {
             "&.mui-selected": { color: "#9B111E" },
           }}
         />
-      </Tabs>
+      </Tabs> */}
 
     </>
   );
