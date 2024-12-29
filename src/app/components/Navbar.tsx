@@ -6,7 +6,7 @@ import { Tabs, Tab } from "@mui/material";
 // import HomeIcon from "@mui/icons-material/Home";
 // import TaskIcon from "@mui/icons-material/Task";
 // import PollIcon from "@mui/icons-material/Poll";
-// import TripIcon from "@mui/icons-material/LoginOutlined";
+// import TripIcon from "@mui/icons-material/Chat";
 
 const Navbar = () => {
   const [value, setValue] = useState(0);
@@ -17,6 +17,7 @@ const Navbar = () => {
 
   return (
     <>
+    {/* <TripIcon/> */}
       <Tabs
         value={value}
         onChange={handleChange}
