@@ -1,6 +1,7 @@
 import Footer from '@/app/components/Footer';
 
 import type { Metadata } from "next";
+import Header from "@/app/components/Header";
 
 
 
@@ -23,8 +24,9 @@ const Home = () => {
   ];
 
   return (
-    <div className="relative min-h-screen bg-gray-100">
 
+    <div className="relative min-h-screen bg-gray-100">
+    <Header />
       {/* כותרת ותוכן ראשי */}
       <div
         className="flex items-center justify-center min-h-screen bg-opacity-60 bg-black text-white"

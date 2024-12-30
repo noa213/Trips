@@ -2,14 +2,11 @@
 import Link from 'next/link';
 import React, { useState } from "react";
 import {
-  // AppBar,
-  // Toolbar,
-  // Typography,
-  // InputBase,
-  // Button,
+
   Tabs,
   Tab,
 } from "@mui/material";
+import SignIn from './SignIn';
 
 const Navbar = () => {
   const [value, setValue] = useState(0);
@@ -20,6 +17,7 @@ const Navbar = () => {
 
   return (
     <>
+      <SignIn />
       <Tabs
         value={value}
         onChange={handleChange}
@@ -29,26 +27,30 @@ const Navbar = () => {
         }}
         textColor="inherit"
       >
+
         <Tab
-          label="תכנון טיול"
+          label="Home page"
           component={Link}
-          href="/pages/Planning_a_trip"
+          href="/"
           sx={{
-            color: value === 0 ? "#9B111E" : "#374151",
+            color: value === 2 ? "#9B111E" : "#374151",
             "&.mui-selected": { color: "#9B111E" },
           }}
         />
+
+
         <Tab
-          label="טיולים קודמים"
+          label="trips"
           component={Link}
-          href="/pages/previous_trips"
+          href="/pages/trips"
           sx={{
             color: value === 1 ? "#9B111E" : "#374151",
             "&.mui-selected": { color: "#9B111E" },
           }}
         />
+
         <Tab
-          label="דף הבית"
+          label="About"
           component={Link}
           href="/"
           sx={{
