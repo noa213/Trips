@@ -64,11 +64,8 @@ const TripDetail = () => {
     }
   };
 
-  // const handleEditClick = (field: string, currentValue: string) => {
-  //   setEditingField(field);
-  //   setUpdatedValue(currentValue);
-  // };
-  console.log("vhhhhhhhhh", trip)
+
+  console.log( trip)
   return (
     <>
 

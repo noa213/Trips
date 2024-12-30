@@ -1,3 +1,5 @@
+
+
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import connect from "@/app/lib/db/mongo-db";
@@ -36,4 +38,5 @@ const handle = NextAuth({
     },
   },
 });
-export { handle as GET, handle as POST };
+
+export {handle as GET, handle as POST}

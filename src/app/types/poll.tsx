@@ -7,10 +7,6 @@ export interface IPoll {
 }
 
 export interface IOption {
-<<<<<<< HEAD
-  text: string;
-=======
   value: string;
->>>>>>> noa
   votes: number;
 }
