@@ -7,6 +7,7 @@ import SignIn from "./components/SignIn";
 import CreatePoll from "./components/CreatePoll";
 import { SessionProvider } from "next-auth/react";
 import GroupChat from "./components/GroupChat";
+import IdeasForTrips from "./components/IdeasForTrips";
 
 
 // export const metadata: Metadata = {
@@ -27,10 +28,12 @@ export default function RootLayout({
           <HomePage />
           <SignIn />
           <Navbar />
-          <GroupChat></GroupChat>
+          {/* <GroupChat></GroupChat> */}
           <TripList />
           {children}
         </SessionProvider>
+        <IdeasForTrips></IdeasForTrips>
+
       </body>
     </html>
   );

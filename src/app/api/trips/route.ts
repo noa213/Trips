@@ -20,6 +20,7 @@ export async function POST(req: NextRequest) {
   try {
     await connect();
     const {
+      adminNmame,
       title,
       destination,
       dates,
@@ -31,6 +32,7 @@ export async function POST(req: NextRequest) {
       status,
     } = await req.json();
     const trip = new Trip({
+      adminNmame,
       title,
       destination,
       dates,
