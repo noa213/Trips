@@ -1,13 +1,12 @@
-import type { Metadata } from "next";
+'use client'
+// import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/app/components/Navbar";
 import TripList from "./components/TripList";
 import HomePage from "./components/HomePage";
 import SignIn from "./components/SignIn";
-import CreatePoll from "./components/CreatePoll";
 import { SessionProvider } from "next-auth/react";
-import GroupChat from "./components/GroupChat";
-import IdeasForTrips from "./components/IdeasForTrips";
+// import IdeasForTrips from "./components/IdeasForTrips";
 
 
 // export const metadata: Metadata = {
@@ -32,7 +31,7 @@ export default function RootLayout({
           <TripList />
           {children}
         </SessionProvider>
-        <IdeasForTrips></IdeasForTrips>
+        {/* <IdeasForTrips></IdeasForTrips> */}
 
       </body>
     </html>
