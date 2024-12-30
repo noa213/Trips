@@ -22,28 +22,28 @@ export default function SignIn() {
     );
   }
 
-  // בדיקת אם המשתמש הוא מנהל
-  if (session.user.role === "admin") {
-    return (
-      <div className="flex items-center space-x-4">
-        <p className="text-sm font-medium text-[#9B111E]">
-          Welcome, {session.user?.name}! You are an admin.
-        </p>
-        <button
-          className="bg-[#9B111E] text-[#F5F5DC] px-4 py-2 rounded-lg font-medium text-sm transition-all hover:bg-[#8A0F1B] hover:shadow-lg focus:ring-2 focus:ring-[#F5F5DC]"
-          onClick={() => signOut()}
-        >
-          Sign out
-        </button>
-      </div>
-    );
-  }
+  // // בדיקת אם המשתמש הוא מנהל
+  // if (session.user.role === "admin") {
+  //   return (
+  //     <div className="flex items-center space-x-4">
+  //       <p className="text-sm font-medium text-[#9B111E]">
+  //         Welcome, {session.user?.name}! You are an admin.
+  //       </p>
+  //       <button
+  //         className="bg-[#9B111E] text-[#F5F5DC] px-4 py-2 rounded-lg font-medium text-sm transition-all hover:bg-[#8A0F1B] hover:shadow-lg focus:ring-2 focus:ring-[#F5F5DC]"
+  //         onClick={() => signOut()}
+  //       >
+  //         Sign out
+  //       </button>
+  //     </div>
+  //   );
+  // }
 
   // אם המשתמש הוא לא מנהל
   return (
     <div className="flex items-center space-x-4">
       <p className="text-sm font-medium text-[#9B111E]">
-        Welcome, {session.user?.name}! you are user
+        Welcome, {session.user?.name}! to triply
       </p>
       <button
         className="bg-[#9B111E] text-[#F5F5DC] px-4 py-2 rounded-lg font-medium text-sm transition-all hover:bg-[#8A0F1B] hover:shadow-lg focus:ring-2 focus:ring-[#F5F5DC]"

@@ -74,6 +74,7 @@ import mongoose, { Model, Schema } from "mongoose";
 import { ITrip } from "@/app/types/trip";
 
 const trips: Schema<ITrip> = new Schema({
+  adminNmame:{ type: String },
   title: { type: String },
   destination: { type: String },
   dates: {
@@ -97,8 +98,8 @@ const trips: Schema<ITrip> = new Schema({
   },
   participants: [
     {
-      userId: { type: String },
-      share: { type: Number },
+      email: { type: String },
+      name: { type: String },
     },
   ],
 

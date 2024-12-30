@@ -4,7 +4,9 @@ import { IPoll } from "./poll";
 import { ITask } from "./task";
 export interface ITrip {
   _id?: string;
-  title: string;
+  // adminUser:string| null | undefined;
+  adminNmame:string| null | undefined;
+  title: string
   destination: string;
   dates: {
     start: Date;
@@ -17,8 +19,8 @@ export interface ITrip {
     tripType: "urban" | "nature" | "family";
   };
   participants: Array<{
-    userId: string;
-    share: number;
+    email: string;
+    name:string;
   }>;
   tasks: Array<ITask>;
   polls: Array<IPoll>;

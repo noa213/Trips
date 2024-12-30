@@ -3,24 +3,7 @@
 
 import connect from "@/app/lib/db/mongo-db";
 import { NextRequest, NextResponse } from "next/server";
-import Message from "@/app/lib/moduls/message";
-
-
-
-// export async function GET() {
-//   try {
-//     await connect();
-//     const data = await Message.find().select(
-//       "title destination dates status"
-//     );
-//     console.log('Fetched data:',NextResponse.json(data)); // הדפסת התשובה מה-API
-//     return NextResponse.json(data);
-//   } catch (error) {
-//     return NextResponse.json("Error in fetching " + error);
-//   }
-// }
-
-
+import Message from "@/app/lib/moduls/chat";
 
 
 
@@ -28,13 +11,16 @@ export async function GET() {
   try {
     await connect();
     const data = await Message.find()
-    console.log("gvdfhsduijok,vbnhjirkl;dnhktgmfc",data);
-    
+    console.log('Fetched data:',NextResponse.json(data)); // הדפסת התשובה מה-API
     return NextResponse.json(data);
   } catch (error) {
-    return NextResponse.json({ message: "Error: " + error }, { status: 500 });
+    return NextResponse.json("Error in fetching " + error);
   }
 }
+
+
+
+
 
 
 export async function POST(req: NextRequest) {
@@ -50,3 +36,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Error: " + error }, { status: 500 });
   }
 }
+
+

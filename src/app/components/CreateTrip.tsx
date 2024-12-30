@@ -623,6 +623,7 @@
 
 "use client";
 import React, { useEffect, useState } from "react";
+import {  useSession } from "next-auth/react";
 import {
   TextField,
   Container,
@@ -653,6 +654,9 @@ import { ITask } from "../types/task";
 import { IPoll } from "../types/poll";
 import { addTrip } from "../services/trips";
 import Image from "next/image";
+import { Session } from "inspector/promises";
+import UserAutocomplete from "./UserAutocomplete";
+import { IUser } from "../types/user";
 
 const tripTypeImages: { [key: string]: string } = {
   urban: "/./images/urban.jpg",
@@ -661,9 +665,12 @@ const tripTypeImages: { [key: string]: string } = {
 }
 const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   onAddTrip,
-}) => {
+}) => {  
+  const { data: session, status } = useSession();
+  
   const [trip, setTrip] = useState<ITrip>({
     title: "",
+    adminNmame:"",
     destination: "",
     dates: {
       start: new Date(),
@@ -696,6 +703,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   // });
   const [addTask, setAddTask] = useState(false);
   const [addPoll, setAddPoll] = useState(false);
+  const [addUser, setAddUser] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {}, [trip]);
@@ -799,6 +807,39 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     setAddPoll(false);
   };
 
+
+
+  const handleCreateUser = () => {
+    setAddUser(!addUser);
+  };
+
+  // const handleAddUser = (newUsers: IUser[]) => {
+  //   if (newUsers.email !== "")
+  //     setTrip((prevTrip) => ({
+  //       ...prevTrip,
+  //       participants: [...prevTrip.participants, newUser],
+  //     }));
+  //   setAddUser(false);
+  // };
+
+
+  const handleAddUser = (newUsers: IUser[]) => {
+    // אם המערך newUsers לא ריק
+    if (newUsers.length > 0) {
+      setTrip((prevTrip) => ({
+        ...prevTrip,
+        participants: [
+          ...prevTrip.participants,
+          ...newUsers.map((user) => ({
+            email: user.email,  // תוכל להוסיף שדות נוספים אם נדרש
+            name: user.name,
+          })),
+        ],
+      }));
+    }
+    setAddUser(false);
+  };
+
   // const handleAddMemory = () => {
   //   if (memory.description.trim() !== "") {
   //     setTrip((prevTrip) => ({
@@ -826,13 +867,14 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   };
 
   const handleSave = async () => {
+    trip.adminNmame=session?.user.name;
+    console.log("trip", trip);
     const response = await addTrip(trip);
     // sendPoll(trip.polls);
     onAddTrip(response);
   };
 
-  console.log("trip", trip);
-
+ 
   return (
     <Container maxWidth="lg">
 <Image src={"https://www.deviantart.com/iseegrim/art/forest-1036328819"} alt="Urban Trip" width={500} height={300} /> 
@@ -898,6 +940,23 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
               >
                 Basic Details
               </Typography>
+              {addUser ? (
+                <UserAutocomplete
+                  onCreate={handleAddUser}
+                />
+               ) : (
+                <div>
+              <Button
+                    variant="contained"
+                    onClick={handleCreateUser}
+                    color="primary"
+                    style={{ marginBottom: "1rem" }}
+                  >
+                    Add User
+                  </Button>
+                  </div>
+                 )}
+     
               <TextField
                 label="Trip Title"
                 name="title"

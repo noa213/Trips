@@ -55,7 +55,7 @@ declare module "next-auth" {
       name?: string | null;
       email?: string | null;
       image?: string | null;
-      role: string; // הוספת שדה role
+      // role: string; // הוספת שדה role
       firstTime?: boolean; // הוספת שדה firstTime
     };
   }
@@ -63,7 +63,7 @@ declare module "next-auth" {
 
 declare module "next-auth/jwt" {
   interface JWT extends DefaultJWT {
-    role: string; // הוספת שדה role
+    // role: string; // הוספת שדה role
     firstTime?: boolean; // הוספת שדה firstTime
   }
 }

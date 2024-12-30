@@ -6,6 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 const TripCard: React.FC<{ trip: ITrip; onDelete: (tripId: string) => void }> = ({ trip, onDelete }) => {
   const [isHovered, setIsHovered] = useState(false);
+
   const router = useRouter();
 
   const handleDelete = (e: React.MouseEvent) => {

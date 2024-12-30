@@ -1,56 +1,101 @@
 
 
-
-
-
-
-
 import React, { useEffect, useState, useRef } from "react";
 import { useSession } from "next-auth/react";
+import { Realtime } from "ably";
 import axios from "axios";
 import { IMessage } from "@/app/types/message";
-import { getMessages } from "../services/messages";
 
-const GroupChat: React.FC = () => {
+// יצירת מופע של Realtime
+const ably = new Realtime({
+  key: process.env.NEXT_PUBLIC_ABLY_API_KEY,
+});
+
+interface GroupChatProps {
+  tripId: string; // מזהה הטיול (ID של MongoDB)
+}
+
+const GroupChat: React.FC<GroupChatProps> = ({ tripId }) => {
+ 
+  
   const { data: session } = useSession();
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
+
+  // ערוץ Ably
+ 
+  
+  const channel = ably.channels.get(tripId); // השתמש ב-ID של הטיול
+
+  // שמירת צ'אט חדש ושליפת הודעות קיימות
   useEffect(() => {
-    const fetchData = async () => {
+    const initializeChat = async () => {
       try {
-        const response = await getMessages();
-        setMessages(response);
+    
+        const response = await axios.get(`/api/messages/${tripId}`);
+  
+        if (response.data.messages) {
+          setMessages(response.data.messages);
+        } else {
+          console.log("No chat found for this trip");
+        }
       } catch (error) {
-        console.error("Failed to fetch messages:", error);
+        console.error("Error initializing chat:", error);
       }
     };
-    fetchData();
-  }, [setMessages]);
+    initializeChat();
+  }, [tripId]);
 
+  // האזנה להודעות חדשות בערוץ
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
-  const sendMessage = async (e?: React.MouseEvent<HTMLButtonElement>) => {
-    if (e) e.preventDefault(); // מונע התנהגות ברירת מחדל
-    if (inputValue.trim() && session?.user?.name) {
+    channel.subscribe("message", (message) => {
       setMessages((prev) => [
         ...prev,
-        { name: session?.user?.name || "Anonymous", content: inputValue },
+        { name: message.data.name, content: message.data.content },
       ]);
+    });
 
+    return () => {
+      channel.unsubscribe("message");
+    };
+  }, [channel]);
+
+  // שליחת הודעה
+  const sendMessage = async (e?: React.MouseEvent<HTMLButtonElement>) => {
+    if (e) e.preventDefault();
+    if (inputValue.trim() && session?.user?.name) {
+      const newMessage = {
+        name: session?.user?.name || "Anonymous",
+        content: inputValue,
+      };
+
+      // עדכון הודעות מקומי
+      setMessages((prev) => [...prev, newMessage]);
+
+      // שליחת ההודעה לערוץ Ably
+      channel.publish("message", newMessage);
+
+      // שמירת ההודעה בשרת
       try {
-        await axios.post("/api/messages", {
-          name: session?.user?.name || "Anonymous",
-          content: inputValue,
+        const response = await axios.post(`/api/messages/${tripId}`, {
+          tripId:tripId,
+          name: newMessage.name,
+          content: newMessage.content,
         });
+    
+        
+
+        // טיפול בתשובה לאחר שליחה
+        if (response.data.message) {
+          console.log(response.data.message);
+        }
       } catch (error) {
-        console.error("Error while saving message:", error);
+        console.error("Error saving message:", error);
       }
 
-      setInputValue("");
+      setInputValue(""); // ניקוי שדה
     }
   };
 
@@ -63,24 +108,18 @@ const GroupChat: React.FC = () => {
 
   return (
     <div className="max-w-md mx-auto mt-10 bg-white rounded-xl shadow-lg overflow-hidden md:max-w-2xl">
-      {/* <div className="p-6 bg-gradient-to-r from-teal-500 to-blue-600 text-white"> */}
       <div className="p-6 bg-gradient-to-r from-pink-500 to-purple-500 text-white">
-
         <h2 className="text-2xl font-bold text-center">📢 Group Chat</h2>
       </div>
       <div className="p-4 h-80 overflow-y-auto bg-gray-50">
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`mb-4 ${
-              msg.name === session?.user?.name ? "text-right" : "text-left"
-            }`}
+            className={`mb-4 ${msg.name === session?.user?.name ? "text-right" : "text-left"}`}
           >
-            <span  className="block text-gray-600">
-              {msg.name ? msg.name : "Anonymous"}
-            </span>
-            <span className="font-semibold text-gray-700">{msg.content}</span>
-           
+            <span className="font-semibold text-gray-700">{msg.name || "Anonymous"}</span>
+            <span className="block text-gray-600">{msg.content}</span>
+            
           </div>
         ))}
         <div ref={messagesEndRef} />
@@ -106,6 +145,15 @@ const GroupChat: React.FC = () => {
 };
 
 export default GroupChat;
+
+
+
+
+
+
+
+
+
 
 
 
