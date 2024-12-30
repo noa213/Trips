@@ -1,4 +1,5 @@
 export interface IPoll {
+  _id?: string;
   pollId: string;
   question: string;
   status: "open" | "closed";
@@ -6,6 +7,10 @@ export interface IPoll {
 }
 
 export interface IOption {
+<<<<<<< HEAD
   text: string;
+=======
+  value: string;
+>>>>>>> noa
   votes: number;
 }

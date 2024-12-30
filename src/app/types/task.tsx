@@ -2,6 +2,6 @@ export interface ITask {
   taskId: string;
   title: string;
   assignedTo: string;
-  status: "notStarted" | "inProgress" | "completed";
+  status: "not started" | "in progress" | "completed";
   dueDate: Date;
 }

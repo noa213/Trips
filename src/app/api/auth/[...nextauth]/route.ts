@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 
 
@@ -160,6 +161,8 @@
 
 
 
+=======
+>>>>>>> noa
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import connect from "@/app/lib/db/mongo-db";
@@ -177,11 +180,14 @@ const handle = NextAuth({
   },
   callbacks: {
     async jwt({ token, user }) {
+<<<<<<< HEAD
       await connect(); // התחברות למאגר הנתונים
 
+=======
+      await connect();
+>>>>>>> noa
       if (user) {
         const existingUser = await User.findOne({ email: user.email });
-
         if (!existingUser) {
           // יצירת משתמש חדש עם תפקיד ברירת מחדל 'user'
           await User.create({
@@ -190,21 +196,27 @@ const handle = NextAuth({
             role: "user", // ברירת מחדל, ניתן לשנות ל-"admin" במקרים מסוימים
           });
           token.firstTime = true;
+<<<<<<< HEAD
           token.role = "user"; // שומר את ה-role ב-token
         } else {
           token.firstTime = false;
           token.role = existingUser.role; // מושך את ה-role מהמשתמש הקיים
         }
+=======
+        } else token.firstTime = false;
+>>>>>>> noa
       }
-
       return token;
     },
 
     async session({ session, token }) {
-      if (session.user) {
+      if (session.user)
         session.user.firstTime = Boolean(token.firstTime ?? false);
+<<<<<<< HEAD
         session.user.role = token.role; // מעביר את ה-role ל-session
       }
+=======
+>>>>>>> noa
       return session;
     },
   },

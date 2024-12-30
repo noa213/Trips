@@ -19,7 +19,7 @@ const BudgetComponent: React.FC<IBudgetProps> = ({ budget, onSave }) => {
       updatedBudget.categories[categoryKey as keyof IBudgetCategories] =
         parseFloat(value);
     }
-    onSave(updatedBudget);
+    onSave!(updatedBudget);
   };
 
   return (

@@ -8,8 +8,8 @@ const CreatePoll: React.FC<ICreatePollProps> = ({ onCreate }) => {
     question: "",
     status: "open",
     options: [
-      { text: "", votes: 0 },
-      { text: "", votes: 0 },
+      { value: "", votes: 0 },
+      { value: "", votes: 0 },
     ],
   });
 
@@ -19,14 +19,14 @@ const CreatePoll: React.FC<ICreatePollProps> = ({ onCreate }) => {
 
   const handleOptionChange = (index: number, value: string) => {
     const updatedOptions = [...poll.options];
-    updatedOptions[index].text = value;
+    updatedOptions[index].value = value;
     setPoll((prevPoll) => ({ ...prevPoll, options: updatedOptions }));
   };
 
   const handleAddOption = () => {
     setPoll((prevPoll) => ({
       ...prevPoll,
-      options: [...prevPoll.options, { text: "", votes: 0 }],
+      options: [...prevPoll.options, { value: "", votes: 0 }],
     }));
   };
 
@@ -40,22 +40,18 @@ const CreatePoll: React.FC<ICreatePollProps> = ({ onCreate }) => {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    console.log("poll", poll);
-
     e.preventDefault();
     const newPoll: IPoll = {
       pollId: `poll-${Date.now()}`,
       ...poll,
     };
-    console.log("newPoll", newPoll);
-
     onCreate(newPoll);
     setPoll({
       question: "",
       status: "open",
       options: [
-        { text: "", votes: 0 },
-        { text: "", votes: 0 },
+        { value: "", votes: 0 },
+        { value: "", votes: 0 },
       ],
     });
   };
@@ -93,7 +89,7 @@ const CreatePoll: React.FC<ICreatePollProps> = ({ onCreate }) => {
           <div key={index} className="flex items-center mb-2">
             <input
               type="text"
-              value={option.text}
+              value={option.value}
               onChange={(e) => handleOptionChange(index, e.target.value)}
               className="border rounded w-full px-3 py-2"
               placeholder={`Option ${index + 1}`}

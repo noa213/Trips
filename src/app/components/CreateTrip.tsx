@@ -652,13 +652,12 @@ import { TripItem } from "../types/tripItem";
 import { ITask } from "../types/task";
 import { IPoll } from "../types/poll";
 import { addTrip } from "../services/trips";
-import Image from "next/image";
 
 const tripTypeImages: { [key: string]: string } = {
   urban: "/./images/urban.jpg",
   nature: "/images/nature.jpg",
   family: "/images/family.jpg",
-}
+};
 const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   onAddTrip,
 }) => {
@@ -791,6 +790,8 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   };
 
   const handleAddPoll = (newPoll: IPoll) => {
+    console.log("newPoll", newPoll);
+
     if (newPoll.question.trim() !== "")
       setTrip((prevTrip) => ({
         ...prevTrip,
@@ -826,19 +827,21 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   };
 
   const handleSave = async () => {
+    console.log("before add",trip.polls);
+
     const response = await addTrip(trip);
     // sendPoll(trip.polls);
     onAddTrip(response);
+    console.log("after add",response.polls);
+    
   };
 
   console.log("trip", trip);
 
   return (
     <Container maxWidth="lg">
-<Image src={"https://www.deviantart.com/iseegrim/art/forest-1036328819"} alt="Urban Trip" width={500} height={300} /> 
-<Image src={'/./footstep.png'} alt="footstep" width={500} height={300} />  
-    <Grid container spacing={4}>
-{/* Sidebar for Navigation */}
+      <Grid container spacing={4}>
+        {/* Sidebar for Navigation */}
         <Grid item xs={12} sm={3}>
           <Box
             sx={{
@@ -1121,48 +1124,46 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
             {/* Polls */}
             <Grid item xs={12} id="polls">
               <Typography variant="h6">Polls</Typography>
+              <List>
+                {trip.polls ? (
+                  trip.polls.map((poll) => (
+                    <ListItem
+                      key={poll.pollId}
+                      sx={{ borderBottom: "1px solid #ccc" }}
+                    >
+                      <ListItemText
+                        primary={poll.question}
+                        secondary={poll.options
+                          .map((option) => option.value)
+                          .join(" | ")}
+                      />
+                      <ListItemSecondaryAction>
+                        <IconButton
+                          edge="end"
+                          onClick={() => handleRemoveItem(poll, "polls")}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  ))
+                ) : (
+                  <Typography variant="body2" color="textSecondary">
+                    No polls added yet.
+                  </Typography>
+                )}
+              </List>
               {addPoll ? (
                 <CreatePoll onCreate={handleAddPoll} />
               ) : (
-                <>
-                  <Button
-                    variant="contained"
-                    onClick={handleCreatePoll}
-                    color="primary"
-                    sx={{ marginBottom: "1rem" }}
-                  >
-                    Add Poll
-                  </Button>
-                  <List>
-                    {trip.polls ? (
-                      trip.polls.map((poll) => (
-                        <ListItem
-                          key={poll.pollId}
-                          sx={{ borderBottom: "1px solid #ccc" }}
-                        >
-                          <ListItemText
-                            primary={poll.question}
-                            secondary={poll.options
-                              .map((option) => option.text)
-                              .join(" | ")}
-                          />
-                          <ListItemSecondaryAction>
-                            <IconButton
-                              edge="end"
-                              onClick={() => handleRemoveItem(poll, "polls")}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </ListItemSecondaryAction>
-                        </ListItem>
-                      ))
-                    ) : (
-                      <Typography variant="body2" color="textSecondary">
-                        No polls added yet.
-                      </Typography>
-                    )}
-                  </List>
-                </>
+                <Button
+                  variant="contained"
+                  onClick={handleCreatePoll}
+                  color="primary"
+                  sx={{ marginBottom: "1rem" }}
+                >
+                  Add Poll
+                </Button>
               )}
             </Grid>
 
