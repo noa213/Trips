@@ -41,10 +41,32 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList }) => {
         >
           {value.title}
         </p>
+  {/* הצגת תמונת פרופיל עם עיגול */}
+  <div style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}>
+        <div
+          style={{
+            width: "24px",
+            height: "24px",
+            borderRadius: "50%",
+            overflow: "hidden",
+            marginRight: "8px",
+            border: "2px solid #dfe1e6",
+          }}
+        >
+          {/* <img
+            src={value.assignedTo} // יש להניח כי assignedTo הוא URL לתמונה
+            alt="Assigned"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+          /> */}
+        </div>
         <p style={{ fontSize: "12px", color: "#5e6c84" }}>
           Assigned to: {value.assignedTo}
         </p>
-        <p style={{ fontSize: "12px", color: "#5e6c84" }}>
+      </div>        <p style={{ fontSize: "12px", color: "#5e6c84" }}>
           Due: {value.dueDate}
         </p>
       </div>
@@ -54,7 +76,7 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList }) => {
   // Sortable list component
   const SortableList = SortableContainer<{
     items: ITask[];
-  }>(({ items }: { items: ITask[]}) => (
+  }>(({ items }: { items: ITask[] }) => (
     <div
       style={{
         width: "100px",
@@ -86,11 +108,19 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList }) => {
     newIndex: number;
     event: React.DragEvent;
   }) => {
-    const hoveredElement = document.elementFromPoint(event.clientX, event.clientY);
+    const hoveredElement = document.elementFromPoint(
+      event.clientX,
+      event.clientY
+    );
     const closestColumn = hoveredElement?.closest(".column[data-column-id]");
     const targetColumnId = closestColumn?.getAttribute("data-column-id");
 
-    if (!sourceColumn || !targetColumnId || !tasks[sourceColumn] || !tasks[targetColumnId]) {
+    if (
+      !sourceColumn ||
+      !targetColumnId ||
+      !tasks[sourceColumn] ||
+      !tasks[targetColumnId]
+    ) {
       console.error("Invalid source or target column.");
       return;
     }
@@ -103,84 +133,57 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList }) => {
 
   return (
     <div
-  className="columns-container"
-  style={{
-    display: "flex",
-    gap: "20px",
-    padding: "20px",
-    backgroundColor: "#f4f5f7", // צבע רקע כללי עדין
-    borderRadius: "8px",
-  }}
->
-  {Object.entries(tasks).map(([status, items]) => (
-    <div
-      className="column"
-      data-column-id={status}
-      key={status}
+      className="columns-container"
       style={{
-        width: "280px", // עמודה רחבה יותר
-        padding: "15px",
-        border: "1px solid #dfe1e6", // מסגרת עדינה
-        borderRadius: "8px",
-        minHeight: "400px", // גובה מינימלי לעמודות
-        backgroundColor: "#ffffff", // רקע לבן לעמודות
-        boxShadow: "0 1px 4px rgba(0, 0, 0, 0.1)", // צל רך
         display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
+        gap: "20px",
+        padding: "20px",
+        backgroundColor: "#f4f5f7", // צבע רקע כללי עדין
+        borderRadius: "8px",
       }}
     >
-      <h3
-        style={{
-          fontSize: "16px",
-          fontWeight: "600",
-          color: "#172b4d", // צבע טקסט כהה
-          marginBottom: "10px",
-        }}
-      >
-        {status === "notStarted"
-          ? "Not Started"
-          : status === "inProgress"
-          ? "In Progress"
-          : "Completed"}
-      </h3>
-      <SortableList
-        items={items}
-        onSortStart={onSortStart}
-        onSortEnd={(sortEndData) => onSortEnd({ ...sortEndData, event })}
-        helperClass="dragging"
-        axis="y"
-      />
+      {Object.entries(tasks).map(([status, items]) => (
+        <div
+          className="column"
+          data-column-id={status}
+          key={status}
+          style={{
+            width: "280px", // עמודה רחבה יותר
+            padding: "15px",
+            border: "1px solid #dfe1e6", // מסגרת עדינה
+            borderRadius: "8px",
+            minHeight: "400px", // גובה מינימלי לעמודות
+            backgroundColor: "#ffffff", // רקע לבן לעמודות
+            boxShadow: "0 1px 4px rgba(0, 0, 0, 0.1)", // צל רך
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <h3
+            style={{
+              fontSize: "16px",
+              fontWeight: "600",
+              color: "#172b4d", // צבע טקסט כהה
+              marginBottom: "10px",
+            }}
+          >
+            {status === "notStarted"
+              ? "Not Started"
+              : status === "inProgress"
+              ? "In Progress"
+              : "Completed"}
+          </h3>
+          <SortableList
+            items={items}
+            onSortStart={onSortStart}
+            onSortEnd={(sortEndData) => onSortEnd({ ...sortEndData, event })}
+            helperClass="dragging"
+            axis="y"
+          />
+        </div>
+      ))}
     </div>
-  ))}
-</div>
-
-    // <div className="columns-container" style={{ display: "flex", gap: "20px" }}>
-    //   {Object.entries(tasks).map(([status, items]) => (
-    //     <div
-    //       className="column"
-    //       data-column-id={status}
-    //       key={status}
-    //       style={{
-    //         width: "200px",
-    //         padding: "10px",
-    //         border: "1px solid grey",
-    //         borderRadius: "8px",
-    //         minHeight: "200px",
-    //         backgroundColor: "#f9f9f9",
-    //       }}
-    //     >
-    //       <SortableList
-    //         items={items}
-    //         columnId={status}
-    //         onSortStart={onSortStart}
-    //         onSortEnd={(sortEndData) => onSortEnd({ ...sortEndData, event })}
-    //         helperClass="dragging"
-    //         axis="y"
-    //       />
-    //     </div>
-    //   ))}
-    // </div>
   );
 };
 

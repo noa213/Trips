@@ -14,7 +14,7 @@ const PieChart: React.FC<IPieChartProps> = (options) => {
   };
 
   const data = {
-    labels: options.options.map((option) => option.text),
+    labels: options.options.map((option) => option.value),
     datasets: [
       {
         data: options.options.map((option) => option.votes + 1),

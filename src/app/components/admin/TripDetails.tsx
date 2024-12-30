@@ -228,7 +228,7 @@ const TripDetail = () => {
                     <ListItemText
                       primary={poll.question}
                       secondary={poll.options
-                        .map((option) => option.value)
+                        .map((option) => option.text)
                         .join(" | ")}
                     />
                     <ListItemSecondaryAction>
