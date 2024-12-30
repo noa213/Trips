@@ -1,97 +1,82 @@
 import React, { useState } from "react";
-import {
-  SortableContainer,
-  SortableElement,
-} from "react-sortable-hoc";
-
-type Task = string;
-
-type TaskColumn = {
-  [key: string]: Task[];
-};
-
-const SortableItem = SortableElement<{ value: Task }>(
-  ({ value }: { value: Task }) => (
-    <div
-      draggable="true"
-      style={{
-        width: "70px",
-        padding: "10px",
-        border: "1px solid black",
-        margin: "5px",
-        backgroundColor: "#f0f0f0",
-      }}
-    >
-      {value}
-    </div>
-  )
-);
-
-const SortableList = SortableContainer<{
-  items: Task[];
-  columnId: string;
-}>(({ items, columnId }: { items: Task[]; columnId: string }) => (
-  <div
-    style={{
-      width: "100px",
-      padding: "10px",
-      backgroundColor: "#e0e0e0",
-      margin: "10px",
-      borderRadius: "8px",
-      minHeight: "200px",
-    }}
-  >
-    <h3>{columnId}</h3>
-    {items.map((value, index) => (
-      <SortableItem key={index} index={index} value={value} />
-    ))}
-  </div>
-));
+import { SortableContainer, SortableElement } from "react-sortable-hoc";
+import { ITasksProps } from "../types/taskProps";
+import { ITask } from "../types/task";
 
 let sourceColumn: string | null = null;
 
-const App: React.FC = () => {
-  // const [tasks, setTasks] = useState<TaskColumn>({
-  //   todo: ["Task 1", "Task 2"],
-  //   inProgress: ["Task 3"],
-  //   done: ["Task 4"],
-  // });
+const Tasks: React.FC<ITasksProps> = ({ tasksList }) => {
+  // Group tasks by status
+  const groupTasksByStatus = (tasks: ITask[]) =>
+    tasks.reduce((acc, task) => {
+      acc[task.status] = acc[task.status] || [];
+      acc[task.status].push(task);
+      return acc;
+    }, {} as Record<string, ITask[]>);
+  const [tasks, setTasks] = useState(groupTasksByStatus(tasksList));
 
-  const [tasks, setTasks] = useState<TaskColumn>({
-    "0": ["Task 1", "Task 2"],
-    "1": ["Task 3", "Task 5"],
-    "2": ["Task 4", "Task 6"],
-  });
+  // Sortable item component
+  const SortableItem = SortableElement<{ value: ITask }>(
+    ({ value }: { value: ITask }) => (
+      <div
+        draggable="true"
+        style={{
+          width: "100%",
+          padding: "10px",
+          border: "1px solid #dfe1e6",
+          marginBottom: "10px",
+          backgroundColor: "#ffffff",
+          borderRadius: "8px",
+          boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+          transition: "transform 0.2s ease",
+        }}
+      >
+        <p
+          style={{
+            fontWeight: "600",
+            fontSize: "14px",
+            color: "#172b4d",
+            marginBottom: "5px",
+          }}
+        >
+          {value.title}
+        </p>
+        <p style={{ fontSize: "12px", color: "#5e6c84" }}>
+          Assigned to: {value.assignedTo}
+        </p>
+        <p style={{ fontSize: "12px", color: "#5e6c84" }}>
+          Due: {value.dueDate}
+        </p>
+      </div>
+    )
+  );
 
-  const onDragOver = (event: React.DragEvent) => {
-    event.preventDefault(); // חשוב מאוד
-    console.log("Drag over:", event.target);
-    const hoveredElement = document.elementFromPoint(
-      event.clientX,
-      event.clientY
-    ); // האלמנט שמתחת לעכבר
-    const closestColumn = hoveredElement?.closest(
-      ".column[data-collection-id]"
-    );
-    console.log("hoveredElement", hoveredElement);
-    console.log("closestColumn", closestColumn);
+  // Sortable list component
+  const SortableList = SortableContainer<{
+    items: ITask[];
+  }>(({ items }: { items: ITask[]}) => (
+    <div
+      style={{
+        width: "100px",
+        padding: "10px",
+        margin: "10px",
+        borderRadius: "8px",
+        minHeight: "200px",
+      }}
+    >
+      {items.map((value, index) => (
+        <SortableItem key={`item-${index}`} index={index} value={value} />
+      ))}
+    </div>
+  ));
 
-    if (closestColumn) {
-      console.log("Hovered column:", closestColumn);
-    } else {
-      console.log("No hovered column found");
-    }
-  };
-
+  // Track source column
   const onSortStart = ({ node }: { node: Element }) => {
     const columnElement = node.closest(".column");
-    if (!columnElement) {
-      console.error("Failed to identify the source column.");
-      return;
-    }
-    sourceColumn = columnElement.getAttribute("data-column-id");
+    sourceColumn = columnElement?.getAttribute("data-column-id") || null;
   };
 
+  // Handle drag-and-drop between columns
   const onSortEnd = ({
     oldIndex,
     newIndex,
@@ -101,44 +86,15 @@ const App: React.FC = () => {
     newIndex: number;
     event: React.DragEvent;
   }) => {
-    event.preventDefault();
-    const hoveredElement = document.elementFromPoint(
-      event.clientX,
-      event.clientY
-    );
-    const closestColumn = hoveredElement?.closest(
-      ".column[data-collection-id]"
-    );
-    const targetColumnId = closestColumn!.getAttribute("data-collection-id");
+    const hoveredElement = document.elementFromPoint(event.clientX, event.clientY);
+    const closestColumn = hoveredElement?.closest(".column[data-column-id]");
+    const targetColumnId = closestColumn?.getAttribute("data-column-id");
 
-    if (closestColumn) {
-      console.log("Hovered column:", closestColumn);
-    } else {
-      console.log("No hovered column found");
-    }
-
-    if (!sourceColumn) {
-      console.error("Failed to determine source or target column.");
+    if (!sourceColumn || !targetColumnId || !tasks[sourceColumn] || !tasks[targetColumnId]) {
+      console.error("Invalid source or target column.");
       return;
     }
-    if (!targetColumnId) {
-      console.error("Failed to get the column ID of the closest element.");
-      return;
-    }
-
     const updatedTasks = { ...tasks };
-
-    if (!updatedTasks[sourceColumn]) {
-      console.error(`Source column '${sourceColumn}' does not exist in tasks.`);
-      return;
-    }
-
-    if (!updatedTasks[targetColumnId]) {
-      console.error(
-        `Target column '${targetColumnId}' does not exist in tasks.`
-      );
-      return;
-    }
     const [movedTask] = updatedTasks[sourceColumn].splice(oldIndex, 1);
     updatedTasks[targetColumnId].splice(newIndex, 0, movedTask);
     sourceColumn = null;
@@ -147,39 +103,86 @@ const App: React.FC = () => {
 
   return (
     <div
-      className="columns-container"
-      onDragOver={(event) => {
-        onDragOver(event);
+  className="columns-container"
+  style={{
+    display: "flex",
+    gap: "20px",
+    padding: "20px",
+    backgroundColor: "#f4f5f7", // צבע רקע כללי עדין
+    borderRadius: "8px",
+  }}
+>
+  {Object.entries(tasks).map(([status, items]) => (
+    <div
+      className="column"
+      data-column-id={status}
+      key={status}
+      style={{
+        width: "280px", // עמודה רחבה יותר
+        padding: "15px",
+        border: "1px solid #dfe1e6", // מסגרת עדינה
+        borderRadius: "8px",
+        minHeight: "400px", // גובה מינימלי לעמודות
+        backgroundColor: "#ffffff", // רקע לבן לעמודות
+        boxShadow: "0 1px 4px rgba(0, 0, 0, 0.1)", // צל רך
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
       }}
-      style={{ display: "flex", gap: "20px" }}
     >
-      {Object.entries(tasks).map(([columnId, items], index) => (
-        <div
-          className="column"
-          data-column-id={columnId}
-          data-collection-id={index}
-          key={columnId}
-          style={{
-            width: "200px",
-            padding: "10px",
-            border: "1px solid grey",
-            borderRadius: "8px",
-            minHeight: "200px",
-            backgroundColor: "#f9f9f9",
-          }}
-        >
-          <SortableList
-            items={items}
-            columnId={columnId}
-            onSortStart={onSortStart}
-            onSortEnd={(sortEndData) => onSortEnd({ ...sortEndData, event })}
-            helperClass="dragging"
-            axis="y"
-          />
-        </div>
-      ))}
+      <h3
+        style={{
+          fontSize: "16px",
+          fontWeight: "600",
+          color: "#172b4d", // צבע טקסט כהה
+          marginBottom: "10px",
+        }}
+      >
+        {status === "notStarted"
+          ? "Not Started"
+          : status === "inProgress"
+          ? "In Progress"
+          : "Completed"}
+      </h3>
+      <SortableList
+        items={items}
+        columnId={status}
+        onSortStart={onSortStart}
+        onSortEnd={(sortEndData) => onSortEnd({ ...sortEndData, event })}
+        helperClass="dragging"
+        axis="y"
+      />
     </div>
+  ))}
+</div>
+
+    // <div className="columns-container" style={{ display: "flex", gap: "20px" }}>
+    //   {Object.entries(tasks).map(([status, items]) => (
+    //     <div
+    //       className="column"
+    //       data-column-id={status}
+    //       key={status}
+    //       style={{
+    //         width: "200px",
+    //         padding: "10px",
+    //         border: "1px solid grey",
+    //         borderRadius: "8px",
+    //         minHeight: "200px",
+    //         backgroundColor: "#f9f9f9",
+    //       }}
+    //     >
+    //       <SortableList
+    //         items={items}
+    //         columnId={status}
+    //         onSortStart={onSortStart}
+    //         onSortEnd={(sortEndData) => onSortEnd({ ...sortEndData, event })}
+    //         helperClass="dragging"
+    //         axis="y"
+    //       />
+    //     </div>
+    //   ))}
+    // </div>
   );
 };
 
-export default App;
+export default Tasks;
