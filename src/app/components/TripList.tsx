@@ -41,8 +41,7 @@ const TripList = () => {
 
   return (
     <>
-    <CreateTrip/>
-      {/* <div className="trip-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+      <div className="trip-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
         {trips ? (
           trips.map((trip: ITrip) => (
             <TripCard key={trip._id} trip={trip} onDelete={handleDelete} />
@@ -51,7 +50,7 @@ const TripList = () => {
           <p className="text-gray-500 text-center">No trips found.</p>
         )}
       </div>
-      <AddTripButton onAddTrip={handleAddTrip} /> */}
+      <AddTripButton onAddTrip={handleAddTrip} />
     </>
   );
 };
