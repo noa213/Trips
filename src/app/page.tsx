@@ -1,10 +1,6 @@
-import Footer from '@/app/components/Footer';
-
 import type { Metadata } from "next";
 import Header from "@/app/components/Header";
-
-
-
+import Footer from '@/app/components/Footer';
 
 export const metadata: Metadata = {
   title: "Steps",
@@ -13,7 +9,6 @@ export const metadata: Metadata = {
 
 
 const Home = () => {
-  // רשימת ה-URL של התמונות
   const images = [
     'https://cdn.istores.co.il/image/upload/c_mpad,g_center,h_350,w_870/c_crop,h_350,w_870/clients/15167/7ce9bc009d68eea5e18d661c918c38e076947a00.jpg', // תמונה 1
     'https://www.tapet3d.co.il/files/products/product102_image1_2021-04-21_10-10-52.jpg', // תמונה 2

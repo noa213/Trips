@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
 import { ITasksProps } from "../types/taskProps";
 import { ITask } from "../types/task";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { IUser } from "../types/user";
 import { updateTask } from "../services/task";
 
 let sourceColumn: string | null = null;
@@ -20,11 +19,11 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
 
   const [tasks, setTasks] = useState(groupTasksByStatus(tasksList));
   const { data: session } = useSession();
-  const [participantss, setParticipants] = useState([
+  const [participantss] = useState([
     {
       name: "Unassigned",
       email: "no_assigned_user",
-      image: "https://via.placeholder.com/96", 
+      image: "https://via.placeholder.com/96",
     },
     {
       name: "Noa Levin",
@@ -38,12 +37,11 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
       image: "https://via.placeholder.com/96",
     },
   ]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // Sortable item component
   const SortableItem = SortableElement<{ value: ITask }>(
     ({ value }: { value: ITask }) => {
-      const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
       const handleAssignChange = (newAssignedEmail: string) => {
         value.assignedTo = newAssignedEmail;
         setIsDropdownOpen(false);
@@ -230,7 +228,7 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
       console.error("Error updating task:", error);
     }
   };
-  
+
   return (
     <div
       className="columns-container"

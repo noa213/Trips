@@ -4,7 +4,6 @@ import { ITask } from "../types/task";
 import { ICreateTaskProps } from "../types/CreateTaskProps";
 import {
   FormControl,
-  InputLabel,
   ListItem,
   ListItemText,
   MenuItem,

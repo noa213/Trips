@@ -18,9 +18,7 @@ import {
   IconButton,
   Button,
   Box,
-  StepIcon,
 } from "@mui/material";
-import { Link as ScrollLink } from "react-scroll";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BudgetCalculator from "./BudgetCalculator";
 import CreateTask from "./CreateTask";
@@ -35,7 +33,6 @@ import { addTrip } from "../services/trips";
 // import { Session } from "inspector/promises";
 import UserAutocomplete from "./UserAutocomplete";
 import { IUser } from "../types/user";
-import DateIcon from "@mui/icons-material/DateRange";
 import Navigation from "./Navigation";
 
 const tripTypeImages: { [key: string]: string } = {
