@@ -1,13 +1,9 @@
-
-
-
 "use client";
 import React, { useEffect, useState } from "react";
 import { ITrip } from "../types/trip";
 import { deleteTrip, getTrips } from "../services/trips";
 import TripCard from "./TripCard";
 import AddTripButton from "./AddTripBtn";
-import CreateTrip from "./CreateTrip";
 
 const TripList = () => {
   const [trips, setTrips] = useState<ITrip[]>([]);
