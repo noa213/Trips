@@ -30,8 +30,8 @@ const UserAutocomplete: React.FC<ICreateUserProps> = ({ onCreate}) => {
     if (!selectedUsers.find((u) => u.email === user.email)) {
       setSelectedUsers([...selectedUsers, user]);
     }
-    setQuery(""); // איפוס שדה החיפוש
-    setResults([]); // איפוס התוצאות לאחר בחירת משתמש
+    setQuery("");
+    setResults([]);
   };
 
 

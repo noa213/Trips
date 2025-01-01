@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import React, { useState } from "react";
 
 const ImageUploader = () => {
@@ -37,9 +38,11 @@ const ImageUploader = () => {
       <div style={styles.grid}>
         {images.map((image, index) => (
           <div key={index} style={styles.card}>
-            <img
+            <Image
               src={URL.createObjectURL(image)}
               alt={image.name}
+              width={100}
+              height={100}
               style={styles.image}
             />
             <button

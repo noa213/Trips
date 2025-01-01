@@ -9,6 +9,8 @@ import { updateTask } from "../services/task";
 let sourceColumn: string | null = null;
 
 const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
+ console.log(participants);
+ 
   // Group tasks by status
   const groupTasksByStatus = (tasks: ITask[]) =>
     tasks.reduce((acc, task) => {
