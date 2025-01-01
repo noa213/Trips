@@ -1,12 +1,8 @@
 "use client";
 import Link from "next/link";
 import React, { useState } from "react";
-import {
-
-  Tabs,
-  Tab,
-} from "@mui/material";
-import SignIn from './SignIn';
+import { Tabs, Tab } from "@mui/material";
+import SignIn from "./SignIn";
 
 const Navbar = () => {
   const [value, setValue] = useState(0);
@@ -17,7 +13,7 @@ const Navbar = () => {
 
   return (
     <>
-      <SignIn />
+      {/* <SignIn /> */}
       <Tabs
         value={value}
         onChange={handleChange}
@@ -27,9 +23,8 @@ const Navbar = () => {
         }}
         textColor="inherit"
       >
-
         <Tab
-          label="Home page"
+          label="Home"
           component={Link}
           href="/"
           sx={{
@@ -37,8 +32,6 @@ const Navbar = () => {
             "&.mui-selected": { color: "#9B111E" },
           }}
         />
-
-
         <Tab
           label="trips"
           component={Link}
@@ -48,7 +41,6 @@ const Navbar = () => {
             "&.mui-selected": { color: "#9B111E" },
           }}
         />
-
         <Tab
           label="About"
           component={Link}
@@ -58,9 +50,7 @@ const Navbar = () => {
             "&.mui-selected": { color: "#9B111E" },
           }}
         />
-
-
-      </Tabs> 
+      </Tabs>
     </>
   );
 };

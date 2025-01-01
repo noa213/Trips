@@ -1,9 +1,6 @@
-
-
-
 "use client";
 import React, { useEffect, useState } from "react";
-import {  useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import {
   TextField,
   Container,
@@ -21,6 +18,7 @@ import {
   IconButton,
   Button,
   Box,
+  StepIcon,
 } from "@mui/material";
 import { Link as ScrollLink } from "react-scroll";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -33,10 +31,12 @@ import { TripItem } from "../types/tripItem";
 import { ITask } from "../types/task";
 import { IPoll } from "../types/poll";
 import { addTrip } from "../services/trips";
-import Image from "next/image";
-import { Session } from "inspector/promises";
+// import Image from "next/image";
+// import { Session } from "inspector/promises";
 import UserAutocomplete from "./UserAutocomplete";
 import { IUser } from "../types/user";
+import DateIcon from "@mui/icons-material/DateRange";
+import Navigation from "./Navigation";
 
 const tripTypeImages: { [key: string]: string } = {
   urban: "/./images/urban.jpg",
@@ -45,12 +45,12 @@ const tripTypeImages: { [key: string]: string } = {
 };
 const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   onAddTrip,
-}) => {  
-  const { data: session, status } = useSession();
-  
+}) => {
+  const { data: session } = useSession();
+
   const [trip, setTrip] = useState<ITrip>({
     title: "",
-    adminNmame:"",
+    adminNmame: "",
     destination: "",
     dates: {
       start: new Date(),
@@ -67,6 +67,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
       },
       tripType: "urban",
     },
+    // session!.user as IUser
     participants: [],
     tasks: [],
     polls: [],
@@ -75,12 +76,6 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     status: "active",
   });
 
-  // const [memory, setMemory] = useState<IMemory>({
-  //   imageUrl: "",
-  //   description: "",
-  //   userId: "",
-  //   timestamp: new Date(),
-  // });
   const [addTask, setAddTask] = useState(false);
   const [addPoll, setAddPoll] = useState(false);
   const [addUser, setAddUser] = useState(false);
@@ -189,31 +184,19 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     setAddPoll(false);
   };
 
-
-
   const handleCreateUser = () => {
     setAddUser(!addUser);
   };
 
-  // const handleAddUser = (newUsers: IUser[]) => {
-  //   if (newUsers.email !== "")
-  //     setTrip((prevTrip) => ({
-  //       ...prevTrip,
-  //       participants: [...prevTrip.participants, newUser],
-  //     }));
-  //   setAddUser(false);
-  // };
-
-
   const handleAddUser = (newUsers: IUser[]) => {
-    // אם המערך newUsers לא ריק
     if (newUsers.length > 0) {
       setTrip((prevTrip) => ({
         ...prevTrip,
         participants: [
           ...prevTrip.participants,
           ...newUsers.map((user) => ({
-            email: user.email,  // תוכל להוסיף שדות נוספים אם נדרש
+            email: user.email,
+            image: user.image,
             name: user.name,
           })),
         ],
@@ -221,21 +204,6 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     }
     setAddUser(false);
   };
-
-  // const handleAddMemory = () => {
-  //   if (memory.description.trim() !== "") {
-  //     setTrip((prevTrip) => ({
-  //       ...prevTrip,
-  //       memories: [...prevTrip.memories, memory],
-  //     }));
-  //     setMemory({
-  //       imageUrl: "",
-  //       description: "",
-  //       userId: "",
-  //       timestamp: new Date(),
-  //     });
-  //   }
-  // };
 
   const handleRemoveItem = (
     // list: TripItem[],
@@ -249,68 +217,19 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   };
 
   const handleSave = async () => {
-    trip.adminNmame=session?.user.name;
+    trip.adminNmame = session?.user.name;
     console.log("trip", trip);
     const response = await addTrip(trip);
     // sendPoll(trip.polls);
     onAddTrip(response);
-    console.log("after add",response.polls);
-    
+    console.log("after add", response.polls);
   };
 
- 
   return (
     <Container maxWidth="lg">
       <Grid container spacing={4}>
         {/* Sidebar for Navigation */}
-        <Grid item xs={12} sm={3}>
-          <Box
-            sx={{
-              position: "sticky",
-              top: 0,
-              height: "100vh",
-              padding: 3,
-              backgroundColor: "#f4f4f4",
-              boxShadow: 2,
-              borderRadius: 2,
-            }}
-          >
-            <Typography
-              variant="h6"
-              sx={{ fontWeight: "bold", color: "#81C784" }}
-            >
-              Navigation
-            </Typography>
-            <List>
-              <ListItem>
-                <ScrollLink to="basic-details" smooth={true} duration={500}>
-                  Basic Details
-                </ScrollLink>
-              </ListItem>
-              <ListItem>
-                <ScrollLink to="budget-details" smooth={true} duration={500}>
-                  Budget Details
-                </ScrollLink>
-              </ListItem>
-              <ListItem>
-                <ScrollLink to="tasks" smooth={true} duration={500}>
-                  Tasks
-                </ScrollLink>
-              </ListItem>
-              <ListItem>
-                <ScrollLink to="polls" smooth={true} duration={500}>
-                  Polls
-                </ScrollLink>
-              </ListItem>
-              <ListItem>
-                <ScrollLink to="memories" smooth={true} duration={500}>
-                  Memories
-                </ScrollLink>
-              </ListItem>
-            </List>
-          </Box>
-        </Grid>
-
+        <Navigation />
         {/* Main Content */}
         <Grid item xs={12} sm={9}>
           <Box sx={{ padding: 4 }}>
@@ -323,12 +242,10 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                 Basic Details
               </Typography>
               {addUser ? (
-                <UserAutocomplete
-                  onCreate={handleAddUser}
-                />
-               ) : (
+                <UserAutocomplete onCreate={handleAddUser} />
+              ) : (
                 <div>
-              <Button
+                  <Button
                     variant="contained"
                     onClick={handleCreateUser}
                     color="primary"
@@ -336,9 +253,9 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                   >
                     Add User
                   </Button>
-                  </div>
-                 )}
-     
+                </div>
+              )}
+
               <TextField
                 label="Trip Title"
                 name="title"
@@ -514,7 +431,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
               {addTask ? (
                 <CreateTask
                   onCreate={handleAddTask}
-                  participants={["Alice", "Bob", "Charlie"]}
+                  participants={trip.participants}
                 />
               ) : (
                 <>
@@ -604,51 +521,6 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                 </Button>
               )}
             </Grid>
-
-            {/* Memories */}
-            {/* <Grid item xs={12} id="memories" sx={{ marginBottom: 4 }}>
-              <Typography
-                variant="h5"
-                sx={{ fontWeight: "bold", color: "#81C784" }}
-              >
-                Memories
-              </Typography>
-              <TextField
-                label="New Memory"
-                value={memory}
-                fullWidth
-                margin="normal"
-                sx={{
-                  backgroundColor: "#f9f9f9",
-                  borderRadius: 1,
-                }}
-              />
-              <Button
-                variant="contained"
-                onClick={handleAddMemory}
-                color="primary"
-                sx={{ marginBottom: "1rem" }}
-              >
-                Add Memory
-              </Button>
-              <List>
-                {trip.memories.map((memory, index) => (
-                  <ListItem key={index}>
-                    <ListItemText primary={memory.description} />
-                    <ListItemSecondaryAction>
-                      <IconButton
-                        edge="end"
-                        onClick={() =>
-                          handleRemoveItem(trip.memories, memory, "memories")
-                        }
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                ))}
-              </List>
-            </Grid> */}
 
             {/* Save Button */}
             <Grid

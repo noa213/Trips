@@ -1,10 +1,7 @@
 export interface IUser {
-//   _id?: string;
-  email:string,
-  name: string,
-  // role:string,
-  createdAt: Date;
+  //   _id?: string;
+  email: string;
+  name: string;
+  image: string;
+  createdAt?: Date;
 }
-
-
-

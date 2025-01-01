@@ -2,6 +2,7 @@ import { IBudgetCategories } from "./BudgetCategories";
 import { IMemory } from "./memory";
 import { IPoll } from "./poll";
 import { ITask } from "./task";
+import { IUser } from "./user";
 export interface ITrip {
   _id?: string;
   // adminUser:string| null | undefined;
@@ -18,10 +19,7 @@ export interface ITrip {
     categories: IBudgetCategories;
     tripType: "urban" | "nature" | "family";
   };
-  participants: Array<{
-    email: string;
-    name:string;
-  }>;
+  participants: Array<IUser>;
   tasks: Array<ITask>;
   polls: Array<IPoll>;
   memories: Array<IMemory>;

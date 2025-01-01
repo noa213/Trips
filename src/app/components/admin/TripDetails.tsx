@@ -201,7 +201,7 @@ const TripDetail = () => {
             {addTask ? (
               <CreateTask
                 onCreate={handleAddTask}
-                participants={["Alice", "Bob", "Charlie"]}
+                participants={trip.participants}
               />
             ) : (
               <Button

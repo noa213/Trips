@@ -16,4 +16,3 @@ export interface SocketWithIO extends NetSocket {
 export interface NextApiResponseServerIO extends NextApiResponse {
   socket: SocketWithIO;
 }
-

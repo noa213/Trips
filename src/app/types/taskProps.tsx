@@ -1,5 +1,7 @@
 import { ITask } from "./task";
+import { IUser } from "./user";
 
 export interface ITasksProps {
-    tasksList: ITask[];
-  }
+  tasksList: ITask[];
+  participants: IUser[];
+}
