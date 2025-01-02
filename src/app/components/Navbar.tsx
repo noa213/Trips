@@ -33,7 +33,7 @@ const Navbar = () => {
           component={Link}
           href="/"
           sx={{
-            color: value === 2 ? "#9B111E" : "#374151",
+            color: value === 1 ? "#9B111E" : "#374151",
             "&.mui-selected": { color: "#9B111E" },
           }}
         />
@@ -50,9 +50,19 @@ const Navbar = () => {
         />
 
         <Tab
-          label="About"
+          label="Information for the traveler"
           component={Link}
-          href="/"
+          href="/pages/Information_for_the_traveler"
+          sx={{
+            color: value === 2 ? "#9B111E" : "#374151",
+            "&.mui-selected": { color: "#9B111E" },
+          }}
+        />
+
+        <Tab
+          label="about"
+          component={Link}
+          href="/pages/about"
           sx={{
             color: value === 2 ? "#9B111E" : "#374151",
             "&.mui-selected": { color: "#9B111E" },
@@ -60,7 +70,7 @@ const Navbar = () => {
         />
 
 
-      </Tabs> 
+      </Tabs>
     </>
   );
 };

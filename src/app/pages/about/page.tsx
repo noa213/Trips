@@ -1,14 +1,12 @@
-"use client";
 
-import Previous_trips from "@/app/components/Previous_trips";
+import About from "@/app/components/About";
 import React from "react";
 
 
 const Page = () => {
 return(
     <div>
-    <Previous_trips />
-   
+    <About />
     </div>
 );
 };

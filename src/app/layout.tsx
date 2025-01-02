@@ -10,6 +10,7 @@ import SignIn from "./components/SignIn";
 import CreatePoll from "./components/CreatePoll";
 import { SessionProvider } from "next-auth/react";
 import GroupChat from "./components/GroupChat";
+import ImageUploader from "./components/ImageUploader";
 
 
 
@@ -26,9 +27,7 @@ export default function RootLayout({
         <SessionProvider>
       
           <Navbar />
-          {/* <GroupChat></GroupChat> */}
-          {/* <IdeasForTrips></IdeasForTrips>
-         < ImageUploader></ImageUploader> */}
+        
           {children}
 
         </SessionProvider>

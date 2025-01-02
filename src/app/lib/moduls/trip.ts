@@ -142,6 +142,13 @@ const trips: Schema<ITrip> = new Schema({
     enum: ["active", "completed", "cancelled"],
     required: true,
   },
+  images:[
+    {
+      url: { type: String },
+    },
+  ],
+
+  
 });
 
 const Trip: Model<ITrip> =

@@ -30,6 +30,7 @@ export async function POST(req: NextRequest) {
       polls,
       memories,
       status,
+      images,
     } = await req.json();
     const trip = new Trip({
       adminNmame,
@@ -42,6 +43,7 @@ export async function POST(req: NextRequest) {
       polls,
       memories,
       status,
+      images,
     });
     await trip.save();
     return NextResponse.json({ newTrip: trip });

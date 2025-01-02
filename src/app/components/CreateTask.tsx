@@ -7,7 +7,7 @@ const CreateTask: React.FC<ICreateTaskProps> = ({ onCreate, participants }) => {
   const [task, setTask] = useState<Omit<ITask, "taskId">>({
     title: "",
     assignedTo: "",
-    status: "notStarted",
+    status: "not started",
     dueDate: new Date(),
   });
 
@@ -35,7 +35,7 @@ const CreateTask: React.FC<ICreateTaskProps> = ({ onCreate, participants }) => {
     setTask({
       title: "",
       assignedTo: "",
-      status: "notStarted",
+      status: "not started",
       dueDate: new Date(),
     });
   };
