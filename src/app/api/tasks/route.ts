@@ -1,5 +1,5 @@
 import connect from "@/app/lib/db/mongo-db";
-import Trip from "@/app/lib/moduls/trip";
+// import Trip from "@/app/lib/moduls/trip";
 import { NextRequest, NextResponse } from "next/server";
 
 // export async function PUT(req: NextRequest) {

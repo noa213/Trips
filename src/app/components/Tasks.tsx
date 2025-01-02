@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
 import { ITasksProps } from "../types/taskProps";
 import { ITask } from "../types/task";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { updateTask } from "../services/task";
 

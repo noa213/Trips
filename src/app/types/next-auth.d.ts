@@ -48,8 +48,6 @@ declare module "next-auth/jwt" {
   }
 }
 
-src/types/next-auth.d.ts
-import NextAuth, { DefaultSession, DefaultUser, DefaultJWT } from "next-auth";
 
 // הרחבת User, Session ו-JWT
 declare module "next-auth" {
