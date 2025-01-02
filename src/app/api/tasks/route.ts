@@ -1,6 +1,6 @@
 import connect from "@/app/lib/db/mongo-db";
 // import Trip from "@/app/lib/moduls/trip";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 // export async function PUT(req: NextRequest) {
 //     try {
@@ -39,6 +39,7 @@ export async function PUT(req: NextRequest) {
     const { taskId, ...updatedTask } = await req.json();
     const { task } = await req.json();
     console.log("updatedTask", updatedTask);
+    console.log("taskId", taskId);
     console.log("task", task);
 
   //   const updatedTrip = await Trip.findOneAndUpdate(
