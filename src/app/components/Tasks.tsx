@@ -9,10 +9,12 @@ import { updateTask } from "../services/task";
 let sourceColumn: string | null = null;
 
 const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
- console.log(participants);
- 
+  
+  console.log("tasksList",tasksList);
   // Group tasks by status
   const groupTasksByStatus = (tasks: ITask[]) =>
+    // const statusOrder = ["notStarted", "inProgress", "completed"];
+
     tasks.reduce((acc, task) => {
       acc[task.status] = acc[task.status] || [];
       acc[task.status].push(task);
@@ -24,31 +26,35 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
   const [participantss] = useState([
     {
       name: "Unassigned",
-      email: "no_assigned_user",
+      email: "Unassigned",
       image: "https://via.placeholder.com/96",
     },
-    {
-      name: "Noa Levin",
-      email: "nlevin1001@gmail.com",
-      image:
-        "https://lh3.googleusercontent.com/a/ACg8ocIu2CH7xG9QqPR6ITXBLL76M6TfLiznJvVXritr6LvYDNW7c-w=s96-c",
-    },
-    {
-      name: "Test User",
-      email: "testuser@example.com",
-      image: "https://via.placeholder.com/96",
-    },
+    ...participants,
   ]);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState<Record<string, boolean>>(
+    {}
+  );
 
   // Sortable item component
   const SortableItem = SortableElement<{ value: ITask }>(
     ({ value }: { value: ITask }) => {
+      const toggleDropdown = (taskId: string) => {
+        setIsDropdownOpen((prev) => ({
+          ...prev,
+          [taskId]: !prev[taskId],
+        }));
+      };
+
       const handleAssignChange = (newAssignedEmail: string) => {
         value.assignedTo = newAssignedEmail;
-        setIsDropdownOpen(false);
+        setIsDropdownOpen((prev) => ({
+          ...prev,
+          [value.taskId]: !prev[value.taskId],
+        }));
         updateTaskInDatabase(value);
       };
+      // const user = await User.findOne({ email: value.assignedTo });
+      // const profileImage = user ? user.image : null;
       return (
         <div
           draggable="true"
@@ -86,7 +92,7 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
                 borderRadius: "50%",
                 overflow: "hidden",
                 marginRight: "8px",
-                border: "solid red",
+                border: "solid",
                 padding: "0",
                 backgroundColor: "transparent",
                 cursor: "pointer",
@@ -95,12 +101,13 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
               }}
               onClick={() => {
                 console.log("poiu");
-                setIsDropdownOpen(!isDropdownOpen);
+                toggleDropdown(value.taskId);
               }}
             >
               <span style={{ display: "block", width: "100%", height: "100%" }}>
                 <Image
-                  src={session?.user.image ?? "/default-avatar.png"}
+                  // src={value.assignedTo.image ?? "https://via.placeholder.com/96"}
+                  src={"https://via.placeholder.com/96"}
                   alt="Assigned"
                   width={100}
                   height={100}
@@ -112,7 +119,7 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
               </span>
             </button>
             {value.assignedTo}
-            {isDropdownOpen && (
+            {isDropdownOpen[value.taskId] && (
               <div
                 style={{
                   position: "absolute",
@@ -225,12 +232,15 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
 
   const updateTaskInDatabase = async (task: ITask) => {
     try {
+      console.log("taskkkk", task);
+
       await updateTask(task);
     } catch (error) {
       console.error("Error updating task:", error);
     }
   };
 
+  const statusOrder = ["not started", "in progress", "completed"];
   return (
     <div
       className="columns-container"
@@ -242,47 +252,53 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
         borderRadius: "8px",
       }}
     >
-      {Object.entries(tasks).map(([status, items]) => (
-        <div
-          className="column"
-          data-column-id={status}
-          key={status}
-          style={{
-            width: "280px", // עמודה רחבה יותר
-            padding: "15px",
-            border: "1px solid #dfe1e6",
-            borderRadius: "8px",
-            minHeight: "400px",
-            backgroundColor: "#ffffff",
-            boxShadow: "0 1px 4px rgba(0, 0, 0, 0.1)",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <h3
-            style={{
-              fontSize: "16px",
-              fontWeight: "600",
-              color: "#172b4d",
-              marginBottom: "10px",
-            }}
-          >
-            {status === "notStarted"
-              ? "Not Started"
-              : status === "inProgress"
-              ? "In Progress"
-              : "Completed"}
-          </h3>
-          <SortableList
-            items={items}
-            onSortStart={onSortStart}
-            onSortEnd={(sortEndData) => onSortEnd({ ...sortEndData, event })}
-            helperClass="dragging"
-            axis="y"
-          />
-        </div>
-      ))}
+      {/* {Object.entries(tasks).map(([status, items]) => ( */}
+      {statusOrder.map(
+        (status) =>
+          tasks[status] && (
+            <div
+              className="column"
+              data-column-id={status}
+              key={status}
+              style={{
+                width: "280px", // עמודה רחבה יותר
+                padding: "15px",
+                border: "1px solid #dfe1e6",
+                borderRadius: "8px",
+                minHeight: "400px",
+                backgroundColor: "#ffffff",
+                boxShadow: "0 1px 4px rgba(0, 0, 0, 0.1)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "600",
+                  color: "#172b4d",
+                  marginBottom: "10px",
+                }}
+              >
+                {status === "not started"
+                  ? "Not Started"
+                  : status === "in progress"
+                  ? "In Progress"
+                  : "Completed"}
+              </h3>
+              <SortableList
+                items={tasks[status]}
+                onSortStart={onSortStart}
+                onSortEnd={(sortEndData) =>
+                  onSortEnd({ ...sortEndData, event })
+                }
+                helperClass="dragging"
+                axis="y"
+              />
+            </div>
+          )
+      )}
     </div>
   );
 };

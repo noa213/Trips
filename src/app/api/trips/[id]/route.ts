@@ -21,9 +21,13 @@ export async function PUT(req: NextRequest) {
   try {
     const updatedData = await req.json();
     await connect();
-    const updatedTrip = await Trip.findByIdAndUpdate(updatedData._id, updatedData, {
-      new: true,
-    });    
+    const updatedTrip = await Trip.findByIdAndUpdate(
+      updatedData._id,
+      updatedData,
+      {
+        new: true,
+      }
+    );
     return !updatedTrip
       ? NextResponse.json({ message: "Trip not found" }, { status: 404 })
       : NextResponse.json(updatedTrip);
@@ -31,6 +35,7 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ message: "Error: " + error }, { status: 500 });
   }
 }
+
 
 // export async function POST(req: NextRequest) {
 //   try {

@@ -1,5 +1,3 @@
-
-
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import connect from "@/app/lib/db/mongo-db";
@@ -21,7 +19,7 @@ const handle = NextAuth({
       if (user) {
         const existingUser = await User.findOne({ email: user.email });
         if (!existingUser) {
-          await User.create({ email: user.email, name: user.name });
+          await User.create({ email: user.email, name: user.name ,image: user.image});
           token.firstTime = true;
         } else {
           token.firstTime = false;

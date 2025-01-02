@@ -74,7 +74,7 @@ import mongoose, { Model, Schema } from "mongoose";
 import { ITrip } from "@/app/types/trip";
 
 const trips: Schema<ITrip> = new Schema({
-  adminNmame:{ type: String },
+  adminNmame: { type: String },
   title: { type: String },
   destination: { type: String },
   dates: {
@@ -87,8 +87,6 @@ const trips: Schema<ITrip> = new Schema({
       type: String,
       enum: ["urban", "nature", "family"],
     },
-
-    // spent: { type: Number },
     categories: {
       transportation: { type: Number },
       accommodation: { type: Number },
@@ -100,6 +98,7 @@ const trips: Schema<ITrip> = new Schema({
     {
       email: { type: String },
       name: { type: String },
+      image: { type: String },
     },
   ],
 
@@ -110,7 +109,7 @@ const trips: Schema<ITrip> = new Schema({
       assignedTo: { type: String },
       status: {
         type: String,
-        enum: ["notStarted", "inProgress", "completed"],
+        enum: ["not started", "in progress", "completed"],
         required: true,
       },
       dueDate: { type: Date },

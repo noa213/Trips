@@ -113,8 +113,11 @@ const TripDetail = () => {
       [type]: trip![type].filter((i) => i !== item),
     };
     try {
+      console.log("tripItem", item);
+      console.log("item", item._id);
+
       // איך אני שולחת את המזהה של הפריט?
-      const response = await deleteTripItem(updatedTrip._id!, "מזהה פריט", type);
+      const response = await deleteTripItem(updatedTrip._id!, item._id!, type);
       setTrip(response);
     } catch (error) {
       console.error("Error deleting tripItem:", error);

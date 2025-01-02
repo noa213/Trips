@@ -57,6 +57,7 @@ export const deleteTripItem = async (
   type: "tasks" | "polls" | "memories"
 ): Promise<ITrip> => {
   try {
+    
     const response = await axios.delete(`/api/trips/${tripId}/${type}?itemId=${itemId}`);
     console.log(`Item with ID ${itemId} from type ${type} in trip ${tripId} deleted successfully.`);
     return response.data;

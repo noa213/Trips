@@ -1,4 +1,5 @@
 export interface ITask {
+  _id?: string;
   taskId: string;
   title: string;
   assignedTo: string;

@@ -64,8 +64,8 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
       },
       tripType: "urban",
     },
-    // session!.user as IUser
-    participants: [],
+    // 
+    participants: [session!.user as IUser],
     tasks: [],
     polls: [],
     memories: [],

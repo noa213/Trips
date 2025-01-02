@@ -2,6 +2,7 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { Tabs, Tab } from "@mui/material";
+import SignIn from "./SignIn";
 
 const Navbar = () => {
   const [value, setValue] = useState(0);
@@ -12,6 +13,7 @@ const Navbar = () => {
 
   return (
     <>
+    <SignIn/>
       <Tabs
         value={value}
         onChange={handleChange}

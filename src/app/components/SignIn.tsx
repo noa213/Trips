@@ -25,7 +25,7 @@ export default function SignIn() {
       <p className="text-sm font-medium text-[#9B111E]">
         <Image
           src={session!.user.image || "/default-avatar.png"}
-          alt={"session.user?.name"}
+          alt={session.user?.name || "User"}
           width={24}
           height={24}
         />

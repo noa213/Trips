@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { ICreateUserProps } from "../types/CreateUserProps";
+import { IUser } from "../types/user";
 
-const UserAutocomplete: React.FC<ICreateUserProps> = ({ onCreate}) => {
+const UserAutocomplete: React.FC<ICreateUserProps> = ({ onCreate }) => {
   // const { data: session, status } = useSession();
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<any[]>([]); // נתמך מכל מבנה המגיע מהשרת
-  const [selectedUsers, setSelectedUsers] = useState<any[]>([]);
+  const [results, setResults] = useState<IUser[]>([]); // נתמך מכל מבנה המגיע מהשרת
+  const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]);
 
   const handleSearch = async (searchTerm: string) => {
     setQuery(searchTerm); // עדכון השאילתה לפי מה שהמשתמש מקליד
@@ -19,23 +20,20 @@ const UserAutocomplete: React.FC<ICreateUserProps> = ({ onCreate}) => {
     try {
       // שליחת בקשת חיפוש על פי המילה שהמשתמש מקליד
       const response = await axios.get(`/api/users/search?query=${searchTerm}`);
-      console.log(response.data);
+      console.log("response", response.data);
       setResults(response.data); // עדכון התוצאות
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
 
-  const handleSelect = (user: any) => {
+  const handleSelect = (user: IUser) => {
     if (!selectedUsers.find((u) => u.email === user.email)) {
       setSelectedUsers([...selectedUsers, user]);
     }
     setQuery("");
     setResults([]);
   };
-
-
-
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,20 +75,20 @@ const UserAutocomplete: React.FC<ICreateUserProps> = ({ onCreate}) => {
           ))}
         </ul>
       </div>
-{/* 
+      {/* 
       {session && session.user && (
         <div className="mt-4">
           <h4 className="text-lg font-semibold">Current User:</h4>
           <p className="text-gray-700">{session.user.name}</p>
         </div>
       )} */}
- 
+
       <button
         type="submit"
         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         onClick={handleSubmit}
       >
-       SAVE USERS
+        SAVE USERS
       </button>
     </div>
   );

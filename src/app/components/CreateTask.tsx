@@ -4,7 +4,6 @@ import { ITask } from "../types/task";
 import { ICreateTaskProps } from "../types/CreateTaskProps";
 import {
   FormControl,
-  ListItem,
   ListItemText,
   MenuItem,
   Select,
@@ -42,6 +41,8 @@ const CreateTask: React.FC<ICreateTaskProps> = ({ onCreate, participants }) => {
       taskId: `task-${Date.now()}`,
       ...task,
     };
+    console.log("newTask", newTask);
+    
     onCreate(newTask);
     setTask({
       title: "",
@@ -82,11 +83,12 @@ const CreateTask: React.FC<ICreateTaskProps> = ({ onCreate, participants }) => {
           Assign To
         </label>
         <FormControl fullWidth>
-          {/* <InputLabel>Choose a Participant</InputLabel> */}
           <Select
             name="assignedTo"
+            value={task.assignedTo}
             onChange={handleChange}
             renderValue={(value) => {
+              if (!value) return <Typography>Select a participant</Typography>;
               const selected = participants.find((p) => p.email === value);
               return (
                 <Typography>
@@ -97,38 +99,14 @@ const CreateTask: React.FC<ICreateTaskProps> = ({ onCreate, participants }) => {
           >
             {participants.map((participant) => (
               <MenuItem key={participant.email} value={participant.email}>
-                <ListItem sx={{ padding: 0 }}>
-                  <ListItemText
-                    primary={participant.name}
-                    secondary={participant.email}
-                  />
-                </ListItem>
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        {/* <select
-          name="assignedTo"
-          id="assignedTo"
-          value={task.assignedTo}
-          onChange={handleChange}
-          className="border rounded w-full px-3 py-2 mt-1"
-        >
-          <option value="">Select a participant</option>
-          {participants.map((participant) => (
-            <option key={participant.email} value={participant.name}>
-              <ListItem
-                key={participant.email}
-                sx={{ borderBottom: "1px solid #ccc" }}
-              >
                 <ListItemText
                   primary={participant.name}
                   secondary={participant.email}
                 />
-              </ListItem>
-            </option>
-          ))}
-        </select> */}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </div>
       <div className="mb-4">
         <label
@@ -165,30 +143,12 @@ const CreateTask: React.FC<ICreateTaskProps> = ({ onCreate, participants }) => {
           }
           className="border rounded w-full px-3 py-2 mt-1"
         >
-          <option value="notStarted">Not Started</option>
-          <option value="inProgress">In Progress</option>
+          <option value="not started">Not Started</option>
+          <option value="in progress">In Progress</option>
           <option value="completed">Completed</option>
         </select>
       </div>
-      {/* <div className="mb-4">
-        <label
-          htmlFor="status"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Status
-        </label>
-        <select
-          name="status"
-          id="status"
-          value={task.status}
-          onChange={handleChange}
-          className="border rounded w-full px-3 py-2 mt-1"
-        >
-          <option value="notStarted">Not Started</option>
-          <option value="inProgress">In Progress</option>
-          <option value="completed">Completed</option>
-        </select>
-      </div> */}
+
       <button
         type="submit"
         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"

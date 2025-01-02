@@ -2,7 +2,9 @@ import axios from "axios";
 import { ITask } from "../types/task";
 
 export const updateTask = async (task: ITask): Promise<void> => {
-    try {    
+    try {  
+      console.log("updateTask", task);
+        
       const response = await axios.put(`/api/tasks`, task);
       console.log("Tasks updated successfully:", response.data);
       // return response.data;

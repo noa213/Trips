@@ -31,6 +31,8 @@ export async function POST(req: NextRequest) {
       memories,
       status,
     } = await req.json();
+    console.log("111");
+    
     const trip = new Trip({
       adminNmame,
       title,
@@ -43,7 +45,11 @@ export async function POST(req: NextRequest) {
       memories,
       status,
     });
+    console.log("222", tasks);
+    
     await trip.save();
+    console.log("333");
+    
     return NextResponse.json({ newTrip: trip });
   } catch (error) {
     return NextResponse.json({ message: "Error: " + error }, { status: 500 });

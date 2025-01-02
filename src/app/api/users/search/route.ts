@@ -16,13 +16,12 @@ export async function GET(req: Request) {
   }
 
   try {
-    // חיבור למסד נתונים
     await connect();
-    console.log("Query:", query); // לוג של המחרוזת המבוקשת
+    console.log("Query:", query); 
 
     // חיפוש משתמשים לפי המייל
     const users = await User.find({ email: { $regex: query, $options: "i" } })
-      .select("email name -_id")
+      .select("email name image")
       .limit(10);
 
     return NextResponse.json(users, { status: 200 });
