@@ -1,5 +1,5 @@
 "use client";
-import IdeasForTrips from "@/app/components/IdeasForTrips";
+import IdeasForTrips from "@/app/components/Previous_trips";
 import Previous_trips from "@/app/components/Previous_trips";
 import React from "react";
 
