@@ -6,6 +6,9 @@ import Navbar from "@/app/components/Navbar";
 // import SignIn from "./components/SignIn";
 // import CreatePoll from "./components/CreatePoll";
 import { SessionProvider } from "next-auth/react";
+import GroupChat from "./components/GroupChat";
+
+
 
 export default function RootLayout({
   children,
@@ -17,9 +20,7 @@ export default function RootLayout({
       <body>
         <SessionProvider>
           <Navbar />
-          {/* <GroupChat></GroupChat> */}
-          {/* <IdeasForTrips></IdeasForTrips>
-         < ImageUploader></ImageUploader> */}
+        
           {children}
         </SessionProvider>
       </body>

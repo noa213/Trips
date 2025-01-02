@@ -2,24 +2,51 @@
 
 import Image from "next/image";
 import React, { useState } from "react";
+import axios from "axios";
+import { IImage } from "../types/image"; // נניח שזו הטיפוס שלך
+import { ITrip } from "../types/trip";
 
-const ImageUploader = () => {
-  const [images, setImages] = useState<File[]>([]);
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+interface ImageUploadProps {
+  trip: ITrip;
+  setTrip: React.Dispatch<React.SetStateAction<ITrip>>;
+}
+
+const ImageUpload: React.FC<ImageUploadProps> = ({ trip, setTrip }) => {
+  const [image, setImage] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const newImages = Array.from(e.target.files);
-      setImages((prev) => [...prev, ...newImages]);
+      setImage(e.target.files[0]);
     }
   };
 
-  const handleDownload = (image: File) => {
-    const url = URL.createObjectURL(image);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = image.name;
-    a.click();
-    URL.revokeObjectURL(url);
+  const handleFileUpload = async () => {
+    if (image && trip._id) {
+      const formData = new FormData();
+      formData.append("image", image);
+
+      try {
+        setLoading(true);
+        const response = await axios.post("/api/images", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+          params: { tripId: trip._id },
+        });
+
+        if (response.data.imageUrl) {
+          // עדכון התמונות בטיול
+          const updatedImages = [...trip.images, { url: response.data.imageUrl }];
+          setTrip({ ...trip, images: updatedImages });
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        setLoading(false);
+      }
+    }
   };
 
   return (
@@ -58,61 +85,4 @@ const ImageUploader = () => {
   );
 };
 
-const styles = {
-  container: {
-    textAlign: "center" as const,
-    padding: "20px",
-    fontFamily: "Arial, sans-serif",
-    backgroundColor: "#f9f9f9",
-  },
-  title: {
-    fontSize: "24px",
-    color: "#333",
-    marginBottom: "20px",
-  },
-  uploadButton: {
-    display: "inline-block",
-    padding: "10px 20px",
-    fontSize: "16px",
-    color: "#fff",
-    backgroundColor: "#007BFF",
-    borderRadius: "5px",
-    cursor: "pointer",
-    marginBottom: "20px",
-  },
-  fileInput: {
-    display: "none",
-  },
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-    gap: "20px",
-  },
-  card: {
-    position: "relative" as const,
-    backgroundColor: "#fff",
-    borderRadius: "10px",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    overflow: "hidden",
-  },
-  image: {
-    width: "100%",
-    height: "200px",
-    objectFit: "cover" as const,
-  },
-  downloadButton: {
-    position: "absolute" as const,
-    bottom: "10px",
-    left: "50%",
-    transform: "translateX(-50%)",
-    backgroundColor: "#28a745",
-    color: "#fff",
-    border: "none",
-    borderRadius: "5px",
-    padding: "10px",
-    cursor: "pointer",
-    fontSize: "14px",
-  },
-};
-
-export default ImageUploader;
+export default ImageUpload;

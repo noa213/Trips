@@ -35,17 +35,3 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ message: "Error: " + error }, { status: 500 });
   }
 }
-
-
-// export async function POST(req: NextRequest) {
-//   try {
-//     await connect();
-//     const { title, destination, dates, budget, tasks, polls, memories, status } = await req.json();
-//     const trip = new Trip({ title, destination, dates, budget, tasks, polls, memories, status});
-//     await trip.save();
-//     // return await GET();
-//     return NextResponse.json({ newTrip: trip });
-//   } catch (error) {
-//     return NextResponse.json({ message: "Error: " + error }, { status: 500 });
-//   }
-// }

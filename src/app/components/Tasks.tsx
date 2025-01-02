@@ -195,7 +195,8 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
   };
 
   // Handle drag-and-drop between columns
-  const onSortEnd = ({
+  const 
+  onSortEnd = ({
     oldIndex,
     newIndex,
     event,

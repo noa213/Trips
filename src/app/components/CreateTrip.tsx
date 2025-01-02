@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import {  useSession } from "next-auth/react";
 import {
   TextField,
   Container,
@@ -33,7 +33,9 @@ import { addTrip } from "../services/trips";
 // import { Session } from "inspector/promises";
 import UserAutocomplete from "./UserAutocomplete";
 import { IUser } from "../types/user";
+import { sendPoll } from "../services/polls";
 import Navigation from "./Navigation";
+
 
 const tripTypeImages: { [key: string]: string } = {
   urban: "/./images/urban.jpg",
@@ -42,9 +44,9 @@ const tripTypeImages: { [key: string]: string } = {
 };
 const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   onAddTrip,
-}) => {
+}) => {  
   const { data: session } = useSession();
-
+  
   const [trip, setTrip] = useState<ITrip>({
     title: "",
     adminNmame: "",
@@ -71,14 +73,33 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     memories: [],
     image: tripTypeImages.urban,
     status: "active",
+    images: [],
   });
 
   const [addTask, setAddTask] = useState(false);
   const [addPoll, setAddPoll] = useState(false);
   const [addUser, setAddUser] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // const [isChecked, setIsChecked] = useState<boolean>(false);
 
-  useEffect(() => {}, [trip]);
+  // const handleSendEail = () => {
+  //   setIsChecked((prev) => !prev);
+  //   console.log(isChecked);
+
+  // }
+
+  const [isChecked, setIsChecked] = useState<boolean>(false);
+
+
+  const handleSendail = () => {
+    setIsChecked((prev) => !prev); // שינוי מצב הצ'קבוקס
+  };
+  const handleRemoveItem1 = (item: any, type: string) => {
+    console.log("Remove item:", item, type);
+  };
+
+
+  useEffect(() => { }, [trip]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -185,6 +206,16 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     setAddUser(!addUser);
   };
 
+  // const handleAddUser = (newUsers: IUser[]) => {
+  //   if (newUsers.email !== "")
+  //     setTrip((prevTrip) => ({
+  //       ...prevTrip,
+  //       participants: [...prevTrip.participants, newUser],
+  //     }));
+  //   setAddUser(false);
+  // };
+
+
   const handleAddUser = (newUsers: IUser[]) => {
     if (newUsers.length > 0) {
       setTrip((prevTrip) => ({
@@ -201,6 +232,21 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     }
     setAddUser(false);
   };
+
+  // const handleAddMemory = () => {
+  //   if (memory.description.trim() !== "") {
+  //     setTrip((prevTrip) => ({
+  //       ...prevTrip,
+  //       memories: [...prevTrip.memories, memory],
+  //     }));
+  //     setMemory({
+  //       imageUrl: "",
+  //       description: "",
+  //       userId: "",
+  //       timestamp: new Date(),
+  //     });
+  //   }
+  // };
 
   const handleRemoveItem = (
     // list: TripItem[],
@@ -222,6 +268,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     console.log("after add", response.polls);
   };
 
+ 
   return (
     <Container maxWidth="lg">
       <Grid container spacing={4}>
@@ -239,10 +286,12 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                 Basic Details
               </Typography>
               {addUser ? (
-                <UserAutocomplete onCreate={handleAddUser} />
-              ) : (
+                <UserAutocomplete
+                  onCreate={handleAddUser}
+                />
+               ) : (
                 <div>
-                  <Button
+              <Button
                     variant="contained"
                     onClick={handleCreateUser}
                     color="primary"
@@ -449,9 +498,8 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                         >
                           <ListItemText
                             primary={task.title}
-                            secondary={`Status: ${
-                              task.status
-                            } | Due Date: ${task.dueDate.toLocaleDateString()}`}
+                            secondary={`Status: ${task.status
+                              } | Due Date: ${task.dueDate.toLocaleDateString()}`}
                           />
                           <ListItemSecondaryAction>
                             <IconButton
@@ -490,12 +538,28 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                           .join(" | ")}
                       />
                       <ListItemSecondaryAction>
-                        <IconButton
-                          edge="end"
-                          onClick={() => handleRemoveItem(poll, "polls")}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
+                        <div className="flex flex-col items-start space-y-4 p-4">
+                          <h1 className="text-gray-700 text-sm font-semibold">Do you want to send travelers this survey?</h1>
+
+                          {/* מיכל הצ'קבוקס */}
+                          <div
+                            className={`w-16 h-8 flex items-center justify-${isChecked ? "end" : "start"} bg-gray-300 rounded-full p-1 cursor-pointer transition-all duration-300 ease-in-out`}
+                            onClick={handleSendail}
+                          >
+                            {/* הכדור הפנימי */}
+                            <div
+                              className={`w-6 h-6  rounded-full shadow-md transition-all duration-300 ease-in-out ${isChecked ? "bg-green-500 translate-x-0.5" : "bg-white translate-x-0"}`}
+                            />
+                          </div>
+
+                          {/* כפתור המחיקה ימוקם מימין */}
+                          <div className="flex justify-end w-full">
+                            <IconButton edge="end" onClick={() => handleRemoveItem1(poll,"polls")}>
+                              <DeleteIcon />
+                            </IconButton>
+                          </div>
+                        </div>
+
                       </ListItemSecondaryAction>
                     </ListItem>
                   ))

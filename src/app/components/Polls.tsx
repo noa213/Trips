@@ -10,6 +10,7 @@ import PieChart from "./PieChart";
 
 const Polls: React.FC<IPollsProps> = ({ pollsList }) => {
   const [polls, setPolls] = useState<IPoll[]>([]);
+ 
   const [userVotes, setUserVotes] = useState<Record<string, string>>({});
 
   useEffect(() => {
