@@ -22,7 +22,7 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
     }, {} as Record<string, ITask[]>);
 
   const [tasks, setTasks] = useState(groupTasksByStatus(tasksList));
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
   const [participantss] = useState([
     {
       name: "Unassigned",

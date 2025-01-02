@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 import { ICreateUserProps } from "../types/CreateUserProps";
 import { IUser } from "../types/user";
 
