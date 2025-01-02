@@ -13,8 +13,6 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
   console.log("tasksList",tasksList);
   // Group tasks by status
   const groupTasksByStatus = (tasks: ITask[]) =>
-    // const statusOrder = ["notStarted", "inProgress", "completed"];
-
     tasks.reduce((acc, task) => {
       acc[task.status] = acc[task.status] || [];
       acc[task.status].push(task);
