@@ -10,11 +10,13 @@ import { ITask } from "../types/task";
 // import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { updateTask } from "../services/task";
+import { IUser } from "../types/user";
 
 let sourceColumn: string | null = null;
 
 const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
   const statusOrder = ["not started", "in progress", "completed"];
+console.log("tasksList",tasksList );
 
   // Group tasks by status
   const groupTasksByStatus = (tasks: ITask[]) =>
@@ -29,7 +31,7 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
   const [participantss] = useState([
     {
       name: "Unassigned",
-      email: "Unassigned",
+      email: "",
       image: "https://via.placeholder.com/96",
     },
     ...participants,
@@ -48,16 +50,14 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
         }));
       };
 
-      const handleAssignChange = (newAssignedEmail: string) => {
-        value.assignedTo = newAssignedEmail;
+      const handleAssignChange = (newAssigned: IUser) => {
+        value.assignedTo = newAssigned;
         setIsDropdownOpen((prev) => ({
           ...prev,
           [value.taskId]: !prev[value.taskId],
         }));
         updateTaskInDatabase(value);
       };
-      // const user = await User.findOne({ email: value.assignedTo });
-      // const profileImage = user ? user.image : null;
       return (
         <div
           draggable="true"
@@ -109,8 +109,7 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
             >
               <span style={{ display: "block", width: "100%", height: "100%" }}>
                 <Image
-                  // src={value.assignedTo.image ?? "https://via.placeholder.com/96"}
-                  src={"https://via.placeholder.com/96"}
+                  src={value.assignedTo?.image ?? "https://via.placeholder.com/96"}
                   alt="Assigned"
                   width={100}
                   height={100}
@@ -121,7 +120,7 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
                 />
               </span>
             </button>
-            {value.assignedTo}
+            {/* {value.assignedTo} */}
             {isDropdownOpen[value.taskId] && (
               <div
                 style={{
@@ -138,7 +137,7 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
                 {participantss.map((participant) => (
                   <button
                     key={participant.email}
-                    onClick={() => handleAssignChange(participant.email)}
+                    onClick={() => handleAssignChange(participant)}
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -160,7 +159,7 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
                         marginRight: "10px",
                       }}
                     />
-                    {participant.name || participant.email}
+                    {participant.name} <br/> {participant.email}
                   </button>
                 ))}
               </div>
@@ -201,9 +200,9 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
 
   const onSortEndHandler = (sortEndData: SortEnd, event: SortEvent) => {
     const nativeEvent = event as unknown as MouseEvent;
-
     onSortEnd({ ...sortEndData, event: nativeEvent });
   };
+
   // Handle drag-and-drop between columns
   const onSortEnd = ({
     oldIndex,

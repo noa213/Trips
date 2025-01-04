@@ -106,7 +106,12 @@ const trips: Schema<ITrip> = new Schema({
     {
       taskId: { type: String },
       title: { type: String },
-      assignedTo: { type: String },
+      assignedTo: {
+        email: { type: String },
+        name: { type: String },
+        image: { type: String },
+        _id: { type: String },
+      },
       status: {
         type: String,
         enum: ["not started", "in progress", "completed"],

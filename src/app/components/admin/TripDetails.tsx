@@ -124,7 +124,7 @@ const TripDetail = () => {
     }
   };
 
-  console.log(trip?.polls);
+  console.log(trip?.tasks);
 
   return (
     <>

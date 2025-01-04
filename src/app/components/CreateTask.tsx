@@ -14,7 +14,7 @@ import {
 const CreateTask: React.FC<ICreateTaskProps> = ({ onCreate, participants }) => {
   const [task, setTask] = useState<Omit<ITask, "taskId">>({
     title: "",
-    assignedTo: "",
+    assignedTo: null,
     status: "not started",
     dueDate: new Date(),
   });
@@ -24,10 +24,21 @@ const CreateTask: React.FC<ICreateTaskProps> = ({ onCreate, participants }) => {
   ) => {
     if ("target" in e && "value" in e.target && "name" in e.target) {
       const { name, value } = e.target;
-      setTask((prevTask) => ({
-        ...prevTask,
-        [name]: name === "dueDate" ? new Date(value) : value,
-      }));
+
+      if (name === "assignedTo") {
+        const selectedUser =
+          participants.find((p) => p.email === value) || null;
+        console.log("selectedUser", selectedUser);
+        setTask((prevTask) => ({
+          ...prevTask,
+          assignedTo: selectedUser,
+        }));
+      } else {
+        setTask((prevTask) => ({
+          ...prevTask,
+          [name]: name === "dueDate" ? new Date(value) : value,
+        }));
+      }
     } else {
       console.error("Unhandled event type");
     }
@@ -35,18 +46,18 @@ const CreateTask: React.FC<ICreateTaskProps> = ({ onCreate, participants }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("task", task);
+    console.log(" before save task", task);
     if (!task.title) return;
     const newTask: ITask = {
       taskId: `task-${Date.now()}`,
       ...task,
     };
-    console.log("newTask", newTask);
-    
+    console.log(" after save newTask", newTask);
+
     onCreate(newTask);
     setTask({
       title: "",
-      assignedTo: "",
+      assignedTo: null,
       status: "not started",
       dueDate: new Date(),
     });
@@ -85,7 +96,7 @@ const CreateTask: React.FC<ICreateTaskProps> = ({ onCreate, participants }) => {
         <FormControl fullWidth>
           <Select
             name="assignedTo"
-            value={task.assignedTo}
+            value={task.assignedTo?.email || ""}
             onChange={handleChange}
             renderValue={(value) => {
               if (!value) return <Typography>Select a participant</Typography>;
