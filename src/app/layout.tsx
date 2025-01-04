@@ -7,6 +7,7 @@ import Navbar from "@/app/components/Navbar";
 // import CreatePoll from "./components/CreatePoll";
 import { SessionProvider } from "next-auth/react";
 import GroupChat from "./components/GroupChat";
+import Footer from "./components/Footer";
 
 
 
@@ -22,6 +23,7 @@ export default function RootLayout({
           <Navbar />
         
           {children}
+          <Footer />
         </SessionProvider>
       </body>
     </html>

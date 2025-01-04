@@ -19,7 +19,7 @@ const Navbar = () => {
         onChange={handleChange}
         className="bg-[#f7f2e7] text-gray-700 mt-2 px-4"
         TabIndicatorProps={{
-          style: { background: "#9B111E" },
+          style: { background: "#66BB6A" },
         }}
         textColor="inherit"
       >
@@ -28,8 +28,8 @@ const Navbar = () => {
           component={Link}
           href="/"
           sx={{
-            color: value === 1 ? "#9B111E" : "#374151",
-            "&.mui-selected": { color: "#9B111E" },
+            color: value === 0 ? "#66BB6A" : "#374151",
+            "&.mui-selected": { color: "#66BB6A" },
           }}
         />
         <Tab
@@ -37,8 +37,8 @@ const Navbar = () => {
           component={Link}
           href="/pages/trips"
           sx={{
-            color: value === 1 ? "#9B111E" : "#374151",
-            "&.mui-selected": { color: "#9B111E" },
+            color: value === 1 ? "#66BB6A" : "#374151",
+            "&.mui-selected": { color: "#66BB6A" },
           }}
         />
 
@@ -47,8 +47,8 @@ const Navbar = () => {
           component={Link}
           href="/pages/Information_for_the_traveler"
           sx={{
-            color: value === 2 ? "#9B111E" : "#374151",
-            "&.mui-selected": { color: "#9B111E" },
+            color: value === 2 ? "#66BB6A" : "#374151",
+            "&.mui-selected": { color: "#66BB6A" },
           }}
         />
 
@@ -57,8 +57,8 @@ const Navbar = () => {
           component={Link}
           href="/pages/about"
           sx={{
-            color: value === 2 ? "#9B111E" : "#374151",
-            "&.mui-selected": { color: "#9B111E" },
+            color: value === 3 ? "#66BB6A" : "#374151",
+            "&.mui-selected": { color: "#66BB6A" },
           }}
         />
 

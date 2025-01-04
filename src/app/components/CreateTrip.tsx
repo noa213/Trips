@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {  useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import {
   TextField,
   Container,
@@ -44,9 +44,10 @@ const tripTypeImages: { [key: string]: string } = {
 };
 const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   onAddTrip,
-}) => {  
+}) => {
   const { data: session } = useSession();
-  
+
+
   const [trip, setTrip] = useState<ITrip>({
     title: "",
     adminNmame: "",
@@ -110,6 +111,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
       [name]: value,
     }));
   };
+
 
   const handleTotalBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const totalBudget = parseFloat(e.target.value);
@@ -261,6 +263,10 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
 
   const handleSave = async () => {
     trip.adminNmame = session?.user.name;
+    if(isChecked){
+      const emails = trip.participants.map((participant) => participant.email);
+      await sendPoll(trip.polls, emails);
+    }
     console.log("trip", trip);
     const response = await addTrip(trip);
     // sendPoll(trip.polls);
@@ -268,7 +274,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     console.log("after add", response.polls);
   };
 
- 
+
   return (
     <Container maxWidth="lg">
       <Grid container spacing={4}>
@@ -289,9 +295,9 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                 <UserAutocomplete
                   onCreate={handleAddUser}
                 />
-               ) : (
+              ) : (
                 <div>
-              <Button
+                  <Button
                     variant="contained"
                     onClick={handleCreateUser}
                     color="primary"
@@ -510,7 +516,9 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                             </IconButton>
                           </ListItemSecondaryAction>
                         </ListItem>
-                      ))
+                      )
+                      )
+
                     ) : (
                       <Typography variant="body2" color="textSecondary">
                         No tasks added yet.
@@ -519,6 +527,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                   </List>
                 </>
               )}
+
             </Grid>
 
             {/* Polls */}
@@ -526,6 +535,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
               <Typography variant="h6">Polls</Typography>
               <List>
                 {trip.polls ? (
+
                   trip.polls.map((poll) => (
                     <ListItem
                       key={poll.pollId}
@@ -539,35 +549,31 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                       />
                       <ListItemSecondaryAction>
                         <div className="flex flex-col items-start space-y-4 p-4">
-                          <h1 className="text-gray-700 text-sm font-semibold">Do you want to send travelers this survey?</h1>
 
-                          {/* מיכל הצ'קבוקס */}
-                          <div
-                            className={`w-16 h-8 flex items-center justify-${isChecked ? "end" : "start"} bg-gray-300 rounded-full p-1 cursor-pointer transition-all duration-300 ease-in-out`}
-                            onClick={handleSendail}
-                          >
-                            {/* הכדור הפנימי */}
-                            <div
-                              className={`w-6 h-6  rounded-full shadow-md transition-all duration-300 ease-in-out ${isChecked ? "bg-green-500 translate-x-0.5" : "bg-white translate-x-0"}`}
-                            />
-                          </div>
 
                           {/* כפתור המחיקה ימוקם מימין */}
-                          <div className="flex justify-end w-full">
-                            <IconButton edge="end" onClick={() => handleRemoveItem1(poll,"polls")}>
+                          <div className="flex items-center justify-end w-full">
+                            <IconButton edge="end" onClick={() => handleRemoveItem1(poll, "polls")}>
                               <DeleteIcon />
                             </IconButton>
                           </div>
                         </div>
 
                       </ListItemSecondaryAction>
+
+
+
                     </ListItem>
+
                   ))
-                ) : (
-                  <Typography variant="body2" color="textSecondary">
-                    No polls added yet.
-                  </Typography>
-                )}
+                )
+
+                  : (
+                    <Typography variant="body2" color="textSecondary">
+                      No polls added yet.
+                    </Typography>
+                  )}
+
               </List>
               {addPoll ? (
                 <CreatePoll onCreate={handleAddPoll} />
@@ -581,32 +587,44 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                   Add Poll
                 </Button>
               )}
-            </Grid>
 
-            {/* Save Button */}
-            <Grid
-              item
-              xs={12}
-              sx={{ display: "flex", justifyContent: "center" }}
-            >
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSave}
-                size="large"
-                sx={{
-                  padding: "10px 20px",
-                  fontWeight: "bold",
-                  backgroundColor: "#81C784",
-                }}
+              <h1 className={"text-gray-700 text-sm font-semibold"}>Do you want to send travelers the surveys?</h1>
+              <div
+                className={`w-16 h-8 flex items-center justify-${isChecked ? "end" : "start"} bg-gray-300 rounded-full p-1 cursor-pointer transition-all duration-300 ease-in-out`}
+                onClick={handleSendail}
               >
-                Save Trip
-              </Button>
-            </Grid>
-          </Box>
+                {/* הכדור הפנימי */}
+                <div
+                  className={`w-6 h-6 rounded-full shadow-md transition-all duration-300 ease-in-out ${isChecked ? "bg-green-500 translate-x-0.5" : "bg-white translate-x-0"}`}
+                />
+              </div>
+         
         </Grid>
-      </Grid>
-    </Container>
+
+        {/* Save Button */}
+        <Grid
+          item
+          xs={12}
+          sx={{ display: "flex", justifyContent: "center" }}
+        >
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSave}
+            size="large"
+            sx={{
+              padding: "10px 20px",
+              fontWeight: "bold",
+              backgroundColor: "#81C784",
+            }}
+          >
+            Save Trip
+          </Button>
+        </Grid>
+      </Box>
+    </Grid>
+      </Grid >
+    </Container >
   );
 };
 
