@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { SortableContainer, SortableElement } from "react-sortable-hoc";
+import {
+  SortableContainer,
+  SortableElement,
+  SortEnd,
+  SortEvent,
+} from "react-sortable-hoc";
 import { ITasksProps } from "../types/taskProps";
 import { ITask } from "../types/task";
 // import { useSession } from "next-auth/react";
@@ -9,12 +14,10 @@ import { updateTask } from "../services/task";
 let sourceColumn: string | null = null;
 
 const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
-  
-  console.log("tasksList",tasksList);
+  const statusOrder = ["not started", "in progress", "completed"];
+
   // Group tasks by status
   const groupTasksByStatus = (tasks: ITask[]) =>
-    // const statusOrder = ["notStarted", "inProgress", "completed"];
-
     tasks.reduce((acc, task) => {
       acc[task.status] = acc[task.status] || [];
       acc[task.status].push(task);
@@ -196,6 +199,11 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
     sourceColumn = columnElement?.getAttribute("data-column-id") || null;
   };
 
+  const onSortEndHandler = (sortEndData: SortEnd, event: SortEvent) => {
+    const nativeEvent = event as unknown as MouseEvent;
+
+    onSortEnd({ ...sortEndData, event: nativeEvent });
+  };
   // Handle drag-and-drop between columns
   const onSortEnd = ({
     oldIndex,
@@ -204,7 +212,7 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
   }: {
     oldIndex: number;
     newIndex: number;
-    event: React.DragEvent;
+    event: MouseEvent;
   }) => {
     const hoveredElement = document.elementFromPoint(
       event.clientX,
@@ -240,7 +248,6 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
     }
   };
 
-  const statusOrder = ["not started", "in progress", "completed"];
   return (
     <div
       className="columns-container"
@@ -252,7 +259,6 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
         borderRadius: "8px",
       }}
     >
-      {/* {Object.entries(tasks).map(([status, items]) => ( */}
       {statusOrder.map(
         (status) =>
           tasks[status] && (
@@ -290,9 +296,9 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
               <SortableList
                 items={tasks[status]}
                 onSortStart={onSortStart}
-                onSortEnd={(sortEndData) =>
-                  onSortEnd({ ...sortEndData, event })
-                }
+                onSortEnd={(sortEndData, event) => onSortEndHandler(sortEndData, event)}
+                // onSortEnd({ ...sortEndData, event })
+                // }
                 helperClass="dragging"
                 axis="y"
               />

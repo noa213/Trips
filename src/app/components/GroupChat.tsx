@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { Realtime } from "ably";
@@ -16,26 +14,19 @@ interface GroupChatProps {
 }
 
 const GroupChat: React.FC<GroupChatProps> = ({ tripId }) => {
- 
-  
   const { data: session } = useSession();
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-
   // ערוץ Ably
- 
-  
   const channel = ably.channels.get(tripId); // השתמש ב-ID של הטיול
 
   // שמירת צ'אט חדש ושליפת הודעות קיימות
   useEffect(() => {
     const initializeChat = async () => {
       try {
-    
         const response = await axios.get(`/api/messages/${tripId}`);
-  
         if (response.data.messages) {
           setMessages(response.data.messages);
         } else {
@@ -80,12 +71,10 @@ const GroupChat: React.FC<GroupChatProps> = ({ tripId }) => {
       // שמירת ההודעה בשרת
       try {
         const response = await axios.post(`/api/messages/${tripId}`, {
-          tripId:tripId,
+          tripId: tripId,
           name: newMessage.name,
           content: newMessage.content,
         });
-    
-        
 
         // טיפול בתשובה לאחר שליחה
         if (response.data.message) {
@@ -115,11 +104,14 @@ const GroupChat: React.FC<GroupChatProps> = ({ tripId }) => {
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`mb-4 ${msg.name === session?.user?.name ? "text-right" : "text-left"}`}
+            className={`mb-4 ${
+              msg.name === session?.user?.name ? "text-right" : "text-left"
+            }`}
           >
-            <span className="font-semibold text-gray-700">{msg.name || "Anonymous"}</span>
+            <span className="font-semibold text-gray-700">
+              {msg.name || "Anonymous"}
+            </span>
             <span className="block text-gray-600">{msg.content}</span>
-            
           </div>
         ))}
         <div ref={messagesEndRef} />
@@ -145,17 +137,3 @@ const GroupChat: React.FC<GroupChatProps> = ({ tripId }) => {
 };
 
 export default GroupChat;
-
-
-
-
-
-
-
-
-
-
-
-
-
-

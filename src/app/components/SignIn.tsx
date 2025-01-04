@@ -1,8 +1,9 @@
 "use client";
+import React from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 
-export default function SignIn() {
+const SignIn = () => {
   const { data: session, status } = useSession();
 
   if (status === "loading") {
@@ -23,12 +24,32 @@ export default function SignIn() {
   return (
     <div className="flex items-center space-x-4 absolute top-10 right-10 z-50 bg-transparent">
       <p className="text-sm font-medium text-[#9B111E]">
-        <Image
-          src={session!.user.image || "/default-avatar.png"}
-          alt={session.user?.name || "User"}
-          width={24}
-          height={24}
-        />
+        <div
+          style={{
+            width: "32px",
+            height: "32px",
+            borderRadius: "50%",
+            overflow: "hidden",
+            marginRight: "8px",
+            border: "nome",
+            padding: "0",
+            backgroundColor: "transparent",
+            cursor: "pointer",
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
+          <Image
+            src={session!.user.image || "/default-avatar.png"}
+            alt={session.user?.name || "User"}
+            width={100}
+            height={100}
+            style={{
+              objectFit: "cover",
+              pointerEvents: "auto",
+            }}
+          />
+        </div>
         {session.user?.name}
       </p>
       <button
@@ -39,4 +60,6 @@ export default function SignIn() {
       </button>
     </div>
   );
-}
+};
+
+export default SignIn;
