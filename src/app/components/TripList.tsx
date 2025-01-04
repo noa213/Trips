@@ -35,13 +35,14 @@ const TripList = () => {
       console.error("Error deleting trip:", error);
     }
   };
+  console.log("trips", trips);
 
   return (
     <>
       <div className="trip-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-        {trips ? (     
+        {trips ? (
           trips
-            .filter((trip: ITrip) => 
+            .filter((trip: ITrip) =>
               trip.participants.some(
                 (participant: IUser) =>
                   participant.email === session?.user.email
