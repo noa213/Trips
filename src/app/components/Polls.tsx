@@ -21,7 +21,6 @@ const Polls: React.FC<IPollsProps> = ({ pollsList }) => {
 
   const createSurveyModel = (poll: IPoll) => {
     const model = new SurveyCore.Model({
-      // showNavigationButtons: false,
       questions: [
         {
           type: "radiogroup",

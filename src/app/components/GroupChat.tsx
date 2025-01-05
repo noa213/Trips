@@ -270,9 +270,13 @@ const GroupChat: React.FC<GroupChatProps> = ({ tripId }) => {
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`mb-4 ${msg.name === session?.user?.name ? "text-right" : "text-left"}`}
+            className={`mb-4 ${
+              msg.name === session?.user?.name ? "text-right" : "text-left"
+            }`}
           >
-            <span className="font-semibold text-gray-700">{msg.name || "Anonymous"}</span>
+            <span className="font-semibold text-gray-700">
+              {msg.name || "Anonymous"}
+            </span>
             <span className="block text-gray-600">{msg.content}</span>
           </div>
         ))}

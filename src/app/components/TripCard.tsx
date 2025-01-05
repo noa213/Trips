@@ -15,7 +15,6 @@ const TripCard: React.FC<{ trip: ITrip; onDelete: (tripId: string) => void }> = 
   };
 
   const handleClick = () => {
-    // /api/trips?id=${tripId}
     router.push(`pages/trips/${trip._id}`);
   };
 

@@ -6,7 +6,7 @@ export async function GET() {
   try {
     await connect();
     const data = await Trip.find().select(
-      "title destination dates status"
+      "title destination dates participants status"
     );
    
     

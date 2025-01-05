@@ -1,16 +1,19 @@
 import React, { useState } from "react";
-import { SortableContainer, SortableElement } from "react-sortable-hoc";
+import {
+  SortableContainer,
+  SortableElement,
+  SortEnd,
+  SortEvent,
+} from "react-sortable-hoc";
 import { ITasksProps } from "../types/taskProps";
 import { ITask } from "../types/task";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { updateTask } from "../services/task";
+import { IUser } from "../types/user";
 
 let sourceColumn: string | null = null;
 
 const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
-  
-  console.log("tasksList",tasksList);
   // Group tasks by status
   const groupTasksByStatus = (tasks: ITask[]) =>
     tasks.reduce((acc, task) => {
@@ -20,18 +23,19 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
     }, {} as Record<string, ITask[]>);
 
   const [tasks, setTasks] = useState(groupTasksByStatus(tasksList));
-  const { data: session } = useSession();
+  const statusOrder = ["not started", "in progress", "completed"];
+  const [isDropdownOpen, setIsDropdownOpen] = useState<Record<string, boolean>>(
+    {}
+  );
+
   const [participantss] = useState([
     {
       name: "Unassigned",
-      email: "Unassigned",
+      email: "",
       image: "https://via.placeholder.com/96",
     },
     ...participants,
   ]);
-  const [isDropdownOpen, setIsDropdownOpen] = useState<Record<string, boolean>>(
-    {}
-  );
 
   // Sortable item component
   const SortableItem = SortableElement<{ value: ITask }>(
@@ -43,16 +47,15 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
         }));
       };
 
-      const handleAssignChange = (newAssignedEmail: string) => {
-        value.assignedTo = newAssignedEmail;
+      const handleAssignChange = (newAssigned: IUser) => {
+        value.assignedTo = newAssigned;
         setIsDropdownOpen((prev) => ({
           ...prev,
-          [value.taskId]: !prev[value.taskId],
+          [value.taskId]: false,
         }));
         updateTaskInDatabase(value);
       };
-      // const user = await User.findOne({ email: value.assignedTo });
-      // const profileImage = user ? user.image : null;
+
       return (
         <div
           draggable="true"
@@ -104,19 +107,20 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
             >
               <span style={{ display: "block", width: "100%", height: "100%" }}>
                 <Image
-                  // src={value.assignedTo.image ?? "https://via.placeholder.com/96"}
-                  src={"https://via.placeholder.com/96"}
+                  src={
+                    value.assignedTo?.image ?? "https://via.placeholder.com/96"
+                  }
                   alt="Assigned"
                   width={100}
                   height={100}
                   style={{
                     objectFit: "cover",
-                    pointerEvents: "auto",
+                    pointerEvents: "none",
                   }}
                 />
               </span>
             </button>
-            {value.assignedTo}
+            {/* {value.assignedTo?.name} */}
             {isDropdownOpen[value.taskId] && (
               <div
                 style={{
@@ -133,7 +137,7 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
                 {participantss.map((participant) => (
                   <button
                     key={participant.email}
-                    onClick={() => handleAssignChange(participant.email)}
+                    onClick={() => handleAssignChange(participant)}
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -155,7 +159,7 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
                         marginRight: "10px",
                       }}
                     />
-                    {participant.name || participant.email}
+                    {participant.name} <br /> {participant.email}
                   </button>
                 ))}
               </div>
@@ -194,6 +198,11 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
     sourceColumn = columnElement?.getAttribute("data-column-id") || null;
   };
 
+  const onSortEndHandler = (sortEndData: SortEnd, event: SortEvent) => {
+    const nativeEvent = event as unknown as MouseEvent;
+    onSortEnd({ ...sortEndData, event: nativeEvent });
+  };
+
   // Handle drag-and-drop between columns
   const 
   onSortEnd = ({
@@ -203,7 +212,7 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
   }: {
     oldIndex: number;
     newIndex: number;
-    event: React.DragEvent;
+    event: MouseEvent;
   }) => {
     const hoveredElement = document.elementFromPoint(
       event.clientX,
@@ -239,7 +248,6 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
     }
   };
 
-  const statusOrder = ["not started", "in progress", "completed"];
   return (
     <div
       className="columns-container"
@@ -251,7 +259,6 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
         borderRadius: "8px",
       }}
     >
-      {/* {Object.entries(tasks).map(([status, items]) => ( */}
       {statusOrder.map(
         (status) =>
           tasks[status] && (
@@ -289,10 +296,9 @@ const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
               <SortableList
                 items={tasks[status]}
                 onSortStart={onSortStart}
-                onSortEnd={(sortEndData) =>
-                  onSortEnd({ ...sortEndData, event })
+                onSortEnd={(sortEndData, event) =>
+                  onSortEndHandler(sortEndData, event)
                 }
-                helperClass="dragging"
                 axis="y"
               />
             </div>

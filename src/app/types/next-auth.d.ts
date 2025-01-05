@@ -1,4 +1,4 @@
-import NextAuth, { DefaultSession, DefaultUser, DefaultJWT } from "next-auth";
+import { DefaultSession, DefaultUser, DefaultJWT } from "next-auth";
 
 declare module "next-auth" {
   // הרחבת הממשק User עם שדה נוסף role
@@ -48,8 +48,6 @@ declare module "next-auth/jwt" {
   }
 }
 
-src/types/next-auth.d.ts
-import NextAuth, { DefaultSession, DefaultUser, DefaultJWT } from "next-auth";
 
 // הרחבת User, Session ו-JWT
 declare module "next-auth" {

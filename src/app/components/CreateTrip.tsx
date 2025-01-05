@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {  useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import {
   TextField,
   Container,
@@ -29,13 +29,9 @@ import { TripItem } from "../types/tripItem";
 import { ITask } from "../types/task";
 import { IPoll } from "../types/poll";
 import { addTrip } from "../services/trips";
-// import Image from "next/image";
-// import { Session } from "inspector/promises";
 import UserAutocomplete from "./UserAutocomplete";
 import { IUser } from "../types/user";
-import { sendPoll } from "../services/polls";
 import Navigation from "./Navigation";
-
 
 const tripTypeImages: { [key: string]: string } = {
   urban: "/./images/urban.jpg",
@@ -44,9 +40,8 @@ const tripTypeImages: { [key: string]: string } = {
 };
 const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   onAddTrip,
-}) => {  
+}) => {
   const { data: session } = useSession();
-  
   const [trip, setTrip] = useState<ITrip>({
     title: "",
     adminNmame: "",
@@ -66,7 +61,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
       },
       tripType: "urban",
     },
-    // 
+    //
     participants: [session!.user as IUser],
     tasks: [],
     polls: [],
@@ -90,16 +85,15 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
-
   const handleSendail = () => {
-    setIsChecked((prev) => !prev); // שינוי מצב הצ'קבוקס
+    setIsChecked((prev) => !prev);
   };
+
   const handleRemoveItem1 = (item: any, type: string) => {
     console.log("Remove item:", item, type);
   };
 
-
-  useEffect(() => { }, [trip]);
+  useEffect(() => {}, [trip]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -215,7 +209,6 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   //   setAddUser(false);
   // };
 
-
   const handleAddUser = (newUsers: IUser[]) => {
     if (newUsers.length > 0) {
       setTrip((prevTrip) => ({
@@ -234,7 +227,6 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   };
 
   const handleRemoveItem = (
-    // list: TripItem[],
     item: TripItem,
     type: "tasks" | "polls" | "memories"
   ) => {
@@ -248,17 +240,16 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     trip.adminNmame = session?.user.name;
     console.log("trip", trip);
     const response = await addTrip(trip);
-    // sendPoll(trip.polls);
     onAddTrip(response);
     console.log("after add", response.polls);
   };
 
- 
   return (
     <Container maxWidth="lg">
       <Grid container spacing={4}>
         {/* Sidebar for Navigation */}
         <Navigation />
+
         {/* Main Content */}
         <Grid item xs={12} sm={9}>
           <Box sx={{ padding: 4 }}>
@@ -270,23 +261,6 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
               >
                 Basic Details
               </Typography>
-              {addUser ? (
-                <UserAutocomplete
-                  onCreate={handleAddUser}
-                />
-               ) : (
-                <div>
-              <Button
-                    variant="contained"
-                    onClick={handleCreateUser}
-                    color="primary"
-                    style={{ marginBottom: "1rem" }}
-                  >
-                    Add User
-                  </Button>
-                </div>
-              )}
-
               <TextField
                 label="Trip Title"
                 name="title"
@@ -456,6 +430,24 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
               )}
             </Grid>
 
+            {/* Users */}
+            <Grid item xs={12} id="users">
+              {addUser ? (
+                <UserAutocomplete onCreate={handleAddUser} />
+              ) : (
+                <div>
+                  <Button
+                    variant="contained"
+                    onClick={handleCreateUser}
+                    color="primary"
+                    style={{ marginBottom: "1rem" }}
+                  >
+                    Add User
+                  </Button>
+                </div>
+              )}
+            </Grid>
+
             {/* Tasks */}
             <Grid item xs={12} id="tasks">
               <Typography variant="h6">Tasks</Typography>
@@ -483,8 +475,9 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                         >
                           <ListItemText
                             primary={task.title}
-                            secondary={`Status: ${task.status
-                              } | Due Date: ${task.dueDate.toLocaleDateString()}`}
+                            secondary={`Status: ${
+                              task.status
+                            } | Due Date: ${task.dueDate.toLocaleDateString()}`}
                           />
                           <ListItemSecondaryAction>
                             <IconButton
@@ -524,27 +517,37 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                       />
                       <ListItemSecondaryAction>
                         <div className="flex flex-col items-start space-y-4 p-4">
-                          <h1 className="text-gray-700 text-sm font-semibold">Do you want to send travelers this survey?</h1>
+                          <h1 className="text-gray-700 text-sm font-semibold">
+                            Do you want to send travelers this survey?
+                          </h1>
 
                           {/* מיכל הצ'קבוקס */}
                           <div
-                            className={`w-16 h-8 flex items-center justify-${isChecked ? "end" : "start"} bg-gray-300 rounded-full p-1 cursor-pointer transition-all duration-300 ease-in-out`}
+                            className={`w-16 h-8 flex items-center justify-${
+                              isChecked ? "end" : "start"
+                            } bg-gray-300 rounded-full p-1 cursor-pointer transition-all duration-300 ease-in-out`}
                             onClick={handleSendail}
                           >
                             {/* הכדור הפנימי */}
                             <div
-                              className={`w-6 h-6  rounded-full shadow-md transition-all duration-300 ease-in-out ${isChecked ? "bg-green-500 translate-x-0.5" : "bg-white translate-x-0"}`}
+                              className={`w-6 h-6  rounded-full shadow-md transition-all duration-300 ease-in-out ${
+                                isChecked
+                                  ? "bg-green-500 translate-x-0.5"
+                                  : "bg-white translate-x-0"
+                              }`}
                             />
                           </div>
 
                           {/* כפתור המחיקה ימוקם מימין */}
                           <div className="flex justify-end w-full">
-                            <IconButton edge="end" onClick={() => handleRemoveItem1(poll,"polls")}>
+                            <IconButton
+                              edge="end"
+                              onClick={() => handleRemoveItem1(poll, "polls")}
+                            >
                               <DeleteIcon />
                             </IconButton>
                           </div>
                         </div>
-
                       </ListItemSecondaryAction>
                     </ListItem>
                   ))
