@@ -9,12 +9,11 @@ import Tasks from "../Tasks";
 import { Icon } from "@mui/material";
 import GroupChat from "../GroupChat";
 import { IImage } from "@/app/types/image";
-import ImageUploader from "../ImageUploader";
 
-const TripDetail = () => {
+const UserTripDetail = () => {
   const [trip, setTrip] = useState<ITrip>();
   const [ShowGroupChat, setShowGroupChat] = useState(false);
-  const [images, setImages] = useState<IImage[]>([]);
+  const [, setImages] = useState<IImage[]>([]);
   const router = useParams();
   const id = router.tripId;
   const tripId = Array.isArray(id) ? id[0] : id;
@@ -23,7 +22,6 @@ const TripDetail = () => {
     const fetchData = async () => {
       try {
         const response = await getTrip(tripId);
-        console.log(response); // לוג לכל
         setTrip(response);
         setImages(response?.images ?? []);
       } catch (error) {
@@ -95,7 +93,4 @@ const TripDetail = () => {
   );
 };
 
-export default TripDetail;
-
-
-
+export default UserTripDetail;

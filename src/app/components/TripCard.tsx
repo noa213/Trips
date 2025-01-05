@@ -4,7 +4,10 @@ import { ITrip } from "../types/trip";
 import { useRouter } from "next/navigation";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const TripCard: React.FC<{ trip: ITrip; onDelete: (tripId: string) => void }> = ({ trip, onDelete }) => {
+const TripCard: React.FC<{
+  trip: ITrip;
+  onDelete: (tripId: string) => void;
+}> = ({ trip, onDelete }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const router = useRouter();

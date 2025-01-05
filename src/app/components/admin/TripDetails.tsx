@@ -21,7 +21,7 @@ import { TripItem } from "../../types/tripItem";
 import CreateTask from "../CreateTask";
 import { ITask } from "../../types/task";
 
-const TripDetail = () => {
+const AdminTripDetail = () => {
   const [trip, setTrip] = useState<ITrip>();
   const [updatedValue, setUpdatedValue] = useState<string>("");
   const [addTask, setAddTask] = useState(false);
@@ -269,4 +269,4 @@ const TripDetail = () => {
   );
 };
 
-export default TripDetail;
+export default AdminTripDetail;

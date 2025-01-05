@@ -75,13 +75,6 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   const [addPoll, setAddPoll] = useState(false);
   const [addUser, setAddUser] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  // const [isChecked, setIsChecked] = useState<boolean>(false);
-
-  // const handleSendEail = () => {
-  //   setIsChecked((prev) => !prev);
-  //   console.log(isChecked);
-
-  // }
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
@@ -89,9 +82,9 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     setIsChecked((prev) => !prev);
   };
 
-  const handleRemoveItem1 = (item: any, type: string) => {
-    console.log("Remove item:", item, type);
-  };
+  // const handleRemoveItem1 = (item: any, type: string) => {
+  //   console.log("Remove item:", item, type);
+  // };
 
   useEffect(() => {}, [trip]);
 
@@ -199,15 +192,6 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   const handleCreateUser = () => {
     setAddUser(!addUser);
   };
-
-  // const handleAddUser = (newUsers: IUser[]) => {
-  //   if (newUsers.email !== "")
-  //     setTrip((prevTrip) => ({
-  //       ...prevTrip,
-  //       participants: [...prevTrip.participants, newUser],
-  //     }));
-  //   setAddUser(false);
-  // };
 
   const handleAddUser = (newUsers: IUser[]) => {
     if (newUsers.length > 0) {
@@ -542,7 +526,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                           <div className="flex justify-end w-full">
                             <IconButton
                               edge="end"
-                              onClick={() => handleRemoveItem1(poll, "polls")}
+                              onClick={() => handleRemoveItem(poll, "polls")}
                             >
                               <DeleteIcon />
                             </IconButton>
