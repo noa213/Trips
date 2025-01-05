@@ -29,6 +29,7 @@ export default function SignIn() {
           alt={session.user?.name || "User"}
           width={24}
           height={24}
+          className="rounded-full w-6 h-6"
         />
         {session.user?.name}
       </p>

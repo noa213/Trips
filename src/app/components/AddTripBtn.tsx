@@ -23,9 +23,9 @@ const AddTripButton: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
       ) : (
         <button
           onClick={toggleForm}
-          className="bg-green-500 text-white p-2 rounded"
+          className="bg-green-500 text-white p-2 rounded hover:bg-[#81C784]"
         >
-          NEW TRIP
+          New Trip
         </button>
       )}
     </div>

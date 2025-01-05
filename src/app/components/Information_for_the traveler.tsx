@@ -242,29 +242,7 @@ const Information_for_the_traveler = () => {
 
   const renderCategorySelection = () => {
     return (
-      // <div className="container mx-auto p-4">
-      //   {/* כפתורים למעבר בין הקטגוריות */}
-      //   <div className="flex justify-center mb-8">
-      //     <button
-      //       onClick={() => setSelectedCategory("attractions")}
-      //       className="relative w-full h-16 rounded-lg overflow-hidden mr-4"
-      //     >
-      //       <img
-      //         src="/img/activity.jpg" // שים כאן את הקישור לתמונה
-      //         alt="Attractions Icon"
-      //         className="object-cover w-full h-full absolute inset-0"
-      //       />
-      //       <span className="relative z-10 text-white text-xl font-semibold p-4">
-      //         Attractions</span>
-      //     </button>
-      //     <button onClick={() => setSelectedCategory("restaurants")} className="bg-green-500 px-6 py-3 rounded-lg text-white mr-4 hover:bg-green-600 transition-colors">
-      //       Restaurants
-      //     </button>
-      //     <button onClick={() => setSelectedCategory("hotels")} className="bg-red-500 px-6 py-3 rounded-lg text-white hover:bg-red-600 transition-colors">
-      //       Hotels
-      //     </button>
-      //   </div>
-      // </div>
+     
 
 
       <div className="container mx-auto p-4">
@@ -285,13 +263,13 @@ const Information_for_the_traveler = () => {
             </span>
           </button>
 
-          {/* כפתור למסעדות */}
+          
           <button
             onClick={() => setSelectedCategory("restaurants")}
             className="relative w-48 h-48 rounded-lg overflow-hidden"
           >
             <img
-              src="/img/resteraunt.jpg" // שים כאן את הקישור לתמונה
+              src="/img/resteraunt.jpg" 
               alt="Restaurants Icon"
               className="object-cover w-full h-full absolute inset-0"
             />
@@ -300,7 +278,7 @@ const Information_for_the_traveler = () => {
             </span>
           </button>
 
-          {/* כפתור למלונות */}
+         
           <button
             onClick={() => setSelectedCategory("hotels")}
             className="relative w-48 h-48 rounded-lg overflow-hidden"

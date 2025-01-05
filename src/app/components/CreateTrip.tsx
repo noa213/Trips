@@ -300,7 +300,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                   <Button
                     variant="contained"
                     onClick={handleCreateUser}
-                    color="primary"
+                    className="bg-green-500 text-white p-2 rounded hover:bg-[#81C784]"
                     style={{ marginBottom: "1rem" }}
                   >
                     Add User
@@ -490,7 +490,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                   <Button
                     variant="contained"
                     onClick={handleCreateTask}
-                    color="primary"
+                    className="bg-green-500 text-white p-2 rounded hover:bg-[#81C784]"
                     style={{ marginBottom: "1rem" }}
                   >
                     Add Task
@@ -581,7 +581,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                 <Button
                   variant="contained"
                   onClick={handleCreatePoll}
-                  color="primary"
+                  className="bg-green-500 text-white p-2 rounded hover:bg-[#81C784]"
                   sx={{ marginBottom: "1rem" }}
                 >
                   Add Poll
@@ -609,7 +609,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
         >
           <Button
             variant="contained"
-            color="primary"
+           className="bg-green-500 text-white p-2 rounded hover:bg-[#81C784]"
             onClick={handleSave}
             size="large"
             sx={{
