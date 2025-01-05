@@ -1,4 +1,4 @@
-import { DefaultSession, DefaultUser, DefaultJWT } from "next-auth";
+// import { DefaultSession, DefaultUser, DefaultJWT } from "next-auth";
 
 // declare module "next-auth" {
 //   // הרחבת הממשק User עם שדה נוסף role
