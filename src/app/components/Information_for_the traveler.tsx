@@ -43,7 +43,8 @@ type Item = Attraction | Restaurant | Hotel;
 
 const Information_for_the_traveler = () => {
   const [step, setStep] = useState<number>(1);
-  const [selectedArea, setSelectedArea] = useState<Area | null>(null);
+  const [selectedArea, setSelectedArea] = useState<
+  a | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
 

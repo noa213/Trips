@@ -539,13 +539,12 @@ import Polls from "../Polls";
 import Tasks from "../Tasks";
 import { Icon } from "@mui/material";
 import GroupChat from "../GroupChat";
-import { IImage } from "@/app/types/image";
+
 
 
 const TripDetail = () => {
   const [trip, setTrip] = useState<ITrip>();
   const [ShowGroupChat, setShowGroupChat] = useState(false);
-  const [ setImages] = useState<IImage[]>([]);
   const router = useParams();
   const id = router.tripId;
   const tripId = Array.isArray(id) ? id[0] : id;
@@ -560,7 +559,6 @@ const TripDetail = () => {
         const response = await getTrip(tripId);
         console.log(response); // לוג לכל
         setTrip(response);
-        setImages(response?.images ?? []);
       } catch (error) {
         console.error("Failed to fetch trip:", error);
       }
