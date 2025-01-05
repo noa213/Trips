@@ -233,21 +233,6 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     setAddUser(false);
   };
 
-  // const handleAddMemory = () => {
-  //   if (memory.description.trim() !== "") {
-  //     setTrip((prevTrip) => ({
-  //       ...prevTrip,
-  //       memories: [...prevTrip.memories, memory],
-  //     }));
-  //     setMemory({
-  //       imageUrl: "",
-  //       description: "",
-  //       userId: "",
-  //       timestamp: new Date(),
-  //     });
-  //   }
-  // };
-
   const handleRemoveItem = (
     // list: TripItem[],
     item: TripItem,
