@@ -92,12 +92,12 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
 
-  const handleSendail = () => {
+  const handleSendmail = () => {
     setIsChecked((prev) => !prev); // שינוי מצב הצ'קבוקס
   };
-  const handleRemoveItem1 = (item: any, type: string) => {
-    console.log("Remove item:", item, type);
-  };
+  // const handleRemoveItem1 = (item: any, type: string) => {
+  //   console.log("Remove item:", item, type);
+  // };
 
 
   useEffect(() => { }, [trip]);
@@ -553,9 +553,9 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
 
                           {/* כפתור המחיקה ימוקם מימין */}
                           <div className="flex items-center justify-end w-full">
-                            <IconButton edge="end" onClick={() => handleRemoveItem1(poll, "polls")}>
+                            {/* <IconButton edge="end" onClick={() => handleRemoveItem1(poll, "polls")}>
                               <DeleteIcon />
-                            </IconButton>
+                            </IconButton> */}
                           </div>
                         </div>
 
@@ -591,7 +591,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
               <h1 className={"text-gray-700 text-sm font-semibold"}>Do you want to send travelers the surveys?</h1>
               <div
                 className={`w-16 h-8 flex items-center justify-${isChecked ? "end" : "start"} bg-gray-300 rounded-full p-1 cursor-pointer transition-all duration-300 ease-in-out`}
-                onClick={handleSendail}
+                onClick={handleSendmail}
               >
                 {/* הכדור הפנימי */}
                 <div
