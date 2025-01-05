@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
       polls,
       memories,
       status,
-      images,
+      // images,
     } = await req.json();
     console.log("111");
     
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
       polls,
       memories,
       status,
-      images,
+      // images,
     });
     console.log("222", tasks);
     
