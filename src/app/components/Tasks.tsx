@@ -7,7 +7,6 @@ import {
 } from "react-sortable-hoc";
 import { ITasksProps } from "../types/taskProps";
 import { ITask } from "../types/task";
-// import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { updateTask } from "../services/task";
 import { IUser } from "../types/user";
@@ -15,9 +14,6 @@ import { IUser } from "../types/user";
 let sourceColumn: string | null = null;
 
 const Tasks: React.FC<ITasksProps> = ({ tasksList, participants }) => {
-  const statusOrder = ["not started", "in progress", "completed"];
-console.log("tasksList",tasksList );
-
   // Group tasks by status
   const groupTasksByStatus = (tasks: ITask[]) =>
     tasks.reduce((acc, task) => {
@@ -27,7 +23,11 @@ console.log("tasksList",tasksList );
     }, {} as Record<string, ITask[]>);
 
   const [tasks, setTasks] = useState(groupTasksByStatus(tasksList));
-  // const { data: session } = useSession();
+  const statusOrder = ["not started", "in progress", "completed"];
+  const [isDropdownOpen, setIsDropdownOpen] = useState<Record<string, boolean>>(
+    {}
+  );
+
   const [participantss] = useState([
     {
       name: "Unassigned",
@@ -36,9 +36,6 @@ console.log("tasksList",tasksList );
     },
     ...participants,
   ]);
-  const [isDropdownOpen, setIsDropdownOpen] = useState<Record<string, boolean>>(
-    {}
-  );
 
   // Sortable item component
   const SortableItem = SortableElement<{ value: ITask }>(
@@ -54,10 +51,11 @@ console.log("tasksList",tasksList );
         value.assignedTo = newAssigned;
         setIsDropdownOpen((prev) => ({
           ...prev,
-          [value.taskId]: !prev[value.taskId],
+          [value.taskId]: false,
         }));
         updateTaskInDatabase(value);
       };
+
       return (
         <div
           draggable="true"
@@ -109,18 +107,20 @@ console.log("tasksList",tasksList );
             >
               <span style={{ display: "block", width: "100%", height: "100%" }}>
                 <Image
-                  src={value.assignedTo?.image ?? "https://via.placeholder.com/96"}
+                  src={
+                    value.assignedTo?.image ?? "https://via.placeholder.com/96"
+                  }
                   alt="Assigned"
                   width={100}
                   height={100}
                   style={{
                     objectFit: "cover",
-                    pointerEvents: "auto",
+                    pointerEvents: "none",
                   }}
                 />
               </span>
             </button>
-            {/* {value.assignedTo} */}
+            {/* {value.assignedTo?.name} */}
             {isDropdownOpen[value.taskId] && (
               <div
                 style={{
@@ -159,7 +159,7 @@ console.log("tasksList",tasksList );
                         marginRight: "10px",
                       }}
                     />
-                    {participant.name} <br/> {participant.email}
+                    {participant.name} <br /> {participant.email}
                   </button>
                 ))}
               </div>
@@ -295,10 +295,9 @@ console.log("tasksList",tasksList );
               <SortableList
                 items={tasks[status]}
                 onSortStart={onSortStart}
-                onSortEnd={(sortEndData, event) => onSortEndHandler(sortEndData, event)}
-                // onSortEnd({ ...sortEndData, event })
-                // }
-                helperClass="dragging"
+                onSortEnd={(sortEndData, event) =>
+                  onSortEndHandler(sortEndData, event)
+                }
                 axis="y"
               />
             </div>

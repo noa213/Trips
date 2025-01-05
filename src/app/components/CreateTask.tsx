@@ -69,6 +69,8 @@ const CreateTask: React.FC<ICreateTaskProps> = ({ onCreate, participants }) => {
       className="p-6 rounded-lg shadow-md border max-w-lg mx-auto"
     >
       <h2 className="text-xl font-bold mb-4">Create New Task</h2>
+
+      {/* Title */}
       <div className="mb-4">
         <label
           htmlFor="title"
@@ -86,6 +88,8 @@ const CreateTask: React.FC<ICreateTaskProps> = ({ onCreate, participants }) => {
           placeholder="Enter task title"
         />
       </div>
+
+      {/* Assign To */}
       <div className="mb-4">
         <label
           htmlFor="assignedTo"
@@ -119,6 +123,8 @@ const CreateTask: React.FC<ICreateTaskProps> = ({ onCreate, participants }) => {
           </Select>
         </FormControl>
       </div>
+
+      {/* Due Date */}
       <div className="mb-4">
         <label
           htmlFor="dueDate"
@@ -135,6 +141,8 @@ const CreateTask: React.FC<ICreateTaskProps> = ({ onCreate, participants }) => {
           className="border rounded w-full px-3 py-2 mt-1"
         />
       </div>
+
+      {/* Status */}
       <div className="mb-4">
         <label
           htmlFor="status"
@@ -160,6 +168,7 @@ const CreateTask: React.FC<ICreateTaskProps> = ({ onCreate, participants }) => {
         </select>
       </div>
 
+      {/* Create Button */}
       <button
         type="submit"
         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"

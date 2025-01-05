@@ -35,7 +35,6 @@ const TripList = () => {
       console.error("Error deleting trip:", error);
     }
   };
-  console.log("trips", trips);
 
   return (
     <>

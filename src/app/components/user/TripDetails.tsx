@@ -16,10 +16,6 @@ const TripDetail = () => {
   const id = router.tripId;
   const tripId = Array.isArray(id) ? id[0] : id;
 
-  const handleClick = () => {
-    setShowGroupChat(!ShowGroupChat);
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -31,6 +27,10 @@ const TripDetail = () => {
     };
     fetchData();
   }, [tripId]);
+
+  const handleClick = () => {
+    setShowGroupChat(!ShowGroupChat);
+  };
 
   return (
     <>

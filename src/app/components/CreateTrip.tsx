@@ -44,7 +44,6 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   onAddTrip,
 }) => {
   const { data: session } = useSession();
-
   const [trip, setTrip] = useState<ITrip>({
     title: "",
     adminNmame: "",
@@ -64,7 +63,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
       },
       tripType: "urban",
     },
-    // 
+    //
     participants: [session!.user as IUser],
     tasks: [],
     polls: [],
@@ -203,7 +202,6 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
   };
 
   const handleRemoveItem = (
-    // list: TripItem[],
     item: TripItem,
     type: "tasks" | "polls" | "memories"
   ) => {
@@ -217,7 +215,6 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     trip.adminNmame = session?.user.name;
     console.log("trip", trip);
     const response = await addTrip(trip);
-    // sendPoll(trip.polls);
     onAddTrip(response);
     console.log("after add", response.polls);
   };
@@ -227,6 +224,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
       <Grid container spacing={4}>
         {/* Sidebar for Navigation */}
         <Navigation />
+
         {/* Main Content */}
         <Grid item xs={12} sm={9}>
           <Box sx={{ padding: 4 }}>
@@ -238,21 +236,6 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
               >
                 Basic Details
               </Typography>
-              {addUser ? (
-                <UserAutocomplete onCreate={handleAddUser} />
-              ) : (
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={handleCreateUser}
-                    color="primary"
-                    style={{ marginBottom: "1rem" }}
-                  >
-                    Add User
-                  </Button>
-                </div>
-              )}
-
               <TextField
                 label="Trip Title"
                 name="title"
@@ -419,6 +402,24 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                 >
                   {errorMessage}
                 </Typography>
+              )}
+            </Grid>
+
+            {/* Users */}
+            <Grid item xs={12} id="users">
+              {addUser ? (
+                <UserAutocomplete onCreate={handleAddUser} />
+              ) : (
+                <div>
+                  <Button
+                    variant="contained"
+                    onClick={handleCreateUser}
+                    color="primary"
+                    style={{ marginBottom: "1rem" }}
+                  >
+                    Add User
+                  </Button>
+                </div>
               )}
             </Grid>
 
