@@ -32,6 +32,7 @@ import { addTrip } from "../services/trips";
 import UserAutocomplete from "./UserAutocomplete";
 import { IUser } from "../types/user";
 import Navigation from "./Navigation";
+import { sendPoll } from "../services/polls";
 
 const tripTypeImages: { [key: string]: string } = {
   urban: "/./images/urban.jpg",
@@ -68,7 +69,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
     memories: [],
     image: tripTypeImages.urban,
     status: "active",
-    images: [],
+    images: "",
   });
 
   const [addTask, setAddTask] = useState(false);
@@ -78,15 +79,18 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
-  const handleSendail = () => {
-    setIsChecked((prev) => !prev);
+  const handleSendmail = () => {
+    setIsChecked((prev) => !prev); // שינוי מצב הצ'קבוקס
   };
+  // const handleRemoveItem1 = (item: any, type: string) => {
+  //   console.log("Remove item:", item, type);
+  // };
 
   // const handleRemoveItem1 = (item: any, type: string) => {
   //   console.log("Remove item:", item, type);
   // };
 
-  useEffect(() => {}, [trip]);
+  useEffect(() => { }, [trip]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -97,6 +101,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
       [name]: value,
     }));
   };
+
 
   const handleTotalBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const totalBudget = parseFloat(e.target.value);
@@ -222,6 +227,10 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
 
   const handleSave = async () => {
     trip.adminNmame = session?.user.name;
+    if (isChecked) {
+      const emails = trip.participants.map((participant) => participant.email);
+      await sendPoll(trip.polls, emails);
+    }
     console.log("trip", trip);
     const response = await addTrip(trip);
     onAddTrip(response);
@@ -245,6 +254,23 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
               >
                 Basic Details
               </Typography>
+              {addUser ? (
+                <UserAutocomplete
+                  onCreate={handleAddUser}
+                />
+              ) : (
+                <div>
+                  <Button
+                    variant="contained"
+                    onClick={handleCreateUser}
+                    color="primary"
+                    style={{ marginBottom: "1rem" }}
+                  >
+                    Add User
+                  </Button>
+                </div>
+              )}
+
               <TextField
                 label="Trip Title"
                 name="title"
@@ -445,7 +471,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                   <Button
                     variant="contained"
                     onClick={handleCreateTask}
-                    color="primary"
+                    className="bg-green-500 text-white p-2 rounded hover:bg-[#81C784]"
                     style={{ marginBottom: "1rem" }}
                   >
                     Add Task
@@ -459,9 +485,8 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                         >
                           <ListItemText
                             primary={task.title}
-                            secondary={`Status: ${
-                              task.status
-                            } | Due Date: ${task.dueDate.toLocaleDateString()}`}
+                            secondary={`Status: ${task.status
+                              } | Due Date: ${task.dueDate.toLocaleDateString()}`}
                           />
                           <ListItemSecondaryAction>
                             <IconButton
@@ -472,7 +497,9 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                             </IconButton>
                           </ListItemSecondaryAction>
                         </ListItem>
-                      ))
+                      )
+                      )
+
                     ) : (
                       <Typography variant="body2" color="textSecondary">
                         No tasks added yet.
@@ -481,6 +508,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                   </List>
                 </>
               )}
+
             </Grid>
 
             {/* Polls */}
@@ -501,24 +529,16 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                       />
                       <ListItemSecondaryAction>
                         <div className="flex flex-col items-start space-y-4 p-4">
-                          <h1 className="text-gray-700 text-sm font-semibold">
-                            Do you want to send travelers this survey?
-                          </h1>
+                          <h1 className="text-gray-700 text-sm font-semibold">Do you want to send travelers this survey?</h1>
 
                           {/* מיכל הצ'קבוקס */}
                           <div
-                            className={`w-16 h-8 flex items-center justify-${
-                              isChecked ? "end" : "start"
-                            } bg-gray-300 rounded-full p-1 cursor-pointer transition-all duration-300 ease-in-out`}
-                            onClick={handleSendail}
+                            className={`w-16 h-8 flex items-center justify-${isChecked ? "end" : "start"} bg-gray-300 rounded-full p-1 cursor-pointer transition-all duration-300 ease-in-out`}
+                            onClick={handleSendmail}
                           >
                             {/* הכדור הפנימי */}
                             <div
-                              className={`w-6 h-6  rounded-full shadow-md transition-all duration-300 ease-in-out ${
-                                isChecked
-                                  ? "bg-green-500 translate-x-0.5"
-                                  : "bg-white translate-x-0"
-                              }`}
+                              className={`w-6 h-6  rounded-full shadow-md transition-all duration-300 ease-in-out ${isChecked ? "bg-green-500 translate-x-0.5" : "bg-white translate-x-0"}`}
                             />
                           </div>
 
@@ -533,13 +553,20 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                           </div>
                         </div>
                       </ListItemSecondaryAction>
+
+
+
                     </ListItem>
+
                   ))
-                ) : (
-                  <Typography variant="body2" color="textSecondary">
-                    No polls added yet.
-                  </Typography>
-                )}
+                )
+
+                  : (
+                    <Typography variant="body2" color="textSecondary">
+                      No polls added yet.
+                    </Typography>
+                  )}
+
               </List>
               {addPoll ? (
                 <CreatePoll onCreate={handleAddPoll} />
@@ -547,12 +574,24 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
                 <Button
                   variant="contained"
                   onClick={handleCreatePoll}
-                  color="primary"
+                  className="bg-green-500 text-white p-2 rounded hover:bg-[#81C784]"
                   sx={{ marginBottom: "1rem" }}
                 >
                   Add Poll
                 </Button>
               )}
+
+              <h1 className={"text-gray-700 text-sm font-semibold"}>Do you want to send travelers the surveys?</h1>
+              <div
+                className={`w-16 h-8 flex items-center justify-${isChecked ? "end" : "start"} bg-gray-300 rounded-full p-1 cursor-pointer transition-all duration-300 ease-in-out`}
+                onClick={handleSendmail}
+              >
+                {/* הכדור הפנימי */}
+                <div
+                  className={`w-6 h-6 rounded-full shadow-md transition-all duration-300 ease-in-out ${isChecked ? "bg-green-500 translate-x-0.5" : "bg-white translate-x-0"}`}
+                />
+              </div>
+
             </Grid>
 
             {/* Save Button */}
@@ -563,7 +602,7 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
             >
               <Button
                 variant="contained"
-                color="primary"
+                className="bg-green-500 text-white p-2 rounded hover:bg-[#81C784]"
                 onClick={handleSave}
                 size="large"
                 sx={{
@@ -577,8 +616,8 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
             </Grid>
           </Box>
         </Grid>
-      </Grid>
-    </Container>
+      </Grid >
+    </Container >
   );
 };
 

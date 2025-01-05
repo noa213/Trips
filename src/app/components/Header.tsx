@@ -40,7 +40,7 @@ const OpeningPage: React.FC = () => {
       </div>
 
       <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-40">
-        <h1 className="text-white text-4xl font-yellowtail font-bold mb-4">STEPS</h1>
+        <h1 className="text-[#66BB6A] text-4xl font-yellowtail font-bold mb-4">STEPS</h1>
         <p className="text-white text-xl">Planning your next step</p>
       </div>
     </div>

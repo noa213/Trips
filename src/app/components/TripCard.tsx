@@ -18,12 +18,12 @@ const TripCard: React.FC<{
   };
 
   const handleClick = () => {
-    router.push(`pages/trips/${trip._id}`);
+    router.push(`/pages/trips/${trip._id}`);
   };
 
   return (
     <div
-      className={`trip-card border p-4 rounded-lg shadow-lg relative ${
+      className={`trip-card border p-4 rounded-lg shadow-lg relative text-#66BB6A bg-${
         isHovered ? "bg-gray-100" : "bg-white"
       }`}
       onMouseEnter={() => setIsHovered(true)}
@@ -37,9 +37,9 @@ const TripCard: React.FC<{
           fontSize="small"
         />
       )}
-      <h3 className="text-xl font-bold">{trip.title}</h3>
-      <p className="text-gray-600">Destination: {trip.destination}</p>
-      <p className="text-gray-600">
+      <h3 className="text-xl font-bold text-#66BB6A">{trip.title}</h3>
+      <p className="text-gray-600 text-#66BB6A">Destination: {trip.destination}</p>
+      <p className="text-gray-600 text-#66BB6A">
         Dates: {new Date(trip.dates.start).toLocaleDateString()} -{" "}
         {new Date(trip.dates.end).toLocaleDateString()}
       </p>

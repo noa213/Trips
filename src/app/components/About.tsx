@@ -3,9 +3,9 @@ import React from 'react';
 const About = () => {
   return (
     <div className="min-h-screen bg-[#f7f2e7] flex flex-col items-center justify-center p-6">
-      <h1 className="text-4xl font-bold mb-6 text-[#9B111E]">TRIPLY</h1>
-      <div className="max-w-4xl text-lg leading-relaxed text-[#9B111E]  p-6 rounded-lg shadow-lg">
-        <p className="mb-4">
+      <h1 className="text-[#66BB6A] text-4xl font-yellowtail  mb-4">STEPS</h1>
+      <div className=" max-w-4xl text-lg leading-relaxed text-[#66BB6A]  p-6 rounded-lg shadow-lg text-center">
+        <p className="mb-4" >
           טיולים משפחתיים הם דרך נהדרת ליצור זיכרונות משותפים ולחוות חוויות יחד. עם זאת, ארגון טיול משפחתי יכול
           להפוך למשימה מורכבת ומאתגרת, הכוללת קביעת תאריכים, יצירת מסלולים, תיאום פעילויות, וניהול תקציב. כל אחד מהמשתתפים
           בטיול מעורב בתהליך בצורה שונה, ולפעמים נוצר קושי בתיאום, במיוחד כשישנם מגוון העדפות, לוחות זמנים ודרישות שונות.

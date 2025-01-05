@@ -5,15 +5,13 @@ import { getTrip } from "../../services/trips";
 import { useParams } from "next/navigation";
 import BudgetComponent from "../BudgetComponent";
 import Polls from "../Polls";
-import Tasks from "../Tasks";
 import { Icon } from "@mui/material";
 import GroupChat from "../GroupChat";
-import { IImage } from "@/app/types/image";
+import Tasks from "../Tasks";
 
 const UserTripDetail = () => {
   const [trip, setTrip] = useState<ITrip>();
   const [ShowGroupChat, setShowGroupChat] = useState(false);
-  const [, setImages] = useState<IImage[]>([]);
   const router = useParams();
   const id = router.tripId;
   const tripId = Array.isArray(id) ? id[0] : id;
@@ -23,7 +21,6 @@ const UserTripDetail = () => {
       try {
         const response = await getTrip(tripId);
         setTrip(response);
-        setImages(response?.images ?? []);
       } catch (error) {
         console.error("Failed to fetch trip:", error);
       }

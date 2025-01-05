@@ -20,10 +20,11 @@ export async function POST(req: NextRequest) {
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: emails.join(","), // רשימה של מיילים מופרדים בפסיקים
-      subject: subject,
+      subject: "steps",
       // html: `<h1>${pollResults.message}</h1>`,
       // שלח את ההודעה בלבד
-      html: `<h1>${"נפתח סקר חדש לגבי הטיול הבא שלך נא היכנס ללינק המצורף על מנת לענות עליו"}</h1>`,
+      // html: `<h1>${"נפתח סקר חדש לגבי הטיול הבא שלך נא היכנס ללינק המצורף על מנת לענות עליו"}</h1>`,
+      html: subject,
     };
 
     // שליחת המייל

@@ -15,6 +15,8 @@ const TripList = () => {
     const fetchData = async () => {
       try {
         const response = await getTrips();
+        console.log("trip", response);
+
         setTrips(response);
       } catch (error) {
         console.error("Failed to fetch trips:", error);
@@ -38,7 +40,7 @@ const TripList = () => {
 
   return (
     <>
-      <div className="trip-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+      {/* <div className="trip-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
         {trips ? (
           trips
             .filter((trip: ITrip) =>
@@ -52,6 +54,23 @@ const TripList = () => {
             ))
         ) : (
           <p className="text-gray-500 text-center">No trips found.</p>
+        )}
+      </div> */}
+
+
+
+      <div className="grid grid-cols-2 gap-4 bg-[#f7f2e7]">
+        {trips ? (
+          trips.map((trip: ITrip) => (
+            <div
+              key={trip._id}
+              className="border-2 border-green-500  p-4 rounded-lg shadow-md"
+            >
+              <TripCard trip={trip} onDelete={handleDelete} />
+            </div>
+          ))
+        ) : (
+          <p className="text-gray-500 text-center col-span-2">No trips found.</p>
         )}
       </div>
       <AddTripButton onAddTrip={handleAddTrip} />

@@ -1,5 +1,4 @@
 import { IBudgetCategories } from "./BudgetCategories";
-import { IImage } from "./image";
 import { IMemory } from "./memory";
 import { IPoll } from "./poll";
 import { ITask } from "./task";
@@ -26,7 +25,7 @@ export interface ITrip {
   memories: Array<IMemory>;
   image: string;
   status: "active" | "completed" | "cancelled";
-  images: Array<IImage>;
+  images: "";
 }
 
 
