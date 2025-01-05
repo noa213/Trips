@@ -254,23 +254,6 @@ const CreateTrip: React.FC<{ onAddTrip: (newTrip: ITrip) => void }> = ({
               >
                 Basic Details
               </Typography>
-              {addUser ? (
-                <UserAutocomplete
-                  onCreate={handleAddUser}
-                />
-              ) : (
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={handleCreateUser}
-                    color="primary"
-                    style={{ marginBottom: "1rem" }}
-                  >
-                    Add User
-                  </Button>
-                </div>
-              )}
-
               <TextField
                 label="Trip Title"
                 name="title"
