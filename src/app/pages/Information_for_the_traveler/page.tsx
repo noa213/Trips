@@ -1,5 +1,5 @@
 
-import Information_for_the_traveler from "@/app/components/Information_for_the traveler";
+// import Information_for_the_traveler from "@/app/components/Information_for_the traveler";
 import React from "react";
 
 

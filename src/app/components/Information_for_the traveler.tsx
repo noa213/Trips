@@ -1,7 +1,12 @@
+import React from "react";
 
+const Information_for_the_traveler = () => {
+  return <div>Information_for_the traveler</div>;
+};
+
+export default Information_for_the_traveler;
 // // "use client"
 // // import React, { useState } from "react";
-
 
 // // type Attraction = {
 // //   name: string;
@@ -38,16 +43,11 @@
 
 // // type Item = Attraction | Restaurant | Hotel;
 
-
-
-
 // // const Information_for_the_traveler = () => {
 // //   const [step, setStep] = useState<number>(1);
 // //   const [selectedArea, setSelectedArea] = useState<Area | null>(null);
 // //   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 // //   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
-
-
 
 //   // const areasData = [
 //   //   // נתוני האזורים
@@ -150,10 +150,6 @@
 //   //   }
 //   // ];
 
-
-
-
-
 // //   // פונקציה למעבר בין שלבים
 // //   const goToStep = (newStep: number) => {
 // //     setStep(newStep);
@@ -184,16 +180,8 @@
 // //     );
 // //   };
 
-
-
-
-
-
-
 // //   const renderCategorySelection = () => {
 // //     return (
-     
-
 
 // //       <div className="container mx-auto p-4">
 // //         {/* כפתורים למעבר בין הקטגוריות */}
@@ -213,16 +201,12 @@
 // //             </span>
 // //           </button>
 
-        
-
-
-
 // //           <button
 // //             onClick={() => setSelectedCategory("restaurants")}
 // //             className="relative w-48 h-48 rounded-lg overflow-hidden"
 // //           >
 // //             <img
-// //               src="/img/resteraunt.jpg" 
+// //               src="/img/resteraunt.jpg"
 // //               alt="Restaurants Icon"
 // //               className="object-cover w-full h-full absolute inset-0"
 // //             />
@@ -231,7 +215,6 @@
 // //             </span>
 // //           </button>
 
-         
 // //           <button
 // //             onClick={() => setSelectedCategory("hotels")}
 // //             className="relative w-48 h-48 rounded-lg overflow-hidden"
@@ -307,8 +290,6 @@
 // // };
 
 // // export default Information_for_the_traveler;
-
-
 
 // "use client";
 // import React, { useState } from "react";
@@ -534,9 +515,8 @@
 //     );
 //   };
 
-
 //   const renderItems = () => {
-    
+
 //     const items = selectedArea ? selectedArea[selectedCategory || ""] : [];
 //     return (
 //       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
@@ -555,10 +535,10 @@
 //   };
 
 //   // const renderItems = () => {
-//   //   const items = selectedArea && selectedCategory 
-//   //     ? selectedArea[selectedCategory] 
+//   //   const items = selectedArea && selectedCategory
+//   //     ? selectedArea[selectedCategory]
 //   //     : [];
-    
+
 //   //   return (
 //   //     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
 //   //       {items.map((item: Item) => (
@@ -600,4 +580,3 @@
 // };
 
 // export default Information_for_the_traveler;
-
