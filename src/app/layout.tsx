@@ -6,7 +6,6 @@ import Navbar from "@/app/components/Navbar";
 // import SignIn from "./components/SignIn";
 // import CreatePoll from "./components/CreatePoll";
 import { SessionProvider } from "next-auth/react";
-import GroupChat from "./components/GroupChat";
 import Footer from "./components/Footer";
 
 
