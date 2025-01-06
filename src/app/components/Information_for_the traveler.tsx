@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> ad358814d45e55e051958e23f9152f14b82f240a
 "use client"
 import React, { useState } from "react";
 
@@ -305,6 +308,10 @@ const Information_for_the_traveler = () => {
 
   );
 };
+<<<<<<< HEAD
 
 export default Information_for_the_traveler;
+=======
+>>>>>>> ad358814d45e55e051958e23f9152f14b82f240a
 
+export default Information_for_the_traveler;

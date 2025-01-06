@@ -111,7 +111,6 @@ const GroupChat: React.FC<GroupChatProps> = ({ tripId }) => {
             <span className="block text-gray-600">{msg.content}</span>
           </div>
         ))}
-        {/* אלמנט שמסמן את סוף הרשימה */}
         <div ref={messagesEndRef} />
       </div>
       <div className="p-4 bg-gray-200 flex items-center">
